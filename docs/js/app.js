@@ -318,29 +318,96 @@ function showDetail(schoolId) {
 
             records.forEach(record => {
 
+                const parameterEvidence =
+                    evidences.filter(
+                        evidence =>
+                            evidence.school_id === schoolId &&
+                            evidence.parameter_code === record.parameter_code
+                    );
+
+                let evidenceHtml = "";
+
+                if (parameterEvidence.length > 0) {
+
+                    evidenceHtml = `
+                        <div class="parameter-evidence">
+
+                            ${parameterEvidence
+                                .map(evidence => `
+                                    <div class="evidence-item">
+
+                                        <div class="evidence-text">
+                                            ${escapeHtml(
+                                                evidence.evidence
+                                            )}
+                                        </div>
+
+                                        <div class="evidence-meta">
+
+                                            <span>
+                                                ${escapeHtml(
+                                                    evidence.evidence_type || ""
+                                                )}
+                                            </span>
+
+                                            <span>
+                                                Confidence
+                                                ${formatPercent(
+                                                    evidence.confidence
+                                                )}
+                                            </span>
+
+                                            <span>
+                                                Evidence #${evidence.id}
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+                                `)
+                                .join("")}
+
+                        </div>
+                    `;
+
+                } else {
+
+                    evidenceHtml = `
+                        <div class="parameter-evidence empty">
+                            Nessuna evidence disponibile.
+                        </div>
+                    `;
+                }
+
                 parametersHtml += `
                     <div class="parameter">
 
-                        <span>
-                            ${escapeHtml(
-                                record.parameter_name
-                            )}
-                        </span>
+                        <div class="parameter-main">
 
-                        <span class="
-                            parameter-status
-                            status-${record.status.toLowerCase()}
-                        ">
-                            ${record.status}
-                        </span>
+                            <span>
+                                ${escapeHtml(
+                                    record.parameter_name
+                                )}
+                            </span>
 
-                        <span class="
-                            parameter-confidence
-                        ">
-                            ${formatPercent(
-                                record.confidence
-                            )}
-                        </span>
+                            <span class="
+                                parameter-status
+                                status-${record.status.toLowerCase()}
+                            ">
+                                ${record.status}
+                            </span>
+
+                            <span class="
+                                parameter-confidence
+                            ">
+                                ${formatPercent(
+                                    record.confidence
+                                )}
+                            </span>
+
+                        </div>
+
+                        ${evidenceHtml}
 
                     </div>
                 `;
