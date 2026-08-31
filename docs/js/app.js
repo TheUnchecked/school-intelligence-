@@ -4,6 +4,7 @@ let schools = [];
 let scores = [];
 let parameters = [];
 let schoolParameters = [];
+let evidences = [];
 
 const $ = (id) => document.getElementById(id);
 
@@ -15,12 +16,14 @@ async function loadData() {
         scoresResponse,
         parametersResponse,
         schoolParametersResponse,
+        evidenceResponse,
         statisticsResponse
     ] = await Promise.all([
         fetch(`${DATA_PATH}/schools.json`),
         fetch(`${DATA_PATH}/school_scores.json`),
         fetch(`${DATA_PATH}/parameters.json`),
         fetch(`${DATA_PATH}/school_parameters.json`),
+        fetch(`${DATA_PATH}/evidence.json`),
         fetch(`${DATA_PATH}/statistics.json`)
     ]);
 
@@ -28,6 +31,7 @@ async function loadData() {
     scores = await scoresResponse.json();
     parameters = await parametersResponse.json();
     schoolParameters = await schoolParametersResponse.json();
+    evidences = await evidenceResponse.json();
 
     const statistics = await statisticsResponse.json();
 

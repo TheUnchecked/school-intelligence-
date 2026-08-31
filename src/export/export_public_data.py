@@ -149,6 +149,37 @@ def export_school_scores(conn):
     return [dict(row) for row in rows]
 
 
+
+def export_evidence(conn):
+    print("Esportazione evidence...")
+
+    rows = conn.execute("""
+        SELECT
+            sf.id,
+            sf.school_id,
+            sf.feature AS parameter_code,
+            sf.value,
+            sf.normalized_value,
+            sf.evidence,
+            sf.confidence,
+            sf.evidence_type,
+            sf.document_id,
+            sf.source_id,
+            sf.verified_at
+        FROM school_features sf
+        ORDER BY sf.school_id, sf.feature, sf.id
+    """).fetchall()
+
+    data = [dict(row) for row in rows]
+
+    write_json(
+        "evidence.json",
+        data
+    )
+
+    print(f"  evidence.json: {len(data)}")
+
+
 def export_statistics(conn):
     schools = conn.execute(
         "SELECT COUNT(*) FROM schools"
@@ -297,6 +328,11 @@ def main():
             f"  school_scores.json: "
             f"{len(school_scores)}"
         )
+
+        print()
+        print("Esportazione evidence...")
+
+        evidence = export_evidence(conn)
 
         print()
         print("Esportazione statistics...")
