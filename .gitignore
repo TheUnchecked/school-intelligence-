@@ -1,0 +1,54 @@
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs / temporary
+*.log
+*.tmp
+*.bak
+*.swp
+
+# Python tooling
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local database artifacts
+*.sqlite-wal
+*.sqlite-shm
+
+# Extracted source documents
+data/documents/
+data/raw/
+data/processed/
+
+# Local exports
+data/exports/
+
+
+# Database backups / intermediate snapshots
+data/database/*.bak*
+data/database/*.before-*.sqlite
+
+# Development backups / working copies
+*.bak
+*.bak.*
+*.before-*
+*.v3-working
+*.v4-backup

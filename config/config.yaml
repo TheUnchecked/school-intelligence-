@@ -1,0 +1,44 @@
+project:
+  name: school-intelligence
+  version: "0.1.0"
+
+target:
+  region: "MARCHE"
+
+  comuni:
+    - "OSIMO"
+    - "CASTELFIDARDO"
+    - "RECANATI"
+    - "POTENZA PICENA"
+    - "LORETO"
+    - "CIVITANOVA MARCHE"
+    - "NUMANA"
+
+  ordine:
+    - "SECONDARIA DI PRIMO GRADO"
+
+mim:
+  school_year: "2025/26"
+
+  statali:
+    csv: "https://dati.istruzione.it/opendata/opendata/catalog/SCUANAGRAFESTAT/SCUANAGRAFESTAT20252620250901.csv"
+    json: "https://dati.istruzione.it/opendata/opendata/catalog/SCUANAGRAFESTAT/SCUANAGRAFESTAT20252620250901.json"
+
+  paritarie:
+    csv: "https://dati.istruzione.it/opendata/opendata/catalog/SCUANAGRAFEPAR/SCUANAGRAFEPAR20252620250901.csv"
+    json: "https://dati.istruzione.it/opendata/opendata/catalog/SCUANAGRAFEPAR/SCUANAGRAFEPAR20252620250901.json"
+
+database:
+  path: "data/database/school-intelligence.sqlite"
+
+scraper:
+  timeout: 30
+  retries: 3
+  min_delay: 1.5
+  max_delay: 4.0
+  user_agent: "SchoolIntelligence/0.1"
+
+exports:
+  csv: "exports/schools.csv"
+  json: "exports/schools.json"
+  jsonl: "exports/schools.jsonl"
