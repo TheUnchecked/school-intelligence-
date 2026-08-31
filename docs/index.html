@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>School Intelligence</title>
+
+    <meta
+        name="description"
+        content="School Intelligence — analisi parametrica delle scuole secondarie di primo grado."
+    >
+
+    <link rel="stylesheet" href="css/app.css">
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <div class="container topbar-inner">
+
+        <div>
+            <div class="brand">
+                SCHOOL INTELLIGENCE
+            </div>
+
+            <div class="subtitle">
+                School data intelligence platform
+            </div>
+        </div>
+
+        <div class="topbar-meta">
+            <span id="schoolCount">—</span>
+            <span>scuole</span>
+        </div>
+
+    </div>
+
+</header>
+
+
+<main class="container">
+
+    <section class="hero">
+
+        <div>
+            <span class="eyebrow">
+                DATASET 2025/26
+            </span>
+
+            <h1>
+                Confronta le scuole<br>
+                attraverso i dati.
+            </h1>
+
+            <p>
+                Un layer parametrico costruito da fonti documentali,
+                evidence e provenance.
+            </p>
+        </div>
+
+    </section>
+
+
+    <section class="kpis">
+
+        <div class="kpi">
+            <span class="kpi-label">SCUOLE</span>
+            <strong id="kpiSchools">—</strong>
+        </div>
+
+        <div class="kpi">
+            <span class="kpi-label">DOCUMENTI</span>
+            <strong id="kpiDocuments">—</strong>
+        </div>
+
+        <div class="kpi">
+            <span class="kpi-label">EVIDENCE</span>
+            <strong id="kpiEvidence">—</strong>
+        </div>
+
+        <div class="kpi">
+            <span class="kpi-label">PARAMETRI</span>
+            <strong id="kpiParameters">—</strong>
+        </div>
+
+    </section>
+
+
+    <section class="controls">
+
+        <input
+            id="search"
+            type="search"
+            placeholder="Cerca scuola, codice o comune..."
+        >
+
+        <select id="provinceFilter">
+            <option value="">Tutte le province</option>
+        </select>
+
+        <select id="scoreFilter">
+            <option value="">Tutti i punteggi</option>
+            <option value="80">Score ≥ 80%</option>
+            <option value="60">Score ≥ 60%</option>
+            <option value="40">Score ≥ 40%</option>
+            <option value="1">Score > 0%</option>
+            <option value="0">Nessuna evidence</option>
+        </select>
+
+    </section>
+
+
+    <section>
+
+        <div class="section-header">
+
+            <div>
+                <span class="eyebrow">
+                    RANKING
+                </span>
+
+                <h2>
+                    Scuole
+                </h2>
+            </div>
+
+            <span id="resultCount">
+                —
+            </span>
+
+        </div>
+
+        <div id="schoolList" class="school-list"></div>
+
+    </section>
+
+
+    <section id="detail" class="detail hidden">
+
+        <button
+            id="closeDetail"
+            class="back-button"
+        >
+            ← Torna al ranking
+        </button>
+
+        <div id="detailContent"></div>
+
+    </section>
+
+</main>
+
+
+<footer>
+
+    <div class="container footer-inner">
+
+        <span>
+            School Intelligence
+        </span>
+
+        <span>
+            Data-driven school analysis
+        </span>
+
+    </div>
+
+</footer>
+
+
+<script src="js/app.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "schools": 16,
+  "documents": 45,
+  "evidence": 1032,
+  "active_parameters": 21,
+  "school_parameters": 336,
+  "status": {
+    "VERIFIED": 94,
+    "PROBABLE": 13,
+    "MENTIONED": 8,
+    "NOT_FOUND": 221
+  }
+}
