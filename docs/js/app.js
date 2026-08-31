@@ -5,6 +5,7 @@ let scores = [];
 let parameters = [];
 let schoolParameters = [];
 let evidences = [];
+let ptofDocuments = [];
 
 const $ = (id) => document.getElementById(id);
 
@@ -17,6 +18,7 @@ async function loadData() {
         parametersResponse,
         schoolParametersResponse,
         evidenceResponse,
+        ptofDocumentsResponse,
         statisticsResponse
     ] = await Promise.all([
         fetch(`${DATA_PATH}/schools.json`),
@@ -24,6 +26,7 @@ async function loadData() {
         fetch(`${DATA_PATH}/parameters.json`),
         fetch(`${DATA_PATH}/school_parameters.json`),
         fetch(`${DATA_PATH}/evidence.json`),
+        fetch(`${DATA_PATH}/ptof_documents.json`),
         fetch(`${DATA_PATH}/statistics.json`)
     ]);
 
@@ -32,6 +35,7 @@ async function loadData() {
     parameters = await parametersResponse.json();
     schoolParameters = await schoolParametersResponse.json();
     evidences = await evidenceResponse.json();
+    ptofDocuments = await ptofDocumentsResponse.json();
 
     const statistics = await statisticsResponse.json();
 
@@ -278,19 +282,38 @@ function showDetail(schoolId) {
             s => s.school_id === schoolId
         );
 
+    if (!school) {
+        return;
+    }
+
     const records =
-        schoolParameters
-            .filter(
-                p => p.school_id === schoolId
-            );
+        schoolParameters.filter(
+            p => p.school_id === schoolId
+        );
 
-    $("schoolList").parentElement.classList.add(
-        "hidden"
-    );
+    const schoolEvidence =
+        evidences.filter(
+            e => e.school_id === schoolId
+        );
 
-    $("detail").classList.remove(
-        "hidden"
-    );
+    const documentIds = [
+        ...new Set(
+            schoolEvidence
+                .map(e => e.document_id)
+                .filter(v => v !== null && v !== undefined)
+        )
+    ];
+
+    const sourceIds = [
+        ...new Set(
+            schoolEvidence
+                .map(e => e.source_id)
+                .filter(v => v !== null && v !== undefined)
+        )
+    ];
+
+    $("schoolList").parentElement.classList.add("hidden");
+    $("detail").classList.remove("hidden");
 
     const groups = {};
 
@@ -306,110 +329,235 @@ function showDetail(schoolId) {
     let parametersHtml = "";
 
     Object.entries(groups).forEach(
-        ([category, records]) => {
+        ([category, categoryRecords]) => {
 
             parametersHtml += `
                 <section class="parameter-group">
 
-                    <h3>
-                        ${escapeHtml(category)}
-                    </h3>
+                    <div class="parameter-group-header">
+
+                        <div>
+                            <span class="eyebrow">
+                                ${escapeHtml(category)}
+                            </span>
+
+                            <h3>
+                                Parametri
+                            </h3>
+                        </div>
+
+                        <span class="parameter-group-count">
+                            ${categoryRecords.length}
+                        </span>
+
+                    </div>
             `;
 
-            records.forEach(record => {
+            categoryRecords.forEach(record => {
 
-                const parameterEvidence =
-                    evidences.filter(
-                        evidence =>
-                            evidence.school_id === schoolId &&
-                            evidence.parameter_code === record.parameter_code
-                    );
+                const recordEvidences =
+                    schoolEvidence
+                        .filter(
+                            e =>
+                                e.parameter_code ===
+                                record.parameter_code
+                        )
+                        .sort(
+                            (a, b) =>
+                                Number(b.confidence || 0) -
+                                Number(a.confidence || 0)
+                        );
+
+                const explicitCount =
+                    recordEvidences.filter(
+                        e => e.evidence_type === "EXPLICIT"
+                    ).length;
+
+                const inferredCount =
+                    recordEvidences.filter(
+                        e => e.evidence_type === "INFERRED"
+                    ).length;
 
                 let evidenceHtml = "";
 
-                if (parameterEvidence.length > 0) {
+                if (recordEvidences.length > 0) {
 
                     evidenceHtml = `
-                        <div class="parameter-evidence">
+                        <details class="evidence-details">
 
-                            ${parameterEvidence
-                                .map(evidence => `
-                                    <div class="evidence-item">
+                            <summary>
+                                <span>
+                                    Vedi evidence
+                                </span>
+
+                                <strong>
+                                    ${recordEvidences.length}
+                                </strong>
+                            </summary>
+
+                            <div class="evidence-summary">
+
+                                ${
+                                    explicitCount
+                                        ? `<span>
+                                            ${explicitCount} explicit
+                                           </span>`
+                                        : ""
+                                }
+
+                                ${
+                                    inferredCount
+                                        ? `<span>
+                                            ${inferredCount} inferred
+                                           </span>`
+                                        : ""
+                                }
+
+                            </div>
+
+                            <div class="evidence-list">
+
+                                ${recordEvidences.map(evidence => `
+
+                                    <article class="evidence-card">
+
+                                        <div class="evidence-header">
+
+                                            <strong>
+                                                Evidence #${evidence.id}
+                                            </strong>
+
+                                            <span>
+                                                ${escapeHtml(
+                                                    evidence.evidence_type || "UNKNOWN"
+                                                )}
+                                            </span>
+
+                                        </div>
 
                                         <div class="evidence-text">
                                             ${escapeHtml(
-                                                evidence.evidence
+                                                evidence.evidence || ""
                                             )}
                                         </div>
 
                                         <div class="evidence-meta">
 
                                             <span>
-                                                ${escapeHtml(
-                                                    evidence.evidence_type || ""
-                                                )}
-                                            </span>
-
-                                            <span>
                                                 Confidence
-                                                ${formatPercent(
-                                                    evidence.confidence
-                                                )}
+                                                <strong>
+                                                    ${formatPercent(
+                                                        evidence.confidence
+                                                    )}
+                                                </strong>
                                             </span>
 
                                             <span>
-                                                Evidence #${evidence.id}
+                                                Document
+                                                <strong>
+                                                    ${evidence.document_id ?? "—"}
+                                                </strong>
+                                            </span>
+
+                                            <span>
+                                                Source
+                                                <strong>
+                                                    ${evidence.source_id ?? "—"}
+                                                </strong>
                                             </span>
 
                                         </div>
 
-                                    </div>
-                                `)
-                                .join("")}
+                                    </article>
 
-                        </div>
+                                `).join("")}
+
+                            </div>
+
+                        </details>
                     `;
 
                 } else {
 
                     evidenceHtml = `
-                        <div class="parameter-evidence empty">
-                            Nessuna evidence disponibile.
+                        <div class="no-evidence">
+                            Nessuna evidence disponibile
                         </div>
                     `;
                 }
 
+                const value =
+                    record.value ??
+                    record.normalized_value ??
+                    "—";
+
                 parametersHtml += `
-                    <div class="parameter">
+
+                    <article class="parameter">
 
                         <div class="parameter-main">
 
-                            <span>
+                            <div class="parameter-title">
+
+                                <span class="parameter-name">
+                                    ${escapeHtml(
+                                        record.parameter_name
+                                    )}
+                                </span>
+
+                                <span class="
+                                    parameter-status
+                                    status-${String(
+                                        record.status || ""
+                                    ).toLowerCase()}
+                                ">
+                                    ${escapeHtml(
+                                        record.status || ""
+                                    )}
+                                </span>
+
+                            </div>
+
+                            <div class="parameter-value">
                                 ${escapeHtml(
-                                    record.parameter_name
+                                    String(value)
                                 )}
-                            </span>
+                            </div>
 
-                            <span class="
-                                parameter-status
-                                status-${record.status.toLowerCase()}
-                            ">
-                                ${record.status}
-                            </span>
+                            <div class="parameter-metrics">
 
-                            <span class="
-                                parameter-confidence
-                            ">
-                                ${formatPercent(
-                                    record.confidence
-                                )}
-                            </span>
+                                <span>
+                                    Confidence
+                                    <strong>
+                                        ${formatPercent(
+                                            record.confidence
+                                        )}
+                                    </strong>
+                                </span>
+
+                                <span>
+                                    Evidence
+                                    <strong>
+                                        ${recordEvidences.length}
+                                    </strong>
+                                </span>
+
+                                <span>
+                                    Type
+                                    <strong>
+                                        ${escapeHtml(
+                                            record.value_type || "—"
+                                        )}
+                                    </strong>
+                                </span>
+
+                            </div>
 
                         </div>
 
                         ${evidenceHtml}
 
-                    </div>
+                    </article>
                 `;
             });
 
@@ -436,63 +584,224 @@ function showDetail(schoolId) {
             </h1>
 
             <div class="detail-meta">
+
                 ${escapeHtml(
                     school.comune
                 )}
+
                 ·
+
                 ${escapeHtml(
                     school.provincia
                 )}
-                ·
-                ${escapeHtml(
-                    school.indirizzo || ""
-                )}
+
+                ${
+                    school.indirizzo
+                        ? ` · ${escapeHtml(school.indirizzo)}`
+                        : ""
+                }
+
             </div>
 
         </div>
 
 
-        <div class="detail-score">
+
+        <section class="detail-ptof">
+
+            <div class="detail-ptof-header">
+
+                <div>
+
+                    <span class="eyebrow">
+                        DOCUMENTO PRINCIPALE
+                    </span>
+
+                    <h2>
+                        PTOF
+                    </h2>
+
+                </div>
+
+            </div>
+
+            ${(() => {
+
+                const schoolPtofs =
+                    ptofDocuments
+                        .filter(
+                            document =>
+                                document.school_id === schoolId
+                        );
+
+                const currentPtof =
+                    schoolPtofs.find(
+                        document =>
+                            String(document.title || "")
+                                .toUpperCase()
+                                .includes("PTOF 2025-2028")
+                            &&
+                            !String(document.title || "")
+                                .toUpperCase()
+                                .includes("PREDISPOSIZIONE")
+                    ) ||
+                    schoolPtofs.find(
+                        document =>
+                            String(document.title || "")
+                                .toUpperCase()
+                                .includes("PTOF")
+                    );
+
+                if (!currentPtof) {
+
+                    return `
+                        <div class="detail-ptof-empty">
+                            Nessun PTOF disponibile.
+                        </div>
+                    `;
+
+                }
+
+                return `
+
+                    <div class="detail-ptof-card">
+
+                        <div>
+
+                            <strong>
+                                ${escapeHtml(
+                                    currentPtof.title || "PTOF"
+                                )}
+                            </strong>
+
+                            <span>
+                                ${escapeHtml(
+                                    currentPtof.school_year || ""
+                                )}
+                            </span>
+
+                        </div>
+
+                        <a
+                            class="detail-ptof-button"
+                            href="${escapeHtml(currentPtof.url)}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            Apri / scarica PTOF
+                            ↗
+                        </a>
+
+                    </div>
+
+                `;
+
+            })()}
+
+        </section>
+
+        <section class="detail-overview">
 
             <div class="detail-score-item">
-
                 <span>SCORE</span>
-
                 <strong>
                     ${formatPercent(
                         score?.score_percent
                     )}
                 </strong>
-
             </div>
 
             <div class="detail-score-item">
-
                 <span>COVERAGE</span>
-
                 <strong>
                     ${formatPercent(
                         score?.coverage_percent
                     )}
                 </strong>
-
             </div>
 
             <div class="detail-score-item">
-
                 <span>CONFIDENCE</span>
-
                 <strong>
                     ${formatPercent(
                         score?.confidence_percent
                     )}
                 </strong>
-
             </div>
+
+            <div class="detail-score-item">
+                <span>PARAMETRI</span>
+                <strong>
+                    ${records.length}
+                </strong>
+            </div>
+
+            <div class="detail-score-item">
+                <span>EVIDENCE</span>
+                <strong>
+                    ${schoolEvidence.length}
+                </strong>
+            </div>
+
+            <div class="detail-score-item">
+                <span>DOCUMENTI</span>
+                <strong>
+                    ${documentIds.length}
+                </strong>
+            </div>
+
+        </section>
+
+
+        <section class="detail-provenance">
+
+            <div class="provenance-item">
+                <span>Evidence</span>
+                <strong>
+                    ${schoolEvidence.length}
+                </strong>
+            </div>
+
+            <div class="provenance-item">
+                <span>Documenti</span>
+                <strong>
+                    ${documentIds.length}
+                </strong>
+            </div>
+
+            <div class="provenance-item">
+                <span>Sources</span>
+                <strong>
+                    ${sourceIds.length}
+                </strong>
+            </div>
+
+        </section>
+
+
+        <div class="detail-section-heading">
+
+            <div>
+                <span class="eyebrow">
+                    ANALISI
+                </span>
+
+                <h2>
+                    Parametri
+                </h2>
+            </div>
+
+            <span>
+                ${records.length} disponibili
+            </span>
 
         </div>
 
-        ${parametersHtml}
+
+        <div class="parameters-container">
+            ${parametersHtml}
+        </div>
+
     `;
 
     window.scrollTo({

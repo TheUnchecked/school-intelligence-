@@ -547,3 +547,552 @@ footer {
         text-align: left;
     }
 }
+
+
+/* SCHOOL INTELLIGENCE MOBILE FIX */
+
+@media (max-width: 700px) {
+
+    .school-card-main {
+        display: block;
+    }
+
+    .school-card-main > div:first-child {
+        width: 100%;
+    }
+
+    .school-name {
+        max-width: 100%;
+        overflow-wrap: anywhere;
+    }
+
+    .school-meta {
+        margin-top: 12px;
+        line-height: 1.5;
+        overflow-wrap: anywhere;
+    }
+
+    .score {
+        margin-top: 20px;
+        text-align: left;
+    }
+
+    .school-stats {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px 16px;
+        margin-top: 18px;
+    }
+
+    .school-stats span {
+        min-width: 0;
+        line-height: 1.4;
+    }
+
+    .school-stats strong {
+        display: inline-block;
+    }
+
+    .parameter {
+        display: block;
+        padding: 16px 0;
+    }
+
+    .parameter-main {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+    }
+
+    .parameter-name {
+        width: 100%;
+        font-weight: 600;
+    }
+
+    .parameter-status,
+    .parameter-confidence {
+        display: inline-block;
+    }
+
+    .evidence-title {
+        margin-top: 14px;
+        margin-bottom: 8px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+    }
+
+    .evidence-list {
+        margin-top: 10px;
+    }
+
+    .evidence-card {
+        padding: 14px;
+        margin-top: 10px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        background: #fafafa;
+    }
+
+    .evidence-header {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 10px;
+    }
+
+    .evidence-text {
+        line-height: 1.55;
+        overflow-wrap: anywhere;
+    }
+
+    .evidence-meta {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 6px;
+        margin-top: 12px;
+        font-size: 0.9rem;
+    }
+
+    .evidence-meta strong {
+        margin-left: 4px;
+    }
+}
+
+
+
+/* SCHOOL INTELLIGENCE MOBILE UX V2 */
+
+@media (max-width: 700px) {
+
+    /* -----------------------------------------
+       GLOBAL
+       ----------------------------------------- */
+
+    .container {
+        width: auto !important;
+        max-width: none !important;
+        margin-left: 20px !important;
+        margin-right: 20px !important;
+    }
+
+    /* -----------------------------------------
+       RANKING CARD
+       ----------------------------------------- */
+
+    .school-card {
+        width: 100% !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+    }
+
+    .school-card-main {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        gap: 18px !important;
+    }
+
+    .school-card-main > div:first-child {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        flex: none !important;
+    }
+
+    .school-card-main > .score {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        flex: none !important;
+        margin: 0 !important;
+        text-align: left !important;
+    }
+
+    /* School name */
+
+    .school-name {
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        white-space: normal !important;
+        overflow: visible !important;
+        overflow-wrap: break-word !important;
+        word-break: normal !important;
+        font-size: 1.55rem !important;
+        line-height: 1.08 !important;
+    }
+
+    /* School metadata */
+
+    .school-meta {
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-top: 12px !important;
+        line-height: 1.45 !important;
+        white-space: normal !important;
+        overflow-wrap: anywhere !important;
+        word-break: normal !important;
+    }
+
+    /* Score */
+
+    .score-value {
+        font-size: 2.2rem !important;
+        line-height: 1 !important;
+    }
+
+    .score-label {
+        margin-top: 6px !important;
+    }
+
+    /* -----------------------------------------
+       CARD STATS
+       ----------------------------------------- */
+
+    .school-stats {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        gap: 14px 18px !important;
+        margin-top: 20px !important;
+    }
+
+    .school-stats span {
+        display: block !important;
+        min-width: 0 !important;
+        line-height: 1.35 !important;
+        white-space: normal !important;
+    }
+
+    .school-stats strong {
+        display: block !important;
+        margin-top: 3px !important;
+    }
+
+    /* -----------------------------------------
+       RANKING HEADER
+       ----------------------------------------- */
+
+    .section-header {
+        align-items: flex-end !important;
+        gap: 12px !important;
+    }
+
+    .section-header h2 {
+        margin-bottom: 0 !important;
+    }
+
+    #resultCount {
+        white-space: nowrap !important;
+    }
+
+    /* -----------------------------------------
+       DETAIL PAGE
+       ----------------------------------------- */
+
+    .detail-header h1 {
+        font-size: 2rem !important;
+        line-height: 1.08 !important;
+        overflow-wrap: anywhere !important;
+    }
+
+    .detail-meta {
+        line-height: 1.5 !important;
+        overflow-wrap: anywhere !important;
+    }
+
+    .detail-score {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 1px !important;
+    }
+
+    .detail-score-item {
+        min-width: 0 !important;
+    }
+
+    .detail-score-item strong {
+        font-size: 1.6rem !important;
+    }
+
+    /* -----------------------------------------
+       PARAMETERS
+       ----------------------------------------- */
+
+    .parameter {
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    .parameter-main {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        width: 100% !important;
+        gap: 8px !important;
+    }
+
+    .parameter-name {
+        width: 100% !important;
+        flex-basis: 100% !important;
+        font-weight: 600 !important;
+    }
+
+    /* -----------------------------------------
+       EVIDENCE
+       ----------------------------------------- */
+
+    .evidence-card {
+        width: 100% !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+    }
+
+    .evidence-text {
+        font-size: 0.92rem !important;
+        line-height: 1.55 !important;
+        overflow-wrap: anywhere !important;
+    }
+
+    .evidence-meta {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+
+
+/* SCHOOL INTELLIGENCE MOBILE UX V3 */
+
+@media screen and (max-width: 900px) {
+
+    /* Force single-column school card */
+    .school-card .school-card-main {
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) !important;
+        grid-template-rows: auto auto !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        gap: 20px !important;
+        align-items: start !important;
+    }
+
+    .school-card .school-card-main > div:first-child {
+        grid-column: 1 !important;
+        grid-row: 1 !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: none !important;
+    }
+
+    .school-card .school-card-main > .score {
+        grid-column: 1 !important;
+        grid-row: 2 !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: none !important;
+        margin: 0 !important;
+        text-align: left !important;
+    }
+
+    /* School title must use the complete card width */
+    .school-card .school-name {
+        display: block !important;
+        width: 100% !important;
+        max-width: none !important;
+        min-width: 0 !important;
+
+        white-space: normal !important;
+        word-break: normal !important;
+        overflow-wrap: normal !important;
+
+        font-size: 1.65rem !important;
+        line-height: 1.1 !important;
+    }
+
+    /* Metadata below the name */
+    .school-card .school-meta {
+        display: block !important;
+        width: 100% !important;
+        max-width: none !important;
+        min-width: 0 !important;
+
+        margin-top: 12px !important;
+
+        white-space: normal !important;
+        word-break: normal !important;
+        overflow-wrap: anywhere !important;
+
+        line-height: 1.5 !important;
+    }
+
+    /* Score */
+    .school-card .score-value {
+        font-size: 2.4rem !important;
+        line-height: 1 !important;
+    }
+
+    .school-card .score-label {
+        margin-top: 7px !important;
+    }
+
+    /* Statistics are independent from title/score */
+    .school-card .school-stats {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+
+        gap: 18px 24px !important;
+        margin-top: 24px !important;
+    }
+
+    .school-card .school-stats span {
+        display: block !important;
+        min-width: 0 !important;
+
+        white-space: normal !important;
+        line-height: 1.35 !important;
+    }
+
+    .school-card .school-stats strong {
+        display: block !important;
+        margin-top: 3px !important;
+    }
+
+    /* Detail score */
+    .detail-score {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        width: 100% !important;
+    }
+
+    /* Prevent horizontal overflow */
+    .school-card,
+    .school-card-main,
+    .school-stats,
+    .school-meta,
+    .school-name {
+        box-sizing: border-box !important;
+    }
+}
+
+
+/* SCHOOL INTELLIGENCE DETAIL UX */
+
+.evidence-details {
+    margin-top: 16px;
+    border-top: 1px solid #ddd;
+}
+
+.evidence-details summary {
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    padding: 14px 0;
+    font-weight: 700;
+    list-style: none;
+}
+
+.evidence-details summary::-webkit-details-marker {
+    display: none;
+}
+
+.evidence-details summary::after {
+    content: "+";
+}
+
+.evidence-details[open] summary::after {
+    content: "−";
+}
+
+.evidence-list {
+    display: grid;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.evidence-card {
+    padding: 18px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background: #fafafa;
+}
+
+.evidence-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.evidence-text {
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+.evidence-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid #ddd;
+}
+
+@media (max-width: 700px) {
+
+    .school-card-main {
+        display: block;
+    }
+
+    .school-name {
+        max-width: 100%;
+        overflow-wrap: anywhere;
+    }
+
+    .school-meta {
+        margin-top: 12px;
+        line-height: 1.5;
+        overflow-wrap: anywhere;
+    }
+
+    .school-stats {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+        margin-top: 20px;
+    }
+
+    .score {
+        margin-top: 20px;
+        text-align: left;
+    }
+
+    .parameter-main {
+        display: block;
+    }
+
+    .parameter-metrics {
+        margin-top: 12px;
+    }
+
+    .evidence-card {
+        padding: 16px;
+    }
+
+    .evidence-header {
+        align-items: flex-start;
+    }
+
+    .evidence-meta {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+}

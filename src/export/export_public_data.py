@@ -180,6 +180,44 @@ def export_evidence(conn):
     print(f"  evidence.json: {len(data)}")
 
 
+def export_ptof_documents(conn):
+    rows = conn.execute("""
+        SELECT
+            id,
+            school_id,
+            school_year,
+            url,
+            title,
+            status,
+            document_date,
+            pages,
+            document_type,
+            relevance,
+            relevance_score
+        FROM ptof_documents
+        ORDER BY school_id, relevance_score DESC, id
+    """).fetchall()
+
+    columns = [
+        "id",
+        "school_id",
+        "school_year",
+        "url",
+        "title",
+        "status",
+        "document_date",
+        "pages",
+        "document_type",
+        "relevance",
+        "relevance_score",
+    ]
+
+    return [
+        dict(zip(columns, row))
+        for row in rows
+    ]
+
+
 def export_statistics(conn):
     schools = conn.execute(
         "SELECT COUNT(*) FROM schools"
@@ -333,6 +371,21 @@ def main():
         print("Esportazione evidence...")
 
         evidence = export_evidence(conn)
+
+        print()
+        print("Esportazione PTOF...")
+
+        ptof_documents = export_ptof_documents(conn)
+
+        write_json(
+            "ptof_documents.json",
+            ptof_documents
+        )
+
+        print(
+            f"  ptof_documents.json: "
+            f"{len(ptof_documents)}"
+        )
 
         print()
         print("Esportazione statistics...")
