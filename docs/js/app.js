@@ -337,12 +337,8 @@ function showDetail(schoolId) {
                     <div class="parameter-group-header">
 
                         <div>
-                            <span class="eyebrow">
+                            <h3 class="parameter-category-title">
                                 ${escapeHtml(category)}
-                            </span>
-
-                            <h3>
-                                Parametri
                             </h3>
                         </div>
 
@@ -567,6 +563,81 @@ function showDetail(schoolId) {
         }
     );
 
+    const schoolPtofs =
+        ptofDocuments
+            .filter(
+                document =>
+                    document.school_id === schoolId
+            );
+
+    const currentPtof =
+        schoolPtofs
+            .map(document => {
+
+                const title =
+                    String(document.title || "")
+                        .toUpperCase()
+                        .replace(/[–—]/g, "-");
+
+                let score = 0;
+
+                // Documento esplicitamente riferito al triennio 2025-2028
+                if (
+                    title.includes("2025-2028") ||
+                    title.includes("2025 - 2028")
+                ) {
+                    score += 100;
+                }
+
+                // PTOF esplicito
+                if (title.includes("PTOF")) {
+                    score += 50;
+                }
+
+                // Documento aggiornato
+                if (title.includes("AGGIORNAT")) {
+                    score += 10;
+                }
+
+                // Escludiamo documenti secondari
+                if (title.includes("PREDISPOSIZIONE")) {
+                    score -= 1000;
+                }
+
+                if (title.includes("ATTO D'INDIRIZZO")) {
+                    score -= 1000;
+                }
+
+                if (title.includes("ATTO D’INDIRIZZO")) {
+                    score -= 1000;
+                }
+
+                if (title.includes("SINTESI")) {
+                    score -= 500;
+                }
+
+                if (title.includes("PRESENTAZIONE")) {
+                    score -= 500;
+                }
+
+                if (title.includes("ALLEGATO")) {
+                    score -= 300;
+                }
+
+                return {
+                    document,
+                    score
+                };
+
+            })
+            .sort(
+                (a, b) =>
+                    b.score - a.score
+            )
+            .map(
+                item => item.document
+            )[0];
+
     $("detailContent").innerHTML = `
 
         <div class="detail-header">
@@ -605,100 +676,6 @@ function showDetail(schoolId) {
 
         </div>
 
-
-
-        <section class="detail-ptof">
-
-            <div class="detail-ptof-header">
-
-                <div>
-
-                    <span class="eyebrow">
-                        DOCUMENTO PRINCIPALE
-                    </span>
-
-                    <h2>
-                        PTOF
-                    </h2>
-
-                </div>
-
-            </div>
-
-            ${(() => {
-
-                const schoolPtofs =
-                    ptofDocuments
-                        .filter(
-                            document =>
-                                document.school_id === schoolId
-                        );
-
-                const currentPtof =
-                    schoolPtofs.find(
-                        document =>
-                            String(document.title || "")
-                                .toUpperCase()
-                                .includes("PTOF 2025-2028")
-                            &&
-                            !String(document.title || "")
-                                .toUpperCase()
-                                .includes("PREDISPOSIZIONE")
-                    ) ||
-                    schoolPtofs.find(
-                        document =>
-                            String(document.title || "")
-                                .toUpperCase()
-                                .includes("PTOF")
-                    );
-
-                if (!currentPtof) {
-
-                    return `
-                        <div class="detail-ptof-empty">
-                            Nessun PTOF disponibile.
-                        </div>
-                    `;
-
-                }
-
-                return `
-
-                    <div class="detail-ptof-card">
-
-                        <div>
-
-                            <strong>
-                                ${escapeHtml(
-                                    currentPtof.title || "PTOF"
-                                )}
-                            </strong>
-
-                            <span>
-                                ${escapeHtml(
-                                    currentPtof.school_year || ""
-                                )}
-                            </span>
-
-                        </div>
-
-                        <a
-                            class="detail-ptof-button"
-                            href="${escapeHtml(currentPtof.url)}"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            Apri / scarica PTOF
-                            ↗
-                        </a>
-
-                    </div>
-
-                `;
-
-            })()}
-
-        </section>
 
         <section class="detail-overview">
 
@@ -750,31 +727,79 @@ function showDetail(schoolId) {
                 </strong>
             </div>
 
+
         </section>
 
 
-        <section class="detail-provenance">
+        <section class="detail-ptof">
 
-            <div class="provenance-item">
-                <span>Evidence</span>
-                <strong>
-                    ${schoolEvidence.length}
-                </strong>
+            <div class="detail-ptof-heading">
+
+                <div>
+                    <span class="eyebrow">
+                        DOCUMENTO PRINCIPALE
+                    </span>
+
+                    <h2>
+                        PTOF
+                    </h2>
+                </div>
+
+                ${
+                    currentPtof
+                        ? `
+                            <span class="detail-ptof-year">
+                                ${escapeHtml(
+                                    currentPtof.school_year || ""
+                                )}
+                            </span>
+                          `
+                        : ""
+                }
+
             </div>
 
-            <div class="provenance-item">
-                <span>Documenti</span>
-                <strong>
-                    ${documentIds.length}
-                </strong>
-            </div>
 
-            <div class="provenance-item">
-                <span>Sources</span>
-                <strong>
-                    ${sourceIds.length}
-                </strong>
-            </div>
+            ${
+                currentPtof
+                    ? `
+                        <div class="detail-ptof-card">
+
+                            <div class="detail-ptof-info">
+
+                                <strong>
+                                    ${escapeHtml(
+                                        currentPtof.title ||
+                                        "PTOF"
+                                    )}
+                                </strong>
+
+                                <span>
+                                    Documento principale
+                                </span>
+
+                            </div>
+
+                            <a
+                                class="detail-ptof-button"
+                                href="${escapeHtml(
+                                    currentPtof.url
+                                )}"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Apri / scarica PTOF
+                                ↗
+                            </a>
+
+                        </div>
+                      `
+                    : `
+                        <div class="detail-ptof-empty">
+                            Nessun PTOF disponibile per questa scuola.
+                        </div>
+                      `
+            }
 
         </section>
 

@@ -1096,3 +1096,262 @@ footer {
         gap: 8px;
     }
 }
+
+
+/* PARAMETER UX COMPACT */
+
+.parameter-group {
+    margin-bottom: 3rem;
+}
+
+.parameter-group-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.parameter-group-header .eyebrow {
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.parameter-category-title {
+    margin: 0;
+    font-size: 1.5rem;
+    line-height: 1.1;
+}
+
+.parameter-group-count {
+    font-size: 0.95rem;
+    font-weight: 700;
+    opacity: 0.55;
+}
+
+.parameter {
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+    padding: 1.25rem 0;
+}
+
+.parameter-main {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 1rem;
+    row-gap: 0.6rem;
+}
+
+.parameter-title {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    min-width: 0;
+}
+
+.parameter-name {
+    font-size: 1.15rem;
+    font-weight: 700;
+}
+
+.parameter-value {
+    grid-column: 1 / -1;
+    font-size: 1.05rem;
+    font-weight: 500;
+}
+
+.parameter-metrics {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    font-size: 0.9rem;
+}
+
+.parameter-metrics span {
+    display: inline-flex;
+    gap: 0.35rem;
+    align-items: baseline;
+}
+
+.parameter-metrics strong {
+    font-weight: 800;
+}
+
+.evidence-details {
+    margin-top: 1rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.evidence-details summary {
+    min-height: 3.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    cursor: pointer;
+    font-weight: 700;
+    list-style: none;
+}
+
+.evidence-details summary::-webkit-details-marker {
+    display: none;
+}
+
+.evidence-details summary::after {
+    content: "+";
+    font-size: 1.5rem;
+    line-height: 1;
+}
+
+.evidence-details[open] summary::after {
+    content: "−";
+}
+
+.evidence-summary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding: 0 0 1rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    opacity: 0.65;
+}
+
+.evidence-list {
+    display: grid;
+    gap: 0.75rem;
+}
+
+@media (max-width: 600px) {
+
+    .parameter-group {
+        margin-bottom: 2.25rem;
+    }
+
+    .parameter-group-header {
+        margin-bottom: 0.75rem;
+    }
+
+    .parameter-category-title {
+        font-size: 1.35rem;
+    }
+
+    .parameter {
+        padding: 1rem 0;
+    }
+
+    .parameter-name {
+        font-size: 1.05rem;
+    }
+
+    .parameter-metrics {
+        gap: 0.6rem 1rem;
+    }
+
+    .evidence-details summary {
+        min-height: 3.25rem;
+    }
+}
+
+
+/* PARAMETER MOBILE REFINEMENT */
+
+.parameter-main {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 1rem;
+    row-gap: 0.65rem;
+    align-items: baseline;
+}
+
+.parameter-title {
+    grid-column: 1;
+    grid-row: 1;
+    display: flex;
+    align-items: baseline;
+    flex-wrap: nowrap;
+    gap: 0.45rem;
+    min-width: 0;
+}
+
+.parameter-name {
+    white-space: normal;
+}
+
+.parameter-status {
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.parameter-value {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+    text-align: right;
+    font-size: 1.05rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.parameter-metrics {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem 1rem;
+    font-size: 0.9rem;
+}
+
+.parameter-metrics span {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.3rem;
+}
+
+.parameter-category-title {
+    margin: 0;
+    font-size: 1.5rem;
+    line-height: 1.1;
+}
+
+@media (max-width: 600px) {
+
+    .parameter-group-header {
+        align-items: center;
+        margin-bottom: 0.5rem;
+    }
+
+    .parameter-category-title {
+        font-size: 1.35rem;
+    }
+
+    .parameter-main {
+        grid-template-columns: minmax(0, 1fr) auto;
+        column-gap: 0.75rem;
+    }
+
+    .parameter-title {
+        gap: 0.35rem;
+    }
+
+    .parameter-name {
+        font-size: 1.05rem;
+    }
+
+    .parameter-status {
+        font-size: 0.85rem;
+        letter-spacing: 0.02em;
+    }
+
+    .parameter-value {
+        font-size: 1rem;
+    }
+
+    .parameter-metrics {
+        gap: 0.35rem 0.9rem;
+        font-size: 0.85rem;
+    }
+}

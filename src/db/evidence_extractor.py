@@ -490,9 +490,30 @@ def classify_evidence(feature: str, snippet: str, matched_text: str):
 
     if any(re.search(pattern, s, flags=re.IGNORECASE) for pattern in patterns):
 
-        # Per una dichiarazione diretta serve almeno un minimo di contesto
-        # scolastico. Evita che una semplice keyword isolata diventi EXPLICIT.
-        if quality >= 1:
+        # Una dichiarazione che corrisponde a un pattern specifico
+        # della feature è già un'indicazione sufficiente.
+        #
+        # Il contesto scolastico resta richiesto solo quando la feature
+        # è identificata esclusivamente da una keyword generica.
+        #
+        # In questo modo un riferimento valido presente in una sezione
+        # curricolare non viene perso solo perché il testo non contiene
+        # marker come "offre", "propone" o "dispone di".
+        specific_patterns = (
+            direct_patterns.get(feature, [])
+            or language_terms.get(feature, [])
+        )
+
+        is_specific = any(
+            re.search(
+                pattern,
+                s,
+                flags=re.IGNORECASE,
+            )
+            for pattern in specific_patterns
+        )
+
+        if quality >= 1 or is_specific:
             return "EXPLICIT", 100
 
     # -----------------------------------------------------------------
