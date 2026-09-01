@@ -531,6 +531,42 @@ function getRecord(records, code) {
 }
 
 
+function getDocumentById(documentId) {
+    return ptofDocuments.find(
+        document => String(document.id) === String(documentId)
+    );
+}
+
+
+function documentLink(documentId, label = "Apri documento") {
+    const document = getDocumentById(documentId);
+
+    if (!document || !document.url) {
+        return "";
+    }
+
+    const title = escapeHtml(
+        document.title || "Documento"
+    );
+
+    const url = escapeHtml(
+        document.url
+    );
+
+    return `
+        <a
+            href="${url}"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="evidence-document-link"
+            title="${title}"
+        >
+            ${label} ↗
+        </a>
+    `;
+}
+
+
 function showDetail(schoolId) {
 
     const school =
@@ -712,18 +748,37 @@ function showDetail(schoolId) {
                                             <span>
                                                 Documento
                                                 <strong>
-                                                    ${evidence.document_id ?? "—"}
+                                                    ${
+                                                        getDocumentById(
+                                                            evidence.document_id
+                                                        )?.title
+                                                            ? escapeHtml(
+                                                                getDocumentById(
+                                                                    evidence.document_id
+                                                                ).title
+                                                            )
+                                                            : "Non disponibile"
+                                                    }
                                                 </strong>
                                             </span>
 
                                             <span>
                                                 Sorgente
                                                 <strong>
-                                                    ${evidence.source_id ?? "—"}
+                                                    ${
+                                                        evidence.source_id ?? "—"
+                                                    }
                                                 </strong>
                                             </span>
 
                                         </div>
+
+                                        ${
+                                            documentLink(
+                                                evidence.document_id,
+                                                "Apri documento"
+                                            )
+                                        }
 
                                     </article>
 
@@ -1069,8 +1124,11 @@ function showDetail(schoolId) {
 
         <section class="detail-overview">
 
-            <div class="detail-score-item">
-                <span>SCORE</span>
+            <div
+                class="detail-score-item"
+                title="Valutazione complessiva della scuola sui criteri analizzati."
+            >
+                <span>INDICE COMPLESSIVO</span>
                 <strong>
                     ${formatPercent(
                         score?.score_percent
@@ -1078,8 +1136,11 @@ function showDetail(schoolId) {
                 </strong>
             </div>
 
-            <div class="detail-score-item">
-                <span>COVERAGE</span>
+            <div
+                class="detail-score-item"
+                title="Percentuale dei criteri per cui sono state trovate informazioni."
+            >
+                <span>COMPLETEZZA DEI DATI</span>
                 <strong>
                     ${formatPercent(
                         score?.coverage_percent
@@ -1087,8 +1148,11 @@ function showDetail(schoolId) {
                 </strong>
             </div>
 
-            <div class="detail-score-item">
-                <span>CONFIDENCE</span>
+            <div
+                class="detail-score-item"
+                title="Affidabilità complessiva dei riscontri utilizzati."
+            >
+                <span>AFFIDABILITÀ DELLE INFORMAZIONI</span>
                 <strong>
                     ${formatPercent(
                         score?.confidence_percent
@@ -1096,25 +1160,84 @@ function showDetail(schoolId) {
                 </strong>
             </div>
 
-            <div class="detail-score-item">
-                <span>PARAMETRI</span>
+            <div
+                class="detail-score-item"
+                title="Numero di caratteristiche utilizzate nell'analisi."
+            >
+                <span>CARATTERISTICHE ANALIZZATE</span>
                 <strong>
                     ${records.length}
                 </strong>
             </div>
 
-            <div class="detail-score-item">
-                <span>EVIDENCE</span>
+            <div
+                class="detail-score-item"
+                title="Numero di passaggi dei documenti utilizzati come riscontro."
+            >
+                <span>RISCONTRI NEI DOCUMENTI</span>
                 <strong>
                     ${schoolEvidence.length}
                 </strong>
             </div>
 
-            <div class="detail-score-item">
-                <span>DOCUMENTI</span>
+            <div
+                class="detail-score-item"
+                title="Numero di documenti consultati per raccogliere le informazioni."
+            >
+                <span>DOCUMENTI ANALIZZATI</span>
                 <strong>
                     ${documentIds.length}
                 </strong>
+
+                ${
+                    documentIds.length
+                        ? `
+                            <details class="detail-documents-list">
+                                <summary>
+                                    Vedi documenti
+                                </summary>
+
+                                <div>
+                                    ${
+                                        documentIds
+                                            .map(documentId => {
+                                                const document =
+                                                    getDocumentById(
+                                                        documentId
+                                                    );
+
+                                                if (!document) {
+                                                    return "";
+                                                }
+
+                                                return `
+                                                    <div>
+                                                        <strong>
+                                                            ${escapeHtml(
+                                                                document.title ||
+                                                                "Documento"
+                                                            )}
+                                                        </strong>
+
+                                                        <a
+                                                            href="${escapeHtml(
+                                                                document.url
+                                                            )}"
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                        >
+                                                            Apri documento ↗
+                                                        </a>
+                                                    </div>
+                                                `;
+                                            })
+                                            .join("")
+                                    }
+                                </div>
+                            </details>
+                          `
+                        : ""
+                }
             </div>
 
 

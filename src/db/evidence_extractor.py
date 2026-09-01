@@ -224,6 +224,189 @@ def clean_snippet(text: str) -> str:
 
 
 # =============================================================================
+# EVIDENCE QUALITY FILTER
+# =============================================================================
+#
+# Evita di trasformare semplici riferimenti testuali del PTOF in evidence
+# operative. In particolare:
+#
+# - indici / sommari
+# - elenchi numerati
+# - riferimenti curricolari
+# - discipline citate come materia
+# - keyword presenti in liste di aree/progetti
+#
+# Una evidence deve contribuire a dimostrare che la scuola offre,
+# utilizza o possiede realmente la feature.
+# =============================================================================
+
+INDEX_PATTERNS = [
+    r"\bindice\b",
+    r"\bsommario\b",
+    r"\bcontenuti\b",
+    r"\b\d+\.\s*area\b",
+    r"\b\d+\.\s*lingue\b",
+    r"\b\d+\.\s*educazione\b",
+    r"\b\d+\.\s*laboratori?\b",
+    r"\b\d+\.\s*progetti?\b",
+    r"\barea\s+\w+(?:\s+\w+){0,4}\s+\d+\.",
+]
+
+CURRICULUM_TERMS = [
+    "curricolo",
+    "curricolo verticale",
+    "obiettivi di apprendimento",
+    "traguardi per lo sviluppo",
+    "discipline coinvolte",
+    "disciplina di riferimento",
+    "contenuti annuali",
+    "competenze chiave",
+    "insegnamenti e quadri orario",
+    "arte e immagine",
+    "lingua inglese",
+    "lingua francese",
+    "lingua spagnola",
+    "lingua tedesca",
+    "seconda lingua comunitaria",
+]
+
+STRONG_OFFER_TERMS = [
+    "dispone di",
+    "dispongono di",
+    "è presente",
+    "sono presenti",
+    "dotato di",
+    "dotata di",
+    "dotati di",
+    "dotate di",
+    "offre",
+    "offrono",
+    "propone",
+    "proponiamo",
+    "attiva",
+    "attivazione",
+    "prevede",
+    "prevedono",
+    "potenziamento",
+    "extracurricolare",
+    "lettorato",
+    "corso",
+    "corsi",
+    "laboratorio",
+    "laboratori",
+    "attività",
+    "progetto",
+    "progetti",
+    "spazi e attrezzature",
+    "attrezzature e infrastrutture",
+]
+
+
+def is_low_quality_context(
+    feature: str,
+    snippet: str,
+    matched_text: str,
+) -> bool:
+    """
+    Restituisce True quando il match è quasi certamente un falso positivo
+    documentale e non una evidence utile per il profilo della scuola.
+    """
+
+    s = snippet.lower()
+    m = matched_text.lower()
+
+    # ---------------------------------------------------------
+    # 1. Indici / elenchi strutturati
+    # ---------------------------------------------------------
+
+    if any(
+        re.search(pattern, s, flags=re.IGNORECASE)
+        for pattern in INDEX_PATTERNS
+    ):
+        # Un elenco è accettabile solo se contiene una dichiarazione
+        # operativa forte riferita alla feature.
+        if not any(term in s for term in STRONG_OFFER_TERMS):
+            return True
+
+    # ---------------------------------------------------------
+    # 2. Contesto esclusivamente curricolare
+    # ---------------------------------------------------------
+
+    curriculum_hits = sum(
+        1
+        for term in CURRICULUM_TERMS
+        if term in s
+    )
+
+    offer_hits = sum(
+        1
+        for term in STRONG_OFFER_TERMS
+        if term in s
+    )
+
+    if curriculum_hits >= 1 and offer_hits == 0:
+        return True
+
+    # ---------------------------------------------------------
+    # 3. Lingue: "lingua inglese" non significa necessariamente
+    #    che la scuola offra un corso/potenziamento specifico.
+    # ---------------------------------------------------------
+
+    if feature in {
+        "INGLESE",
+        "FRANCESE",
+        "SPAGNOLO",
+        "TEDESCO",
+    }:
+        if curriculum_hits > 0 and offer_hits == 0:
+            return True
+
+    # ---------------------------------------------------------
+    # 4. ARTE: impedisce che "arte" dentro una lista disciplinare
+    #    diventi automaticamente una feature verificata.
+    # ---------------------------------------------------------
+
+    if feature == "ARTE":
+        curricular_art_terms = [
+            "arte e immagine",
+            "linguaggi dell'arte",
+            "disciplina",
+            "discipline",
+            "obiettivi",
+            "traguardi",
+        ]
+
+        if (
+            any(term in s for term in curricular_art_terms)
+            and offer_hits == 0
+        ):
+            return True
+
+    # ---------------------------------------------------------
+    # 5. STEM: la semplice presenza di STEM in un indice non basta.
+    # ---------------------------------------------------------
+
+    if feature == "STEM":
+        if (
+            "stem" in s
+            and offer_hits == 0
+            and any(
+                term in s
+                for term in [
+                    "area stem",
+                    "discipline stem",
+                    "competenze stem",
+                    "educazione stem",
+                ]
+            )
+        ):
+            return True
+
+    return False
+
+
+
+# =============================================================================
 # CONTEXT QUALITY
 # =============================================================================
 
@@ -844,6 +1027,13 @@ def extract_from_text(text: str):
                 )
 
                 matched_text = match.group(0)
+
+                if is_low_quality_context(
+                    feature,
+                    snippet,
+                    matched_text,
+                ):
+                    continue
 
                 evidence_type, confidence = classify_evidence(
                     feature,
