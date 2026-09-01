@@ -177,85 +177,73 @@ function renderRanking() {
             "school-card";
 
         card.innerHTML = `
-            <div class="school-card-main">
+            <div class="ranking-card">
 
-                <div>
+                <div class="ranking-card-header">
 
-                    <div class="school-rank">
-                        #${index + 1}
+                    <div class="ranking-card-identity">
+
+                        <div class="ranking-rank">
+                            #${index + 1}
+                        </div>
+
+                        <div class="ranking-school-name">
+                            ${escapeHtml(school.denominazione)}
+                        </div>
+
+                        <div class="ranking-school-meta">
+                            ${escapeHtml(school.comune)}
+                            ·
+                            ${escapeHtml(school.provincia)}
+                            ·
+                            ${escapeHtml(school.codice_scuola)}
+                        </div>
+
                     </div>
 
-                    <div class="school-name">
-                        ${escapeHtml(
-                            school.denominazione
-                        )}
-                    </div>
+                    <div class="ranking-score">
+                        <div class="ranking-score-value">
+                            ${formatPercent(score?.score_percent)}
+                        </div>
 
-                    <div class="school-meta">
-                        ${escapeHtml(
-                            school.comune
-                        )}
-                        ·
-                        ${escapeHtml(
-                            school.provincia
-                        )}
-                        ·
-                        ${escapeHtml(
-                            school.codice_scuola
-                        )}
-                    </div>
-
-                </div>
-
-                <div class="score">
-
-                    <div class="score-value">
-                        ${formatPercent(
-                            score?.score_percent
-                        )}
-                    </div>
-
-                    <div class="score-label">
-                        SCORE
+                        <div class="ranking-score-label">
+                            SCORE
+                        </div>
                     </div>
 
                 </div>
 
-            </div>
+                <div class="ranking-stats">
 
-            <div class="school-stats">
+                    <div class="ranking-stat">
+                        <span>Coverage</span>
+                        <strong>
+                            ${formatPercent(score?.coverage_percent)}
+                        </strong>
+                    </div>
 
-                <span>
-                    Coverage
-                    <strong>
-                        ${formatPercent(
-                            score?.coverage_percent
-                        )}
-                    </strong>
-                </span>
+                    <div class="ranking-stat">
+                        <span>Confidence</span>
+                        <strong>
+                            ${formatPercent(score?.confidence_percent)}
+                        </strong>
+                    </div>
 
-                <span>
-                    Confidence
-                    <strong>
-                        ${formatPercent(
-                            score?.confidence_percent
-                        )}
-                    </strong>
-                </span>
+                    <div class="ranking-stat">
+                        <span>Verified</span>
+                        <strong>
+                            ${score?.verified_count ?? 0}
+                        </strong>
+                    </div>
 
-                <span>
-                    Verified
-                    <strong>
-                        ${score?.verified_count ?? 0}
-                    </strong>
-                </span>
+                    <div class="ranking-stat">
+                        <span>Evidence</span>
+                        <strong>
+                            ${score?.evidence_count ?? 0}
+                        </strong>
+                    </div>
 
-                <span>
-                    Evidence
-                    <strong>
-                        ${score?.evidence_count ?? 0}
-                    </strong>
-                </span>
+                </div>
 
             </div>
         `;
@@ -1182,7 +1170,7 @@ function showDetail(schoolId) {
                 </span>
 
                 <h2>
-                    Parametri
+                    Analisi tecnica
                 </h2>
             </div>
 
@@ -1198,7 +1186,7 @@ function showDetail(schoolId) {
             <summary class="technical-details-summary">
                 <div>
                     <span class="eyebrow">DATI TECNICI</span>
-                    <strong>Parametri ed evidence</strong>
+                    <strong>Verifica delle informazioni</strong>
                 </div>
 
                 <span class="technical-details-count">

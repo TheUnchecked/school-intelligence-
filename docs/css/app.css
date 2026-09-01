@@ -3100,3 +3100,189 @@ footer {
         white-space: normal !important;
     }
 }
+
+/* ============================================================
+   RANKING V9
+   Isolated layout — no dependency on legacy card CSS
+   ============================================================ */
+
+.ranking-card {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 24px !important;
+    border: 1px solid var(--line) !important;
+    border-radius: 12px !important;
+    background: var(--surface) !important;
+    box-sizing: border-box !important;
+    cursor: pointer;
+}
+
+.ranking-card-header {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    gap: 30px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    align-items: start !important;
+}
+
+.ranking-card-identity {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+}
+
+.ranking-rank {
+    color: var(--muted);
+    font-size: 0.82rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.ranking-school-name {
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    font-size: 1.35rem;
+    font-weight: 800;
+    line-height: 1.12;
+    letter-spacing: -0.025em;
+    overflow-wrap: anywhere;
+}
+
+.ranking-school-meta {
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin-top: 9px;
+    color: var(--muted);
+    font-size: 0.8rem;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+}
+
+.ranking-score {
+    flex: 0 0 auto;
+    min-width: 100px;
+    text-align: right;
+}
+
+.ranking-score-value {
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    white-space: nowrap;
+}
+
+.ranking-score-label {
+    margin-top: 6px;
+    color: var(--muted);
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+}
+
+.ranking-stats {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 20px !important;
+    width: 100% !important;
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+}
+
+.ranking-stat {
+    min-width: 0;
+}
+
+.ranking-stat span {
+    display: block;
+    color: var(--muted);
+    font-size: 0.72rem;
+    line-height: 1.2;
+}
+
+.ranking-stat strong {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.95rem;
+    line-height: 1.2;
+}
+
+/* ============================================================
+   RANKING V9 — MOBILE
+   ============================================================ */
+
+@media screen and (max-width: 700px) {
+
+    .ranking-card {
+        padding: 20px !important;
+        border-radius: 11px !important;
+    }
+
+    .ranking-card-header {
+        display: block !important;
+        width: 100% !important;
+    }
+
+    .ranking-card-identity {
+        width: 100% !important;
+    }
+
+    .ranking-school-name {
+        font-size: 1.55rem;
+        line-height: 1.08;
+    }
+
+    .ranking-school-meta {
+        font-size: 0.78rem;
+        line-height: 1.5;
+    }
+
+    .ranking-score {
+        width: 100% !important;
+        margin-top: 20px;
+        text-align: left !important;
+    }
+
+    .ranking-score-value {
+        font-size: 2.25rem;
+    }
+
+    .ranking-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 16px 20px !important;
+        margin-top: 22px;
+        padding-top: 18px;
+    }
+
+    .ranking-stat span {
+        font-size: 0.7rem;
+    }
+
+    .ranking-stat strong {
+        font-size: 0.95rem;
+    }
+}
+
+@media screen and (max-width: 380px) {
+
+    .ranking-card {
+        padding: 16px !important;
+    }
+
+    .ranking-school-name {
+        font-size: 1.35rem;
+    }
+
+    .ranking-score-value {
+        font-size: 2rem;
+    }
+
+    .ranking-stats {
+        gap: 14px !important;
+    }
+}
