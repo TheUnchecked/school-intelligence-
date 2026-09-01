@@ -659,7 +659,7 @@ function showDetail(schoolId) {
                                         <div class="evidence-meta">
 
                                             <span>
-                                                Confidence
+                                                Affidabilità
                                                 <strong>
                                                     ${formatPercent(
                                                         evidence.confidence
@@ -668,14 +668,14 @@ function showDetail(schoolId) {
                                             </span>
 
                                             <span>
-                                                Document
+                                                Documento
                                                 <strong>
                                                     ${evidence.document_id ?? "—"}
                                                 </strong>
                                             </span>
 
                                             <span>
-                                                Source
+                                                Sorgente
                                                 <strong>
                                                     ${evidence.source_id ?? "—"}
                                                 </strong>
@@ -707,65 +707,74 @@ function showDetail(schoolId) {
                         recordEvidences
                     );
 
+                const meta = parameterMeta(
+                    record.parameter_code
+                );
+
+                const humanStatus = {
+                    VERIFIED: "Verificato",
+                    PROBABLE: "Probabile",
+                    MENTIONED: "Menzionato",
+                    NOT_FOUND: "Non rilevato"
+                }[record.status] || record.status || "Non rilevato";
+
+                const valueIsUnknown =
+                    record.status === "NOT_FOUND";
+
+                const displayValue =
+                    valueIsUnknown
+                        ? "Non rilevato"
+                        : String(value);
+
+                const statusClass =
+                    String(record.status || "")
+                        .toLowerCase();
+
                 parametersHtml += `
 
-                    <article class="parameter">
+                    <article class="parameter parameter-v4">
 
-                        <div class="parameter-main">
+                        <div class="parameter-v4-main">
 
-                            <div class="parameter-title">
+                            <div class="parameter-v4-icon">
+                                ${meta.icon}
+                            </div>
 
-                                <span class="parameter-name">
-                                    ${escapeHtml(
-                                        record.parameter_name
-                                    )}
-                                </span>
+                            <div class="parameter-v4-content">
 
-                                <span class="
-                                    parameter-status
-                                    status-${String(
-                                        record.status || ""
-                                    ).toLowerCase()}
+                                <div class="parameter-v4-title-row">
+
+                                    <span class="parameter-v4-name">
+                                        ${escapeHtml(meta.label)}
+                                    </span>
+
+                                    <span class="
+                                        parameter-v4-status
+                                        status-${statusClass}
+                                    ">
+                                        ${escapeHtml(humanStatus)}
+                                    </span>
+
+                                </div>
+
+                                <div class="
+                                    parameter-v4-value
+                                    ${valueIsUnknown ? "is-unknown" : ""}
                                 ">
-                                    ${escapeHtml(
-                                        record.status || ""
-                                    )}
-                                </span>
+                                    ${escapeHtml(displayValue)}
+                                </div>
 
                             </div>
 
-                            <div class="parameter-value">
-                                ${escapeHtml(
-                                    String(value)
-                                )}
-                            </div>
-
-                            <div class="parameter-metrics">
+                            <div class="parameter-v4-confidence">
 
                                 <span>
-                                    Confidence
-                                    <strong>
-                                        ${formatPercent(
-                                            record.confidence
-                                        )}
-                                    </strong>
+                                    Affidabilità
                                 </span>
 
-                                <span>
-                                    Evidence
-                                    <strong>
-                                        ${recordEvidences.length}
-                                    </strong>
-                                </span>
-
-                                <span>
-                                    Type
-                                    <strong>
-                                        ${escapeHtml(
-                                            record.value_type || "—"
-                                        )}
-                                    </strong>
-                                </span>
+                                <strong>
+                                    ${formatPercent(record.confidence)}
+                                </strong>
 
                             </div>
 
