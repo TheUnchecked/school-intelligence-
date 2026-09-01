@@ -1409,3 +1409,255 @@ footer {
         grid-template-columns: 1fr;
     }
 }
+
+
+/* ============================================================
+   UX REFINEMENT — SCHOOL DETAIL
+   ============================================================ */
+
+.detail {
+    margin-top: 24px;
+    padding-bottom: 50px;
+}
+
+/* Header più compatto */
+
+.detail-header {
+    padding: 24px;
+    border-radius: 14px;
+}
+
+.detail-header h1,
+.detail-header h2 {
+    font-size: clamp(1.65rem, 4vw, 2.7rem);
+    line-height: 1.05;
+}
+
+.detail-meta {
+    margin-top: 8px;
+    font-size: 0.86rem;
+}
+
+/* Score / KPI molto più discreti */
+
+.detail-overview {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 8px;
+    margin: 12px 0 18px;
+}
+
+.detail-score-item {
+    padding: 11px 12px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--surface);
+}
+
+.detail-score-item span {
+    display: block;
+    color: var(--muted);
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+}
+
+.detail-score-item strong {
+    display: block;
+    margin-top: 2px;
+    font-size: 1.18rem;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+}
+
+/* PTOF */
+
+.detail-ptof {
+    margin-top: 14px;
+    padding: 20px;
+    border-radius: 14px;
+}
+
+.detail-ptof-heading h2 {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+/* Snapshot */
+
+.school-snapshot {
+    margin-top: 16px;
+    padding: 20px;
+    border-radius: 14px;
+}
+
+.school-snapshot-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.school-snapshot-item {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    min-height: 72px;
+    padding: 12px;
+    border: 1px solid var(--line);
+    border-radius: 11px;
+    background: var(--background);
+    transition:
+        transform 140ms ease,
+        border-color 140ms ease,
+        box-shadow 140ms ease;
+}
+
+.school-snapshot-item:hover {
+    transform: translateY(-1px);
+    border-color: #b7b7b0;
+    box-shadow: 0 5px 18px rgba(0,0,0,0.05);
+}
+
+.school-snapshot-icon {
+    flex: 0 0 42px;
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    border-radius: 10px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    font-size: 1.55rem;
+}
+
+.school-snapshot-content {
+    min-width: 0;
+}
+
+.school-snapshot-label {
+    display: block;
+    margin: 0;
+    color: var(--text);
+    font-size: 0.82rem;
+    font-weight: 750;
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+.school-snapshot-value {
+    display: block;
+    margin-top: 3px;
+    color: var(--muted);
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+/* Status più discreto */
+
+.parameter-status {
+    margin-top: 6px;
+    display: inline-block;
+    padding: 3px 7px;
+    border-radius: 999px;
+    background: var(--bg);
+    font-size: 0.62rem;
+    letter-spacing: 0.05em;
+}
+
+/* Parametri: meno rumore tecnico */
+
+.parameter {
+    border-radius: 11px;
+}
+
+.parameter-main {
+    padding: 15px 17px;
+}
+
+.parameter-value {
+    font-size: 0.88rem;
+}
+
+.parameter-metrics {
+    gap: 8px;
+    margin-top: 8px;
+    font-size: 0.68rem;
+}
+
+/* Mobile */
+
+@media (max-width: 900px) {
+
+    .detail-overview {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .school-snapshot-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 560px) {
+
+    .container {
+        width: min(100% - 24px, 1180px);
+    }
+
+    .detail-header {
+        padding: 18px;
+    }
+
+    .detail-overview {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 6px;
+    }
+
+    .detail-score-item {
+        padding: 9px 8px;
+    }
+
+    .detail-score-item strong {
+        font-size: 1rem;
+    }
+
+    .school-snapshot {
+        padding: 14px;
+    }
+
+    .school-snapshot-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 7px;
+    }
+
+    .school-snapshot-item {
+        min-height: 64px;
+        padding: 9px;
+        gap: 8px;
+    }
+
+    .school-snapshot-icon {
+        flex-basis: 34px;
+        width: 34px;
+        height: 34px;
+        font-size: 1.25rem;
+    }
+
+    .school-snapshot-label {
+        font-size: 0.74rem;
+    }
+
+    .school-snapshot-value {
+        font-size: 0.68rem;
+    }
+}
+
+@media (max-width: 380px) {
+
+    .school-snapshot-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .detail-overview {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}

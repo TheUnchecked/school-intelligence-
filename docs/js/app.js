@@ -271,6 +271,36 @@ function renderRanking() {
 
 
 
+
+function parameterIcon(code) {
+    const icons = {
+        INGLESE: "🇬🇧",
+        FRANCESE: "🇫🇷",
+        SPAGNOLO: "🇪🇸",
+        TEDESCO: "🇩🇪",
+        MENSA: "🍽️",
+        PALESTRA: "🏋️",
+        BIBLIOTECA: "📚",
+        LABORATORIO_INFORMATICA: "💻",
+        LABORATORIO_SCIENZE: "🧪",
+        LABORATORIO_MUSICALE: "🎵",
+        LABORATORIO_ARTISTICO: "🎨",
+        ATELIER_DIGITALE: "🖥️",
+        AULE_MULTIMEDIALI: "🖥️",
+        STEM: "🔬",
+        ARTE: "🎨",
+        TEATRO: "🎭",
+        SPORT: "⚽",
+        PNRR: "🚀",
+        INDIRIZZO_MUSICALE: "🎼",
+        STRUMENTI_MUSICALI: "🎹",
+        TEMPO_SCUOLA: "🕒"
+    };
+
+    return icons[code] || "•";
+}
+
+
 function extractHours(evidences) {
     for (const evidence of evidences || []) {
         const text = String(evidence.evidence || "");
@@ -747,13 +777,23 @@ function showDetail(schoolId) {
 
         return `
             <div class="school-snapshot-item">
-                <span class="school-snapshot-label">
-                    ${escapeHtml(record.parameter_name)}
-                </span>
 
-                <strong class="school-snapshot-value status-${statusClass}">
-                    ${escapeHtml(value)}
-                </strong>
+                <div class="school-snapshot-icon">
+                    ${parameterIcon(record.parameter_code)}
+                </div>
+
+                <div class="school-snapshot-content">
+
+                    <span class="school-snapshot-label">
+                        ${escapeHtml(record.parameter_name)}
+                    </span>
+
+                    <strong class="school-snapshot-value status-${statusClass}">
+                        ${escapeHtml(value)}
+                    </strong>
+
+                </div>
+
             </div>
         `;
     }).join("");
