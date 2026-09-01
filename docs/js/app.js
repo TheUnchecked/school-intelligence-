@@ -775,23 +775,6 @@ function showDetail(schoolId) {
                                 Number(a.confidence || 0)
                         );
 
-                const explicitCount =
-                    recordEvidences.filter(
-                        e => e.evidence_type === "EXPLICIT"
-                    ).length;
-
-                const inferredCount =
-                    recordEvidences.filter(
-                        e => e.evidence_type === "INFERRED"
-                    ).length;
-
-                /*
-                 * Le evidenze non vengono più renderizzate dentro
-                 * ogni parametro. Sono raccolte in un'unica tabella
-                 * "Riscontri documentali" più sotto.
-                 */
-                const evidenceHtml = "";
-
                 const value =
                     formatParameterValue(
                         record,
@@ -870,8 +853,6 @@ function showDetail(schoolId) {
                             </div>
 
                         </div>
-
-                        ${evidenceHtml}
 
                     </article>
                 `;
