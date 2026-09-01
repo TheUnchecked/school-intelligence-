@@ -1005,9 +1005,24 @@ function showDetail(schoolId) {
         </div>
 
 
-        <div class="parameters-container">
-            ${parametersHtml}
-        </div>
+        <details class="technical-details">
+
+            <summary class="technical-details-summary">
+                <div>
+                    <span class="eyebrow">DATI TECNICI</span>
+                    <strong>Parametri ed evidence</strong>
+                </div>
+
+                <span class="technical-details-count">
+                    ${records.length}
+                </span>
+            </summary>
+
+            <div class="parameters-container">
+                ${parametersHtml}
+            </div>
+
+        </details>
 
     `;
 

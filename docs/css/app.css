@@ -1661,3 +1661,175 @@ footer {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
+
+
+/* ============================================================
+   TECHNICAL DETAILS
+   La parte tecnica non deve dominare la scheda scuola.
+   ============================================================ */
+
+.technical-details {
+    margin-top: 28px;
+    border-top: 1px solid var(--line);
+}
+
+.technical-details-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 18px 4px;
+    cursor: pointer;
+    list-style: none;
+}
+
+.technical-details-summary::-webkit-details-marker {
+    display: none;
+}
+
+.technical-details-summary::after {
+    content: "+";
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    color: var(--muted);
+    font-size: 1.1rem;
+}
+
+.technical-details[open]
+.technical-details-summary::after {
+    content: "−";
+}
+
+.technical-details-summary .eyebrow {
+    display: block;
+    margin-bottom: 2px;
+}
+
+.technical-details-summary strong {
+    display: block;
+    font-size: 0.95rem;
+}
+
+.technical-details-count {
+    min-width: 28px;
+    height: 28px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--bg);
+    color: var(--muted);
+    font-size: 0.72rem;
+    font-weight: 800;
+}
+
+.technical-details .parameters-container {
+    padding-bottom: 25px;
+}
+
+/* Parametri più compatti */
+
+.technical-details .parameter {
+    border-radius: 10px;
+}
+
+.technical-details .parameter-main {
+    padding: 13px 15px;
+}
+
+.technical-details .parameter-metrics {
+    font-size: 0.65rem;
+}
+
+.technical-details .parameter-metrics strong {
+    font-size: 0.72rem;
+}
+
+.technical-details .evidence-details {
+    font-size: 0.8rem;
+}
+
+/* ============================================================
+   SNAPSHOT — DEVE ESSERE LA PARTE DOMINANTE
+   ============================================================ */
+
+.school-snapshot {
+    margin-top: 20px;
+    padding: 22px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: var(--surface);
+}
+
+.school-snapshot .detail-section-heading {
+    margin-bottom: 16px;
+}
+
+.school-snapshot .detail-section-heading h2 {
+    margin: 0;
+    font-size: 1.45rem;
+    letter-spacing: -0.035em;
+}
+
+.school-snapshot-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 9px;
+}
+
+.school-snapshot-item {
+    min-height: 76px;
+    padding: 12px 13px;
+}
+
+.school-snapshot-value {
+    font-size: 0.76rem;
+}
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 700px) {
+
+    .school-snapshot {
+        padding: 15px;
+        margin-top: 14px;
+        border-radius: 13px;
+    }
+
+    .school-snapshot-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 7px;
+    }
+
+    .school-snapshot-item {
+        min-height: 68px;
+        padding: 9px;
+    }
+
+    .school-snapshot-icon {
+        flex-basis: 34px;
+        width: 34px;
+        height: 34px;
+        font-size: 1.25rem;
+    }
+
+    .school-snapshot-label {
+        font-size: 0.72rem;
+    }
+
+    .school-snapshot-value {
+        font-size: 0.67rem;
+    }
+
+    .technical-details {
+        margin-top: 20px;
+    }
+
+    .technical-details-summary {
+        padding: 15px 2px;
+    }
+}
