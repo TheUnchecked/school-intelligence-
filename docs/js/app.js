@@ -1216,12 +1216,17 @@ function showDetail(schoolId) {
 
                 <div>
                     <span class="eyebrow">
-                        DOCUMENTO PRINCIPALE
+                        DOCUMENTO DI RIFERIMENTO
                     </span>
 
                     <h2>
                         PTOF
                     </h2>
+
+                    <p>
+                        Il documento principale per conoscere
+                        l'offerta formativa e il progetto della scuola.
+                    </p>
                 </div>
 
                 ${
@@ -1254,7 +1259,7 @@ function showDetail(schoolId) {
                                 </strong>
 
                                 <span>
-                                    Documento principale
+                                    PTOF di riferimento
                                 </span>
 
                             </div>
@@ -1267,17 +1272,197 @@ function showDetail(schoolId) {
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
-                                Apri / scarica PTOF
-                                ↗
+                                Apri PTOF ↗
                             </a>
 
                         </div>
                       `
                     : `
                         <div class="detail-ptof-empty">
-                            Nessun PTOF disponibile per questa scuola.
+                            Nessun PTOF di riferimento disponibile.
                         </div>
                       `
+            }
+
+
+            ${
+                (() => {
+
+                    const allOtherDocuments =
+                        ptofDocuments
+                            .filter(
+                                document =>
+                                    document.school_id === schoolId &&
+                                    String(document.id) !==
+                                        String(currentPtof?.id)
+                            );
+
+
+                    const classifyDocument = (document) => {
+
+                        const title =
+                            String(
+                                document.title || ""
+                            ).toUpperCase();
+
+
+                        /*
+                         * PTOF successivi / aggiornamenti
+                         */
+
+                        if (
+                            title.includes("PTOF") &&
+                            (
+                                title.includes("AGGIORNAMENTO") ||
+                                title.includes("PREDISPOSIZIONE")
+                            )
+                        ) {
+                            return title.includes("PREDISPOSIZIONE") ? "Predisposizione PTOF" : "Aggiornamento PTOF";
+                        }
+
+
+                        /*
+                         * PTOF precedenti
+                         */
+
+                        if (
+                            title.includes("PTOF")
+                        ) {
+                            return "PTOF precedente";
+                        }
+
+
+                        /*
+                         * Atti di indirizzo:
+                         * servono a capire il contesto
+                         * della progettazione della scuola.
+                         */
+
+                        if (
+                            title.includes("ATTO D'INDIRIZZO") ||
+                            title.includes("ATTO DI INDIRIZZO") ||
+                            title.includes("INDIRIZZO DEL DIRIGENTE")
+                        ) {
+                            return "Documento di contesto";
+                        }
+
+
+                        /*
+                         * Tutto il resto è materiale
+                         * di supporto all'analisi.
+                         */
+
+                        return "Documento di supporto";
+                    };
+
+
+                    const otherDocuments =
+                        allOtherDocuments
+                            .map(document => ({
+                                document,
+                                role: classifyDocument(document)
+                            }))
+                            .sort((a, b) => {
+
+                                const rank = {
+                                    "Aggiornamento PTOF": 0,
+                                    "Predisposizione PTOF": 1,
+                                    "PTOF precedente": 2,
+                                    "Documento di supporto": 3,
+                                    "Documento di contesto": 4
+                                };
+
+                                return (
+                                    (rank[a.role] ?? 9) -
+                                    (rank[b.role] ?? 9)
+                                );
+
+                            });
+
+
+                    if (!otherDocuments.length) {
+                        return "";
+                    }
+
+
+                    return `
+
+                        <div class="detail-source-list">
+
+                            <div class="detail-source-list-heading">
+
+                                <strong>
+                                    Altre fonti utilizzate nell'analisi
+                                </strong>
+
+                                <span>
+                                    ${otherDocuments.length}
+                                </span>
+
+                            </div>
+
+
+                            <div class="detail-source-list-items">
+
+                                ${
+                                    otherDocuments
+                                        .map(
+                                            ({
+                                                document,
+                                                role
+                                            }) => `
+
+                                                <div
+                                                    class="detail-source-item"
+                                                >
+
+                                                    <div>
+
+                                                        <strong>
+                                                            ${escapeHtml(
+                                                                document.title ||
+                                                                "Documento"
+                                                            )}
+                                                        </strong>
+
+                                                        <span>
+                                                            ${escapeHtml(
+                                                                role
+                                                            )}
+                                                        </span>
+
+                                                    </div>
+
+
+                                                    ${
+                                                        document.url
+                                                            ? `
+                                                                <a
+                                                                    href="${escapeHtml(
+                                                                        document.url
+                                                                    )}"
+                                                                    target="_blank"
+                                                                    rel="noopener noreferrer"
+                                                                >
+                                                                    Apri ↗
+                                                                </a>
+                                                              `
+                                                            : ""
+                                                    }
+
+                                                </div>
+
+                                            `
+                                        )
+                                        .join("")
+                                }
+
+                            </div>
+
+                        </div>
+
+                    `;
+                })()
             }
 
         </section>
