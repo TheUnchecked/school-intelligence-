@@ -1310,7 +1310,7 @@ function showDetail(schoolId) {
                                                         EXPLICIT: "Riscontro diretto",
                                                         INFERRED: "Riscontro indiretto",
                                                         MENTION: "Menzione"
-                                                    }[e.evidence_type] ||
+                                                    }[evidence.evidence_type] ||
                                                     "Non specificato")
                                                 )}
                                             </td>
