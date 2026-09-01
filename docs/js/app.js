@@ -207,7 +207,7 @@ function renderRanking() {
                         </div>
 
                         <div class="ranking-score-label">
-                            SCORE
+                            INDICE COMPLESSIVO
                         </div>
                     </div>
 
@@ -216,28 +216,28 @@ function renderRanking() {
                 <div class="ranking-stats">
 
                     <div class="ranking-stat">
-                        <span>Coverage</span>
+                        <span>Dati disponibili</span>
                         <strong>
                             ${formatPercent(score?.coverage_percent)}
                         </strong>
                     </div>
 
                     <div class="ranking-stat">
-                        <span>Confidence</span>
+                        <span>Affidabilità dei dati</span>
                         <strong>
                             ${formatPercent(score?.confidence_percent)}
                         </strong>
                     </div>
 
                     <div class="ranking-stat">
-                        <span>Verified</span>
+                        <span>Informazioni verificate</span>
                         <strong>
                             ${score?.verified_count ?? 0}
                         </strong>
                     </div>
 
                     <div class="ranking-stat">
-                        <span>Evidence</span>
+                        <span>Riscontri documentali</span>
                         <strong>
                             ${score?.evidence_count ?? 0}
                         </strong>
