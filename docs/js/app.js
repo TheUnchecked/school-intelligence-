@@ -272,32 +272,158 @@ function renderRanking() {
 
 
 
-function parameterIcon(code) {
-    const icons = {
-        INGLESE: "🇬🇧",
-        FRANCESE: "🇫🇷",
-        SPAGNOLO: "🇪🇸",
-        TEDESCO: "🇩🇪",
-        MENSA: "🍽️",
-        PALESTRA: "🏋️",
-        BIBLIOTECA: "📚",
-        LABORATORIO_INFORMATICA: "💻",
-        LABORATORIO_SCIENZE: "🧪",
-        LABORATORIO_MUSICALE: "🎵",
-        LABORATORIO_ARTISTICO: "🎨",
-        ATELIER_DIGITALE: "🖥️",
-        AULE_MULTIMEDIALI: "🖥️",
-        STEM: "🔬",
-        ARTE: "🎨",
-        TEATRO: "🎭",
-        SPORT: "⚽",
-        PNRR: "🚀",
-        INDIRIZZO_MUSICALE: "🎼",
-        STRUMENTI_MUSICALI: "🎹",
-        TEMPO_SCUOLA: "🕒"
+
+function parameterMeta(code) {
+
+    const meta = {
+
+        INGLESE: {
+            label: "Inglese",
+            category: "Lingue",
+            icon: "🇬🇧"
+        },
+
+        FRANCESE: {
+            label: "Francese",
+            category: "Lingue",
+            icon: "🇫🇷"
+        },
+
+        SPAGNOLO: {
+            label: "Spagnolo",
+            category: "Lingue",
+            icon: "🇪🇸"
+        },
+
+        TEDESCO: {
+            label: "Tedesco",
+            category: "Lingue",
+            icon: "🇩🇪"
+        },
+
+        MENSA: {
+            label: "Mensa scolastica",
+            category: "Servizi",
+            icon: "🍽️"
+        },
+
+        PALESTRA: {
+            label: "Palestra",
+            category: "Strutture",
+            icon: "🏀"
+        },
+
+        BIBLIOTECA: {
+            label: "Biblioteca",
+            category: "Strutture",
+            icon: "📚"
+        },
+
+        LABORATORIO_INFORMATICA: {
+            label: "Laboratorio di informatica",
+            category: "Strutture",
+            icon: "💻"
+        },
+
+        LABORATORIO_SCIENZE: {
+            label: "Laboratorio di scienze",
+            category: "Strutture",
+            icon: "🧪"
+        },
+
+        LABORATORIO_MUSICALE: {
+            label: "Laboratorio musicale",
+            category: "Strutture",
+            icon: "🎵"
+        },
+
+        LABORATORIO_ARTISTICO: {
+            label: "Laboratorio artistico",
+            category: "Strutture",
+            icon: "🎨"
+        },
+
+        ATELIER_DIGITALE: {
+            label: "Atelier digitale",
+            category: "Strutture",
+            icon: "🖥️"
+        },
+
+        AULE_MULTIMEDIALI: {
+            label: "Aule multimediali",
+            category: "Strutture",
+            icon: "📺"
+        },
+
+        STEM: {
+            label: "STEM",
+            category: "Attività e didattica",
+            icon: "🔬"
+        },
+
+        ARTE: {
+            label: "Arte",
+            category: "Attività e didattica",
+            icon: "🎨"
+        },
+
+        TEATRO: {
+            label: "Teatro",
+            category: "Attività e didattica",
+            icon: "🎭"
+        },
+
+        SPORT: {
+            label: "Sport",
+            category: "Attività e didattica",
+            icon: "⚽"
+        },
+
+        PNRR: {
+            label: "Progetti PNRR",
+            category: "Attività e didattica",
+            icon: "🚀"
+        },
+
+        INDIRIZZO_MUSICALE: {
+            label: "Indirizzo musicale",
+            category: "Attività e didattica",
+            icon: "🎼"
+        },
+
+        STRUMENTI_MUSICALI: {
+            label: "Strumenti musicali",
+            category: "Attività e didattica",
+            icon: "🎹"
+        },
+
+        TEMPO_SCUOLA: {
+            label: "Tempo scuola",
+            category: "Organizzazione",
+            icon: "🕒"
+        }
     };
 
-    return icons[code] || "•";
+    return meta[code] || {
+        label: code,
+        category: "Altro",
+        icon: "•"
+    };
+}
+
+
+function parameterIcon(code) {
+    return parameterMeta(code).icon;
+}
+
+
+function parameterLabel(code, fallback) {
+    return parameterMeta(code).label || fallback;
+}
+
+
+function parameterCategory(code) {
+    return parameterMeta(code).category;
 }
 
 
@@ -733,6 +859,7 @@ function showDetail(schoolId) {
             )[0];
 
 
+
     const snapshotCodes = [
         "INGLESE",
         "FRANCESE",
@@ -744,58 +871,110 @@ function showDetail(schoolId) {
         "LABORATORIO_INFORMATICA",
         "LABORATORIO_SCIENZE",
         "LABORATORIO_MUSICALE",
+        "LABORATORIO_ARTISTICO",
         "ATELIER_DIGITALE",
-        "AULE_MULTIMEDIALI"
+        "AULE_MULTIMEDIALI",
+        "STEM",
+        "ARTE",
+        "TEATRO",
+        "SPORT",
+        "PNRR",
+        "INDIRIZZO_MUSICALE",
+        "STRUMENTI_MUSICALI"
     ];
 
-    const snapshotHtml = snapshotCodes.map(code => {
+    const snapshotGroups = [
+        "Lingue",
+        "Servizi",
+        "Strutture",
+        "Attività e didattica"
+    ];
 
-        const record = getRecord(records, code);
+    const snapshotHtml = snapshotGroups.map(group => {
 
-        if (!record) {
+        const groupItems = snapshotCodes
+            .map(code => getRecord(records, code))
+            .filter(Boolean)
+            .filter(record =>
+                parameterCategory(record.parameter_code) === group
+            );
+
+        if (!groupItems.length) {
             return "";
         }
 
-        const recordEvidences = schoolEvidence
-            .filter(
-                e => e.parameter_code === record.parameter_code
-            )
-            .sort(
-                (a, b) =>
-                    Number(b.confidence || 0) -
-                    Number(a.confidence || 0)
+        const cards = groupItems.map(record => {
+
+            const recordEvidences = schoolEvidence
+                .filter(
+                    e => e.parameter_code === record.parameter_code
+                )
+                .sort(
+                    (a, b) =>
+                        Number(b.confidence || 0) -
+                        Number(a.confidence || 0)
+                );
+
+            const value = formatParameterValue(
+                record,
+                recordEvidences
             );
 
-        const value = formatParameterValue(
-            record,
-            recordEvidences
-        );
+            const found =
+                record.value === "SI" ||
+                record.status === "VERIFIED" ||
+                record.status === "PROBABLE" ||
+                record.status === "MENTIONED";
 
-        const statusClass = String(
-            record.status || ""
-        ).toLowerCase();
+            const stateClass = found
+                ? "is-present"
+                : "is-unknown";
+
+            const stateLabel = found
+                ? value
+                : "Non rilevato";
+
+            const meta = parameterMeta(
+                record.parameter_code
+            );
+
+            return `
+                <article class="school-feature-card ${stateClass}">
+
+                    <div class="school-feature-icon">
+                        ${meta.icon}
+                    </div>
+
+                    <div class="school-feature-body">
+
+                        <div class="school-feature-name">
+                            ${escapeHtml(meta.label)}
+                        </div>
+
+                        <div class="school-feature-state">
+                            ${escapeHtml(String(stateLabel))}
+                        </div>
+
+                    </div>
+
+                </article>
+            `;
+        }).join("");
 
         return `
-            <div class="school-snapshot-item">
+            <section class="school-feature-group">
 
-                <div class="school-snapshot-icon">
-                    ${parameterIcon(record.parameter_code)}
+                <div class="school-feature-group-title">
+                    ${escapeHtml(group)}
                 </div>
 
-                <div class="school-snapshot-content">
-
-                    <span class="school-snapshot-label">
-                        ${escapeHtml(record.parameter_name)}
-                    </span>
-
-                    <strong class="school-snapshot-value status-${statusClass}">
-                        ${escapeHtml(value)}
-                    </strong>
-
+                <div class="school-feature-grid">
+                    ${cards}
                 </div>
 
-            </div>
+            </section>
         `;
+
     }).join("");
 
     $("detailContent").innerHTML = `

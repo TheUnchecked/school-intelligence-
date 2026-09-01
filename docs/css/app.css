@@ -1357,59 +1357,6 @@ footer {
 }
 
 
-/* ============================================================
-   SCHOOL SNAPSHOT
-   ============================================================ */
-
-.school-snapshot {
-    margin-top: 28px;
-    padding: 24px;
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    background: var(--surface);
-}
-
-.school-snapshot-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 10px;
-}
-
-.school-snapshot-item {
-    min-width: 0;
-    padding: 14px;
-    border: 1px solid var(--line);
-    border-radius: 9px;
-    background: var(--background);
-}
-
-.school-snapshot-label {
-    display: block;
-    color: var(--muted);
-    font-size: 0.78rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-}
-
-.school-snapshot-value {
-    display: block;
-    margin-top: 7px;
-    font-size: 1rem;
-}
-
-@media (max-width: 800px) {
-    .school-snapshot-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-}
-
-@media (max-width: 520px) {
-    .school-snapshot-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
 
 /* ============================================================
    UX REFINEMENT — SCHOOL DETAIL
@@ -1831,5 +1778,155 @@ footer {
 
     .technical-details-summary {
         padding: 15px 2px;
+    }
+}
+/* ============================================================
+   SCHOOL FEATURES — HUMAN READABLE UX
+   ============================================================ */
+
+.school-snapshot {
+    margin-top: 20px;
+    padding: 22px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: var(--surface);
+}
+
+.school-snapshot .detail-section-heading {
+    margin-bottom: 22px;
+}
+
+.school-snapshot .detail-section-heading h2 {
+    margin: 0;
+    font-size: 1.45rem;
+    letter-spacing: -0.035em;
+}
+
+.school-feature-group {
+    margin-top: 22px;
+}
+
+.school-feature-group:first-child {
+    margin-top: 0;
+}
+
+.school-feature-group-title {
+    margin-bottom: 9px;
+    color: var(--muted);
+    font-size: 0.67rem;
+    font-weight: 850;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.school-feature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.school-feature-card {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    min-height: 68px;
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: 11px;
+    background: var(--background);
+}
+
+.school-feature-icon {
+    flex: 0 0 38px;
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    border-radius: 9px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    font-size: 1.3rem;
+}
+
+.school-feature-body {
+    min-width: 0;
+}
+
+.school-feature-name {
+    color: var(--text);
+    font-size: 0.79rem;
+    font-weight: 760;
+    line-height: 1.2;
+}
+
+.school-feature-state {
+    margin-top: 4px;
+    color: var(--muted);
+    font-size: 0.68rem;
+    font-weight: 700;
+}
+
+.school-feature-card.is-present
+.school-feature-state {
+    color: var(--text);
+}
+
+.school-feature-card.is-unknown {
+    opacity: 0.65;
+}
+
+.school-feature-card.is-unknown
+.school-feature-state {
+    font-style: italic;
+}
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 800px) {
+
+    .school-feature-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 520px) {
+
+    .school-snapshot {
+        padding: 15px;
+    }
+
+    .school-feature-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 7px;
+    }
+
+    .school-feature-card {
+        min-height: 64px;
+        padding: 8px;
+        gap: 8px;
+    }
+
+    .school-feature-icon {
+        flex-basis: 32px;
+        width: 32px;
+        height: 32px;
+        font-size: 1.15rem;
+    }
+
+    .school-feature-name {
+        font-size: 0.7rem;
+    }
+
+    .school-feature-state {
+        font-size: 0.63rem;
+    }
+}
+
+@media (max-width: 360px) {
+
+    .school-feature-grid {
+        grid-template-columns: 1fr;
     }
 }
