@@ -1173,11 +1173,11 @@ function showDetail(schoolId) {
 
             <div>
                 <span class="eyebrow">
-                    ANALISI
+                    INFORMAZIONI
                 </span>
 
                 <h2>
-                    Analisi tecnica
+                    Informazioni sulla scuola
                 </h2>
             </div>
 
@@ -1326,8 +1326,8 @@ function showDetail(schoolId) {
                     </h2>
 
                     <p>
-                        I passaggi dei documenti utilizzati per verificare
-                        le informazioni della scuola.
+                        I passaggi dei documenti che supportano
+                        le informazioni riportate nella scheda.
                     </p>
                 </div>
 
@@ -1422,8 +1422,12 @@ function showDetail(schoolId) {
 
                                             <td data-label="Tipo">
                                                 ${escapeHtml(
-                                                    evidence.evidence_type ||
-                                                    "Non specificato"
+                                                    evidenc({
+                                                        EXPLICIT: "Riscontro diretto",
+                                                        INFERRED: "Riscontro indiretto",
+                                                        MENTION: "Menzione"
+                                                    }[e.evidence_type] ||
+                                                    "Non specificato")
                                                 )}
                                             </td>
 
@@ -1473,24 +1477,36 @@ function showDetail(schoolId) {
         </section>
 
 
-        <details class="technical-details">
+        <section class="school-information-section">
 
-            <summary class="technical-details-summary">
+            <div class="school-information-header">
+
                 <div>
-                    <span class="eyebrow">DATI TECNICI</span>
-                    <strong>Verifica delle informazioni</strong>
+                    <span class="eyebrow">
+                        INFORMAZIONI
+                    </span>
+
+                    <h2>
+                        Informazioni sulla scuola
+                    </h2>
+
+                    <p>
+                        Le caratteristiche della scuola rilevate
+                        nei documenti analizzati.
+                    </p>
                 </div>
 
-                <span class="technical-details-count">
+                <span class="school-information-count">
                     ${records.length}
                 </span>
-            </summary>
+
+            </div>
 
             <div class="parameters-container">
                 ${parametersHtml}
             </div>
 
-        </details>
+        </section>
 
     `;
 
