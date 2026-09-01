@@ -2873,3 +2873,119 @@ footer {
         line-height: 1.08 !important;
     }
 }
+
+/* ============================================================
+   RANKING — DEFINITIVE CARD LAYOUT
+   Un solo layout strutturale, senza override precedenti.
+   ============================================================ */
+
+.school-card {
+    display: block !important;
+    width: 100%;
+    padding: 24px;
+    box-sizing: border-box;
+}
+
+.school-card-main {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    gap: 24px;
+    width: 100%;
+    align-items: start;
+}
+
+.school-card-main > div:first-child {
+    min-width: 0;
+    width: 100%;
+}
+
+.school-card .school-name {
+    display: block;
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: normal;
+}
+
+.school-card .school-meta {
+    display: block;
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    line-height: 1.45;
+}
+
+.school-card .score {
+    min-width: 110px;
+    text-align: right;
+}
+
+.school-card .score-value {
+    white-space: nowrap;
+}
+
+.school-card .school-stats {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 12px 24px;
+    width: 100%;
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+    box-sizing: border-box;
+}
+
+.school-card .school-stats span {
+    min-width: 0;
+    line-height: 1.35;
+}
+
+.school-card .school-stats strong {
+    display: block;
+    margin-top: 3px;
+}
+
+/* ------------------------------------------------------------
+   MOBILE RANKING
+   ------------------------------------------------------------ */
+
+@media screen and (max-width: 700px) {
+
+    .school-card {
+        display: block !important;
+        padding: 20px !important;
+    }
+
+    .school-card-main {
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) !important;
+        gap: 18px !important;
+        width: 100% !important;
+    }
+
+    .school-card .score {
+        min-width: 0 !important;
+        width: 100% !important;
+        text-align: left !important;
+    }
+
+    .school-card .score-value {
+        font-size: 2.2rem !important;
+    }
+
+    .school-card .school-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 16px 20px !important;
+        margin-top: 20px !important;
+        padding-top: 18px !important;
+    }
+
+    .school-card .school-stats span {
+        min-width: 0 !important;
+        white-space: normal !important;
+    }
+}
