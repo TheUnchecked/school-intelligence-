@@ -1306,7 +1306,7 @@ function showDetail(schoolId) {
 
                                             <td data-label="Tipo">
                                                 ${escapeHtml(
-                                                    evidenc({
+                                                    ({
                                                         EXPLICIT: "Riscontro diretto",
                                                         INFERRED: "Riscontro indiretto",
                                                         MENTION: "Menzione"
