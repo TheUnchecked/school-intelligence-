@@ -12,47 +12,161 @@ const $ = (id) => document.getElementById(id);
 
 async function loadData() {
 
+    const loadJson = async (file) => {
+
+        const response =
+            await fetch(
+                `${DATA_PATH}/${file}`,
+                {
+                    cache: "no-store"
+                }
+            );
+
+        if (!response.ok) {
+            throw new Error(
+                `${file}: HTTP ${response.status}`
+            );
+        }
+
+        return response.json();
+    };
+
+
+    const results =
+        await Promise.allSettled([
+
+            loadJson("schools.json"),
+            loadJson("school_scores.json"),
+            loadJson("parameters.json"),
+            loadJson("school_parameters.json"),
+            loadJson("evidence.json"),
+            loadJson("ptof_documents.json"),
+            loadJson("statistics.json")
+
+        ]);
+
+
     const [
-        schoolsResponse,
-        scoresResponse,
-        parametersResponse,
-        schoolParametersResponse,
-        evidenceResponse,
-        ptofDocumentsResponse,
-        statisticsResponse
-    ] = await Promise.all([
-        fetch(`${DATA_PATH}/schools.json`),
-        fetch(`${DATA_PATH}/school_scores.json`),
-        fetch(`${DATA_PATH}/parameters.json`),
-        fetch(`${DATA_PATH}/school_parameters.json`),
-        fetch(`${DATA_PATH}/evidence.json`),
-        fetch(`${DATA_PATH}/ptof_documents.json`),
-        fetch(`${DATA_PATH}/statistics.json`)
-    ]);
+        schoolsResult,
+        scoresResult,
+        parametersResult,
+        schoolParametersResult,
+        evidenceResult,
+        ptofDocumentsResult,
+        statisticsResult
+    ] = results;
 
-    schools = await schoolsResponse.json();
-    scores = await scoresResponse.json();
-    parameters = await parametersResponse.json();
-    schoolParameters = await schoolParametersResponse.json();
-    evidences = await evidenceResponse.json();
-    ptofDocuments = await ptofDocumentsResponse.json();
 
-    const statistics = await statisticsResponse.json();
+    schools =
+        schoolsResult.status === "fulfilled"
+            ? schoolsResult.value
+            : [];
 
-    $("kpiSchools").textContent =
-        statistics.schools;
+    scores =
+        scoresResult.status === "fulfilled"
+            ? scoresResult.value
+            : [];
 
-    $("kpiDocuments").textContent =
-        statistics.documents;
+    parameters =
+        parametersResult.status === "fulfilled"
+            ? parametersResult.value
+            : [];
 
-    $("kpiEvidence").textContent =
-        statistics.evidence.toLocaleString("it-IT");
+    schoolParameters =
+        schoolParametersResult.status === "fulfilled"
+            ? schoolParametersResult.value
+            : [];
 
-    $("kpiParameters").textContent =
-        statistics.active_parameters;
+    evidences =
+        evidenceResult.status === "fulfilled"
+            ? evidenceResult.value
+            : [];
 
-    $("schoolCount").textContent =
-        statistics.schools;
+    ptofDocuments =
+        ptofDocumentsResult.status === "fulfilled"
+            ? ptofDocumentsResult.value
+            : [];
+
+
+    /*
+     * statistics.json è un riepilogo.
+     * Se non è disponibile, ricaviamo comunque
+     * i KPI direttamente dai dataset caricati.
+     */
+
+    let statistics;
+
+    if (statisticsResult.status === "fulfilled") {
+
+        statistics =
+            statisticsResult.value;
+
+    } else {
+
+        statistics = {
+
+            schools: schools.length,
+
+            documents: ptofDocuments.length,
+
+            evidence: evidences.length,
+
+            active_parameters:
+                parameters.filter(
+                    parameter =>
+                        Number(parameter.active) === 1
+                ).length ||
+                parameters.length
+
+        };
+
+        console.warn(
+            "statistics.json non disponibile:",
+            statisticsResult.reason
+        );
+
+    }
+
+
+    /*
+     * Verifica minima dei dataset fondamentali.
+     */
+
+    if (
+        !schools.length ||
+        !scores.length ||
+        !schoolParameters.length
+    ) {
+
+        throw new Error(
+            "Dataset principali non disponibili."
+        );
+
+    }
+
+
+    $( "kpiSchools" ).textContent =
+        statistics.schools ??
+        schools.length;
+
+    $( "kpiDocuments" ).textContent =
+        statistics.documents ??
+        ptofDocuments.length;
+
+    $( "kpiEvidence" ).textContent =
+        Number(
+            statistics.evidence ??
+            evidences.length
+        ).toLocaleString("it-IT");
+
+    $( "kpiParameters" ).textContent =
+        statistics.active_parameters ??
+        parameters.length;
+
+    $( "schoolCount" ).textContent =
+        statistics.schools ??
+        schools.length;
+
 
     populateProvinceFilter();
 
