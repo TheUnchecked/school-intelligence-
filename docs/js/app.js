@@ -1189,123 +1189,7 @@ function showDetail(schoolId) {
 
 
 
-        <!-- =====================================================
-             DOCUMENTI ANALIZZATI
-             ===================================================== -->
 
-        <section class="school-data-section documents-section">
-
-            <div class="school-data-section-header">
-
-                <div>
-                    <span class="eyebrow">
-                        FONTI DELL'ANALISI
-                    </span>
-
-                    <h2>
-                        Documenti analizzati
-                    </h2>
-
-                    <p>
-                        I documenti utilizzati per raccogliere e verificare
-                        le informazioni presenti nella scheda.
-                    </p>
-                </div>
-
-                <strong class="school-data-count">
-                    ${documentIds.length}
-                </strong>
-
-            </div>
-
-            <div class="school-data-table-wrap">
-
-                <table class="school-data-table">
-
-                    <thead>
-                        <tr>
-                            <th>Documento</th>
-                            <th>Tipologia</th>
-                            <th>Utilizzo</th>
-                            <th>Apri</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-
-                        ${
-                            documentIds
-                                .map(documentId => {
-
-                                    const document =
-                                        getDocumentById(documentId);
-
-                                    if (!document) {
-                                        return "";
-                                    }
-
-                                    const title =
-                                        document.title ||
-                                        "Documento";
-
-                                    const type =
-                                        document.document_type ||
-                                        document.type ||
-                                        "Documento";
-
-                                    const url =
-                                        document.url || "";
-
-                                    return `
-                                        <tr>
-
-                                            <td data-label="Documento">
-                                                <strong>
-                                                    ${escapeHtml(title)}
-                                                </strong>
-                                            </td>
-
-                                            <td data-label="Tipologia">
-                                                ${escapeHtml(type)}
-                                            </td>
-
-                                            <td data-label="Utilizzo">
-                                                Documento utilizzato
-                                                nell'analisi
-                                            </td>
-
-                                            <td data-label="Apri">
-
-                                                ${
-                                                    url
-                                                        ? `
-                                                            <a
-                                                                class="school-document-link"
-                                                                href="${escapeHtml(url)}"
-                                                                target="_blank"
-                                                                rel="noopener noreferrer"
-                                                            >
-                                                                Apri ↗
-                                                            </a>
-                                                          `
-                                                        : "Non disponibile"
-                                                }
-
-                                            </td>
-
-                                        </tr>
-                                    `;
-                                })
-                                .join("")
-                        }
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-        </section>
 
 
         <!-- =====================================================
@@ -1458,6 +1342,125 @@ function showDetail(schoolId) {
                                                         : escapeHtml(
                                                             documentTitle
                                                         )
+                                                }
+
+                                            </td>
+
+                                        </tr>
+                                    `;
+                                })
+                                .join("")
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             DOCUMENTI ANALIZZATI
+             ===================================================== -->
+
+        <section class="school-data-section documents-section">
+
+            <div class="school-data-section-header">
+
+                <div>
+                    <span class="eyebrow">
+                        FONTI DELL'ANALISI
+                    </span>
+
+                    <h2>
+                        Documenti analizzati
+                    </h2>
+
+                    <p>
+                        I documenti utilizzati per raccogliere e verificare
+                        le informazioni presenti nella scheda.
+                    </p>
+                </div>
+
+                <strong class="school-data-count">
+                    ${documentIds.length}
+                </strong>
+
+            </div>
+
+            <div class="school-data-table-wrap">
+
+                <table class="school-data-table">
+
+                    <thead>
+                        <tr>
+                            <th>Documento</th>
+                            <th>Tipologia</th>
+                            <th>Utilizzo</th>
+                            <th>Apri</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        ${
+                            documentIds
+                                .map(documentId => {
+
+                                    const document =
+                                        getDocumentById(documentId);
+
+                                    if (!document) {
+                                        return "";
+                                    }
+
+                                    const title =
+                                        document.title ||
+                                        "Documento";
+
+                                    const type =
+                                        document.document_type ||
+                                        document.type ||
+                                        "Documento";
+
+                                    const url =
+                                        document.url || "";
+
+                                    return `
+                                        <tr>
+
+                                            <td data-label="Documento">
+                                                <strong>
+                                                    ${escapeHtml(title)}
+                                                </strong>
+                                            </td>
+
+                                            <td data-label="Tipologia">
+                                                ${escapeHtml(type)}
+                                            </td>
+
+                                            <td data-label="Utilizzo">
+                                                Documento utilizzato
+                                                nell'analisi
+                                            </td>
+
+                                            <td data-label="Apri">
+
+                                                ${
+                                                    url
+                                                        ? `
+                                                            <a
+                                                                class="school-document-link"
+                                                                href="${escapeHtml(url)}"
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                            >
+                                                                Apri ↗
+                                                            </a>
+                                                          `
+                                                        : "Non disponibile"
                                                 }
 
                                             </td>
