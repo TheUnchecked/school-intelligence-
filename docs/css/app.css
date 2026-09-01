@@ -2210,3 +2210,666 @@ footer {
         margin-left: 0;
     }
 }
+
+/* ============================================================
+   SCHOOL PROFILE UX V5
+   Profilo scuola: layout pieno, compatto e leggibile
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   SNAPSHOT CONTAINER
+   ------------------------------------------------------------ */
+
+.school-snapshot {
+    width: 100%;
+    margin-top: 16px;
+    padding: 24px;
+}
+
+.school-snapshot-grid {
+    display: block !important;
+    width: 100%;
+}
+
+/* ------------------------------------------------------------
+   GROUPS
+   Ogni gruppo occupa tutta la larghezza.
+   ------------------------------------------------------------ */
+
+.school-feature-group {
+    width: 100%;
+    margin-top: 24px;
+}
+
+.school-feature-group:first-child {
+    margin-top: 0;
+}
+
+.school-feature-group-title {
+    margin-bottom: 10px;
+    color: var(--muted);
+    font-size: 0.68rem;
+    font-weight: 850;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+/* ------------------------------------------------------------
+   FEATURE GRID
+   ------------------------------------------------------------ */
+
+.school-feature-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    width: 100%;
+}
+
+/* ------------------------------------------------------------
+   FEATURE CARD
+   ------------------------------------------------------------ */
+
+.school-feature-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    min-height: 68px;
+    padding: 10px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--surface);
+    box-sizing: border-box;
+}
+
+.school-feature-card.is-unknown {
+    opacity: 0.55;
+}
+
+.school-feature-icon {
+    flex: 0 0 36px;
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    background: var(--bg);
+    font-size: 1.25rem;
+    line-height: 1;
+}
+
+.school-feature-body {
+    min-width: 0;
+}
+
+.school-feature-name {
+    font-size: 0.78rem;
+    font-weight: 800;
+    line-height: 1.15;
+    overflow-wrap: anywhere;
+}
+
+.school-feature-state {
+    margin-top: 3px;
+    color: var(--muted);
+    font-size: 0.7rem;
+    font-weight: 650;
+    line-height: 1.2;
+}
+
+/* ------------------------------------------------------------
+   SEPARAZIONE VISIVA TRA I GRUPPI
+   ------------------------------------------------------------ */
+
+.school-feature-group + .school-feature-group {
+    padding-top: 4px;
+}
+
+/* ------------------------------------------------------------
+   TECHNICAL AREA
+   ------------------------------------------------------------ */
+
+.technical-details {
+    margin-top: 18px;
+    border-top: 1px solid var(--line);
+}
+
+.technical-details-summary {
+    padding: 16px 4px;
+}
+
+.technical-details-summary strong {
+    font-size: 0.92rem;
+}
+
+.technical-details .parameter {
+    background: transparent;
+}
+
+.technical-details .parameter-name {
+    font-size: 0.98rem;
+}
+
+.technical-details .parameter-value {
+    font-size: 0.84rem;
+}
+
+.technical-details .parameter-metrics {
+    font-size: 0.67rem;
+}
+
+/* ------------------------------------------------------------
+   EVIDENCE
+   ------------------------------------------------------------ */
+
+.evidence-list {
+    width: 100%;
+}
+
+.evidence-card {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.evidence-text {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    word-break: normal;
+    white-space: normal;
+}
+
+/* ------------------------------------------------------------
+   TABLET
+   ------------------------------------------------------------ */
+
+@media (max-width: 900px) {
+
+    .school-feature-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+}
+
+/* ------------------------------------------------------------
+   MOBILE
+   ------------------------------------------------------------ */
+
+@media (max-width: 600px) {
+
+    .school-snapshot {
+        padding: 16px;
+    }
+
+    .school-feature-group {
+        margin-top: 20px;
+    }
+
+    .school-feature-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 7px;
+    }
+
+    .school-feature-card {
+        min-height: 62px;
+        padding: 8px;
+        gap: 8px;
+    }
+
+    .school-feature-icon {
+        flex-basis: 32px;
+        width: 32px;
+        height: 32px;
+        font-size: 1.1rem;
+    }
+
+    .school-feature-name {
+        font-size: 0.72rem;
+    }
+
+    .school-feature-state {
+        font-size: 0.66rem;
+    }
+
+    .technical-details-summary {
+        padding: 14px 2px;
+    }
+
+    .evidence-card {
+        padding: 12px;
+    }
+
+    .evidence-text {
+        font-size: 0.82rem;
+        line-height: 1.5;
+    }
+
+}
+
+@media (max-width: 380px) {
+
+    .school-feature-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+/* ------------------------------------------------------------
+   SCORE / KPI — SECONDARY INFORMATION
+   ------------------------------------------------------------ */
+
+.detail-overview {
+    gap: 7px;
+    margin: 10px 0 16px;
+}
+
+.detail-score-item {
+    padding: 9px 10px;
+}
+
+.detail-score-item span {
+    font-size: 0.58rem;
+}
+
+.detail-score-item strong {
+    font-size: 1.05rem;
+}
+
+@media (max-width: 560px) {
+
+    .detail-score-item {
+        padding: 8px;
+    }
+
+    .detail-score-item strong {
+        font-size: 0.95rem;
+    }
+
+}
+
+/* ============================================================
+   SCHOOL SNAPSHOT — RESPONSIVE GRID FIX
+   ============================================================ */
+
+/* Container principale */
+.school-snapshot {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Le categorie diventano una griglia vera */
+.school-snapshot-grid {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 2fr);
+    gap: 28px;
+    width: 100%;
+    align-items: start;
+}
+
+/* Ogni categoria */
+.school-feature-group {
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+}
+
+/* Titolo categoria */
+.school-feature-group-title {
+    margin-bottom: 10px;
+}
+
+/* Card della categoria */
+.school-feature-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    width: 100%;
+}
+
+/* Card */
+.school-feature-card {
+    width: 100%;
+    min-width: 0;
+    min-height: 62px;
+    box-sizing: border-box;
+}
+
+/* Attività didattica: quarta sezione, tutta larghezza */
+.school-feature-group:last-child {
+    grid-column: 1 / -1;
+}
+
+.school-feature-group:last-child .school-feature-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+/* ============================================================
+   DESKTOP
+   ============================================================ */
+
+@media (min-width: 901px) {
+
+    .school-feature-group:nth-child(1) {
+        grid-column: 1;
+    }
+
+    .school-feature-group:nth-child(2) {
+        grid-column: 2;
+    }
+
+    .school-feature-group:nth-child(3) {
+        grid-column: 3;
+    }
+
+    .school-feature-group:last-child {
+        grid-column: 1 / -1;
+        margin-top: 4px;
+    }
+
+}
+
+/* ============================================================
+   TABLET
+   ============================================================ */
+
+@media (max-width: 900px) {
+
+    .school-snapshot-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 22px;
+    }
+
+    .school-feature-group:last-child {
+        grid-column: 1 / -1;
+    }
+
+    .school-feature-group:last-child .school-feature-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+}
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 600px) {
+
+    .school-snapshot {
+        padding: 16px;
+    }
+
+    /* UNA CATEGORIA ALLA VOLTA */
+    .school-snapshot-grid {
+        display: grid !important;
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .school-feature-group,
+    .school-feature-group:last-child {
+        grid-column: 1 / -1;
+        width: 100%;
+        margin: 0;
+    }
+
+    /* CARD 2 PER RIGA */
+    .school-feature-grid,
+    .school-feature-group:last-child .school-feature-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .school-feature-card {
+        min-height: 64px;
+        padding: 9px;
+        gap: 8px;
+    }
+
+    .school-feature-icon {
+        flex: 0 0 34px;
+        width: 34px;
+        height: 34px;
+        font-size: 1.1rem;
+    }
+
+    .school-feature-name {
+        font-size: 0.75rem;
+        line-height: 1.15;
+    }
+
+    .school-feature-state {
+        font-size: 0.68rem;
+    }
+
+}
+
+/* ============================================================
+   SMALL MOBILE
+   ============================================================ */
+
+@media (max-width: 380px) {
+
+    .school-feature-grid,
+    .school-feature-group:last-child .school-feature-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 6px;
+    }
+
+    .school-feature-card {
+        min-height: 60px;
+        padding: 7px;
+    }
+
+    .school-feature-icon {
+        flex-basis: 30px;
+        width: 30px;
+        height: 30px;
+        font-size: 1rem;
+    }
+
+    .school-feature-name {
+        font-size: 0.7rem;
+    }
+
+}
+
+/* ============================================================
+   MOBILE — FINAL LAYOUT OVERRIDE
+   ============================================================ */
+
+@media (max-width: 600px) {
+
+    .school-snapshot {
+        width: 100% !important;
+        box-sizing: border-box !important;
+        padding: 16px !important;
+    }
+
+    /* Una categoria sotto l'altra */
+    .school-snapshot-grid {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        grid-auto-flow: row !important;
+        gap: 24px !important;
+        width: 100% !important;
+    }
+
+    /* Ogni sezione prende tutta la riga */
+    .school-feature-group {
+        grid-column: 1 / -1 !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        margin: 0 !important;
+    }
+
+    /* Card: due colonne */
+    .school-feature-grid,
+    .school-feature-group:last-child .school-feature-grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 8px !important;
+        width: 100% !important;
+    }
+
+    .school-feature-card {
+        width: 100% !important;
+        min-width: 0 !important;
+        min-height: 64px !important;
+        padding: 9px !important;
+        box-sizing: border-box !important;
+    }
+
+    .school-feature-icon {
+        flex: 0 0 34px !important;
+        width: 34px !important;
+        height: 34px !important;
+    }
+
+    .school-feature-body {
+        min-width: 0 !important;
+    }
+
+    .school-feature-name {
+        font-size: 0.75rem !important;
+        line-height: 1.15 !important;
+        overflow-wrap: anywhere !important;
+    }
+
+    .school-feature-state {
+        font-size: 0.68rem !important;
+        line-height: 1.2 !important;
+    }
+}
+
+@media (max-width: 380px) {
+
+    .school-feature-grid,
+    .school-feature-group:last-child .school-feature-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    .school-feature-card {
+        min-height: 60px !important;
+        padding: 7px !important;
+    }
+
+    .school-feature-icon {
+        flex-basis: 30px !important;
+        width: 30px !important;
+        height: 30px !important;
+    }
+
+}
+
+/* ============================================================
+   SCHOOL SNAPSHOT — MOBILE / TABLET PORTRAIT
+   ============================================================ */
+
+@media (max-width: 900px) {
+
+    .school-snapshot-grid {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 24px !important;
+        width: 100% !important;
+    }
+
+    .school-feature-group,
+    .school-feature-group:last-child {
+        grid-column: 1 / -1 !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        margin: 0 !important;
+    }
+
+    .school-feature-grid,
+    .school-feature-group:last-child .school-feature-grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 8px !important;
+        width: 100% !important;
+    }
+
+    .school-feature-card {
+        width: 100% !important;
+        min-width: 0 !important;
+        min-height: 64px !important;
+        box-sizing: border-box !important;
+    }
+
+    .school-feature-icon {
+        flex: 0 0 34px !important;
+        width: 34px !important;
+        height: 34px !important;
+    }
+
+    .school-feature-body {
+        min-width: 0 !important;
+    }
+
+    .school-feature-name {
+        font-size: 0.78rem !important;
+        line-height: 1.15 !important;
+    }
+
+    .school-feature-state {
+        font-size: 0.7rem !important;
+        line-height: 1.2 !important;
+    }
+}
+
+@media (max-width: 420px) {
+
+    .school-feature-grid,
+    .school-feature-group:last-child .school-feature-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    .school-feature-card {
+        min-height: 60px !important;
+        padding: 8px !important;
+    }
+
+    .school-feature-icon {
+        flex-basis: 30px !important;
+        width: 30px !important;
+        height: 30px !important;
+        font-size: 1rem !important;
+    }
+
+    .school-feature-name {
+        font-size: 0.72rem !important;
+    }
+}
+
+/* ============================================================
+   RANKING MOBILE — FULL WIDTH CARD
+   ============================================================ */
+
+@media screen and (max-width: 700px) {
+
+    .school-card {
+        grid-template-columns: minmax(0, 1fr) !important;
+        width: 100% !important;
+    }
+
+    .school-card-main {
+        grid-column: 1 !important;
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+
+    .school-stats {
+        grid-column: 1 !important;
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+
+    .school-name {
+        font-size: 1.55rem !important;
+        line-height: 1.08 !important;
+    }
+}
