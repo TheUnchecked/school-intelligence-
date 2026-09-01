@@ -270,6 +270,69 @@ function renderRanking() {
 }
 
 
+
+function extractHours(evidences) {
+    for (const evidence of evidences || []) {
+        const text = String(evidence.evidence || "");
+
+        const match = text.match(
+            /\b(\d+(?:[.,]\d+)?)\s*ore\s*(settimanali|settimanale|a settimana)\b/i
+        );
+
+        if (match) {
+            return `${match[1].replace(",", ".")} ore/settimana`;
+        }
+    }
+
+    return null;
+}
+
+
+function formatParameterValue(record, recordEvidences = []) {
+
+    if (record.value_type === "BOOLEAN") {
+
+        if (record.value === "SI") {
+            const languageCodes = [
+                "INGLESE",
+                "FRANCESE",
+                "SPAGNOLO",
+                "TEDESCO"
+            ];
+
+            if (languageCodes.includes(record.parameter_code)) {
+                const hours = extractHours(recordEvidences);
+
+                return hours
+                    ? `Sì · ${hours}`
+                    : "Sì";
+            }
+
+            return "Sì";
+        }
+
+        if (record.status === "NOT_FOUND") {
+            return "Non rilevato";
+        }
+
+        return "No";
+    }
+
+    return (
+        record.value ??
+        record.normalized_value ??
+        "Non rilevato"
+    );
+}
+
+
+function getRecord(records, code) {
+    return records.find(
+        record => record.parameter_code === code
+    );
+}
+
+
 function showDetail(schoolId) {
 
     const school =
@@ -483,9 +546,10 @@ function showDetail(schoolId) {
                 }
 
                 const value =
-                    record.value ??
-                    record.normalized_value ??
-                    "—";
+                    formatParameterValue(
+                        record,
+                        recordEvidences
+                    );
 
                 parametersHtml += `
 
@@ -638,6 +702,62 @@ function showDetail(schoolId) {
                 item => item.document
             )[0];
 
+
+    const snapshotCodes = [
+        "INGLESE",
+        "FRANCESE",
+        "SPAGNOLO",
+        "TEDESCO",
+        "MENSA",
+        "PALESTRA",
+        "BIBLIOTECA",
+        "LABORATORIO_INFORMATICA",
+        "LABORATORIO_SCIENZE",
+        "LABORATORIO_MUSICALE",
+        "ATELIER_DIGITALE",
+        "AULE_MULTIMEDIALI"
+    ];
+
+    const snapshotHtml = snapshotCodes.map(code => {
+
+        const record = getRecord(records, code);
+
+        if (!record) {
+            return "";
+        }
+
+        const recordEvidences = schoolEvidence
+            .filter(
+                e => e.parameter_code === record.parameter_code
+            )
+            .sort(
+                (a, b) =>
+                    Number(b.confidence || 0) -
+                    Number(a.confidence || 0)
+            );
+
+        const value = formatParameterValue(
+            record,
+            recordEvidences
+        );
+
+        const statusClass = String(
+            record.status || ""
+        ).toLowerCase();
+
+        return `
+            <div class="school-snapshot-item">
+                <span class="school-snapshot-label">
+                    ${escapeHtml(record.parameter_name)}
+                </span>
+
+                <strong class="school-snapshot-value status-${statusClass}">
+                    ${escapeHtml(value)}
+                </strong>
+            </div>
+        `;
+    }).join("");
+
     $("detailContent").innerHTML = `
 
         <div class="detail-header">
@@ -727,6 +847,28 @@ function showDetail(schoolId) {
                 </strong>
             </div>
 
+
+        </section>
+
+
+
+        <section class="school-snapshot">
+
+            <div class="detail-section-heading">
+                <div>
+                    <span class="eyebrow">
+                        IN SINTESI
+                    </span>
+
+                    <h2>
+                        Cosa offre la scuola
+                    </h2>
+                </div>
+            </div>
+
+            <div class="school-snapshot-grid">
+                ${snapshotHtml}
+            </div>
 
         </section>
 
