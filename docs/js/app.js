@@ -165,56 +165,49 @@ function renderRanking() {
 
     container.innerHTML = "";
 
-    results.forEach((school, index) => {
+    let rankedIndex = 0;
+
+    results.forEach((school) => {
 
         const score =
             school.score;
+
+        const evidenceCount =
+            Number(score?.evidence_count ?? 0);
+
+        const hasData =
+            evidenceCount > 0;
 
         const card =
             document.createElement("article");
 
         card.className =
-            "school-card";
+            hasData
+                ? "school-card"
+                : "school-card school-card-no-data";
 
-        card.innerHTML = `
-            <div class="ranking-card">
+        if (hasData) {
+            rankedIndex++;
+        }
 
-                <div class="ranking-card-header">
+        const rankLabel =
+            hasData
+                ? `#${rankedIndex}`
+                : "—";
 
-                    <div class="ranking-card-identity">
+        const scoreValue =
+            hasData
+                ? formatPercent(score?.score_percent)
+                : "Dati insufficienti";
 
-                        <div class="ranking-rank">
-                            #${index + 1}
-                        </div>
+        const scoreLabel =
+            hasData
+                ? "INDICE COMPLESSIVO"
+                : "NON VALUTABILE";
 
-                        <div class="ranking-school-name">
-                            ${escapeHtml(school.denominazione)}
-                        </div>
-
-                        <div class="ranking-school-meta">
-                            ${escapeHtml(school.comune)}
-                            ·
-                            ${escapeHtml(school.provincia)}
-                            ·
-                            ${escapeHtml(school.codice_scuola)}
-                        </div>
-
-                    </div>
-
-                    <div class="ranking-score">
-                        <div class="ranking-score-value">
-                            ${formatPercent(score?.score_percent)}
-                        </div>
-
-                        <div class="ranking-score-label">
-                            INDICE COMPLESSIVO
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="ranking-stats">
-
+        const statsHtml =
+            hasData
+                ? `
                     <div class="ranking-stat">
                         <span>Dati disponibili</span>
                         <strong>
@@ -239,10 +232,71 @@ function renderRanking() {
                     <div class="ranking-stat">
                         <span>Riscontri documentali</span>
                         <strong>
-                            ${score?.evidence_count ?? 0}
+                            ${evidenceCount}
+                        </strong>
+                    </div>
+                `
+                : `
+                    <div class="ranking-stat ranking-stat-message">
+                        <span>Stato della valutazione</span>
+                        <strong>
+                            Nessun riscontro documentale
                         </strong>
                     </div>
 
+                    <div class="ranking-stat">
+                        <span>Parametri da verificare</span>
+                        <strong>
+                            ${score?.parameter_count ?? 21}
+                        </strong>
+                    </div>
+                `;
+
+        card.innerHTML = `
+            <div class="ranking-card">
+
+                <div class="ranking-card-header">
+
+                    <div class="ranking-card-identity">
+
+                        <div class="ranking-rank">
+                            ${rankLabel}
+                        </div>
+
+                        <div class="ranking-school-name">
+                            ${escapeHtml(school.denominazione)}
+                        </div>
+
+                        <div class="ranking-school-meta">
+                            ${escapeHtml(school.comune)}
+                            ·
+                            ${escapeHtml(school.provincia)}
+                            ·
+                            ${escapeHtml(school.codice_scuola)}
+                        </div>
+
+                    </div>
+
+                    <div class="ranking-score">
+
+                        <div class="ranking-score-value ${
+                            hasData
+                                ? ""
+                                : "ranking-score-no-data"
+                        }">
+                            ${scoreValue}
+                        </div>
+
+                        <div class="ranking-score-label">
+                            ${scoreLabel}
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="ranking-stats">
+                    ${statsHtml}
                 </div>
 
             </div>
