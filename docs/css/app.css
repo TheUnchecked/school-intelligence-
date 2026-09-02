@@ -3286,3 +3286,955 @@ footer {
         gap: 14px !important;
     }
 }
+
+
+/* ============================================================
+   SCHOOL PROFILE — FINAL UX
+   ============================================================ */
+
+.school-profile {
+  margin: 28px 0;
+  padding: 30px;
+  border: 1px solid var(--border, #ddd);
+  border-radius: 24px;
+  background: var(--surface, #fff);
+}
+
+.school-profile-header {
+  margin-bottom: 24px;
+}
+
+.school-profile-header .section-kicker {
+  margin-bottom: 8px;
+}
+
+.school-profile-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.school-profile-card {
+  padding: 22px;
+  border: 1px solid var(--border, #ddd);
+  border-radius: 18px;
+  background: var(--surface-soft, #fafafa);
+}
+
+.school-profile-label {
+  font-size: .75rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  color: var(--muted, #666);
+  margin-bottom: 10px;
+}
+
+.school-profile-value {
+  font-size: 1.25rem;
+  font-weight: 750;
+  line-height: 1.25;
+}
+
+.school-profile-meta {
+  margin-top: 7px;
+  font-size: .9rem;
+  color: var(--muted, #666);
+}
+
+.profile-source-link {
+  display: inline-flex;
+  margin-top: 12px;
+  font-size: .82rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.profile-source-link:hover {
+  text-decoration: underline;
+}
+
+.school-profile-note {
+  margin-top: 18px;
+  padding: 13px 16px;
+  border-radius: 12px;
+  background: var(--surface-soft, #f6f6f6);
+  color: var(--muted, #666);
+  font-size: .82rem;
+  line-height: 1.45;
+}
+
+/* stato iscrizioni */
+.school-profile-card:has(.profile-source-link) {
+  min-height: 120px;
+}
+
+/* mobile */
+@media (max-width: 700px) {
+
+  .school-profile {
+    margin: 22px 0;
+    padding: 20px 18px;
+    border-radius: 20px;
+  }
+
+  .school-profile-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .school-profile-card {
+    padding: 18px;
+  }
+
+  .school-profile-value {
+    font-size: 1.05rem;
+  }
+
+  .school-profile-label {
+    font-size: .7rem;
+  }
+
+  .profile-source-link {
+    font-size: .78rem;
+  }
+}
+
+
+
+/* ============================================================
+   COMPARATOR / FILTER UX
+   ============================================================ */
+
+.controls {
+    display: grid;
+    grid-template-columns:
+        minmax(220px, 2fr)
+        repeat(4, minmax(150px, 1fr))
+        auto;
+    gap: 12px;
+    align-items: end;
+}
+
+.controls label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: .72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+}
+
+.control-search input,
+.control-select select {
+    width: 100%;
+    min-height: 42px;
+    box-sizing: border-box;
+}
+
+.reset-filters {
+    min-height: 42px;
+    padding: 0 15px;
+    border: 1px solid var(--border, #ddd);
+    border-radius: 10px;
+    background: transparent;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.comparison-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin: 18px 0;
+    padding: 15px 18px;
+    border: 1px solid var(--border, #ddd);
+    border-radius: 14px;
+    background: var(--surface, #fff);
+}
+
+.comparison-kicker {
+    font-size: .68rem;
+    font-weight: 850;
+    letter-spacing: .1em;
+    opacity: .65;
+}
+
+.compare-button,
+.comparison-close {
+    border: 0;
+    border-radius: 10px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-weight: 750;
+}
+
+.compare-button:disabled {
+    opacity: .45;
+    cursor: not-allowed;
+}
+
+.school-compare-check {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    z-index: 5;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: .72rem;
+    font-weight: 750;
+    cursor: pointer;
+}
+
+.school-compare-check input {
+    width: 16px;
+    height: 16px;
+}
+
+.ranking-card {
+    position: relative;
+}
+
+.ranking-card.is-selected {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+}
+
+.comparison-panel {
+    margin: 24px 0 32px;
+    padding: 22px;
+    border: 1px solid var(--border, #ddd);
+    border-radius: 20px;
+    background: var(--surface, #fff);
+}
+
+.comparison-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.comparison-header h2 {
+    margin: 5px 0 0;
+}
+
+.comparison-table-wrap {
+    overflow-x: auto;
+}
+
+.comparison-table {
+    width: 100%;
+    min-width: 680px;
+    border-collapse: collapse;
+}
+
+.comparison-table th,
+.comparison-table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border, #ddd);
+    text-align: center;
+}
+
+.comparison-table th:first-child {
+    text-align: left;
+}
+
+.comparison-table thead th {
+    font-size: .82rem;
+    font-weight: 800;
+}
+
+.comparison-yes {
+    font-weight: 900;
+}
+
+.comparison-no {
+    opacity: .4;
+}
+
+.comparison-section th,
+.comparison-section td {
+    padding-top: 20px;
+    font-weight: 800;
+}
+
+@media (max-width: 1100px) {
+
+    .controls {
+        grid-template-columns:
+            repeat(3, minmax(150px, 1fr));
+    }
+
+    .control-search {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 700px) {
+
+    .controls {
+        grid-template-columns: 1fr;
+    }
+
+    .control-search {
+        grid-column: auto;
+    }
+
+    .comparison-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .compare-button {
+        width: 100%;
+    }
+
+    .comparison-panel {
+        padding: 16px;
+    }
+
+    .comparison-header {
+        flex-direction: column;
+    }
+
+    .comparison-close {
+        width: 100%;
+    }
+
+    .school-compare-check {
+        position: static;
+        margin-bottom: 10px;
+    }
+}
+
+
+
+
+
+/* Checkbox confronto */
+
+.ranking-card {
+  position: relative;
+}
+
+.school-compare-checkbox {
+  position: absolute;
+
+  top: 13px;
+  right: 13px;
+
+  z-index: 5;
+
+  width: 23px;
+  height: 23px;
+
+  margin: 0;
+
+  cursor: pointer;
+}
+
+.ranking-card.is-selected {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+/* Tabella confronto */
+
+.comparison-panel table {
+  width: 100%;
+  min-width: 620px;
+
+  border-collapse: collapse;
+}
+
+.comparison-panel th,
+.comparison-panel td {
+  padding: 9px 11px;
+
+  border-bottom: 1px solid var(--border-color, #ddd);
+
+  text-align: left;
+  vertical-align: top;
+}
+
+.comparison-panel th {
+  font-weight: 700;
+}
+
+/* Mobile */
+
+@media (max-width: 700px) {
+
+  .comparison-toolbar {
+    position: sticky;
+
+    bottom: 10px;
+
+    z-index: 50;
+
+    margin: 14px 0;
+
+    padding: 9px 11px;
+
+    border-radius: 11px;
+
+    box-shadow: 0 4px 18px rgba(0,0,0,.10);
+  }
+
+  .comparison-summary {
+    gap: 8px;
+  }
+
+  .comparison-icon {
+    width: 27px;
+    height: 27px;
+    flex-basis: 27px;
+
+    font-size: .95rem;
+  }
+
+  .comparison-summary strong {
+    font-size: .86rem;
+  }
+
+  .comparison-summary span:not(.comparison-icon) {
+    font-size: .70rem;
+  }
+
+  .comparison-button {
+    min-width: 86px;
+    min-height: 37px;
+
+    padding: 7px 11px;
+
+    font-size: .84rem;
+  }
+
+  .comparison-panel {
+    padding: 11px;
+  }
+
+  .school-compare-checkbox {
+    top: 9px;
+    right: 9px;
+
+    width: 24px;
+    height: 24px;
+  }
+
+}
+
+
+/* ============================================================
+   UX FINALE
+   ============================================================ */
+
+.comparison-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  margin: 18px 0;
+
+  padding: 10px 13px;
+
+  border: 1px solid var(--border-color, #ddd);
+  border-radius: 12px;
+
+  background: var(--card-background, #fff);
+
+  box-sizing: border-box;
+}
+
+.comparison-summary {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  min-width: 0;
+}
+
+.comparison-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 30px;
+  height: 30px;
+  flex: 0 0 30px;
+
+  border-radius: 8px;
+
+  background: rgba(0,0,0,.06);
+
+  font-weight: 700;
+}
+
+.comparison-summary-text strong {
+  display: block;
+
+  font-size: .92rem;
+}
+
+.comparison-summary-text span {
+  display: block;
+
+  margin-top: 2px;
+
+  font-size: .75rem;
+
+  opacity: .65;
+}
+
+.comparison-button {
+  min-width: 90px;
+  min-height: 38px;
+
+  padding: 7px 12px;
+
+  border: 0;
+  border-radius: 9px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.comparison-button:disabled {
+  cursor: not-allowed;
+  opacity: .42;
+}
+
+.comparison-toolbar.is-open {
+  margin-bottom: 0;
+
+  border-bottom-left-radius: 7px;
+  border-bottom-right-radius: 7px;
+}
+
+.comparison-panel {
+  margin: 0 0 20px;
+
+  padding: 14px;
+
+  border: 1px solid var(--border-color, #ddd);
+  border-top: 0;
+
+  border-radius: 0 0 12px 12px;
+
+  background: var(--card-background, #fff);
+
+  overflow-x: auto;
+}
+
+.comparison-panel[hidden] {
+  display: none !important;
+}
+
+.comparison-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 12px;
+
+  margin-bottom: 12px;
+}
+
+.comparison-panel-header h3 {
+  margin: 0;
+}
+
+.comparison-panel-header p {
+  margin: 3px 0 0;
+
+  font-size: .8rem;
+
+  opacity: .65;
+}
+
+.comparison-close {
+  border: 1px solid var(--border-color, #ddd);
+
+  border-radius: 8px;
+
+  padding: 7px 10px;
+
+  background: transparent;
+
+  cursor: pointer;
+}
+
+.comparison-table-wrap {
+  overflow-x: auto;
+}
+
+.comparison-panel table {
+  width: 100%;
+
+  min-width: 620px;
+
+  border-collapse: collapse;
+}
+
+.comparison-panel th,
+.comparison-panel td {
+  padding: 9px 11px;
+
+  border-bottom: 1px solid var(--border-color, #ddd);
+
+  text-align: left;
+
+  vertical-align: top;
+}
+
+.comparison-panel th {
+  font-weight: 700;
+}
+
+/* Card */
+
+.ranking-card {
+  position: relative;
+}
+
+.school-compare-checkbox {
+  position: absolute;
+
+  top: 12px;
+  right: 12px;
+
+  z-index: 5;
+
+  width: 23px;
+  height: 23px;
+
+  margin: 0;
+
+  cursor: pointer;
+}
+
+.ranking-card.is-selected {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+/* Mobile */
+
+@media (max-width: 700px) {
+
+  .comparison-toolbar {
+    position: sticky;
+
+    bottom: 8px;
+
+    z-index: 50;
+
+    margin: 12px 0;
+
+    padding: 9px 11px;
+
+    border-radius: 11px;
+
+    box-shadow: 0 3px 16px rgba(0,0,0,.12);
+  }
+
+  .comparison-icon {
+    width: 27px;
+    height: 27px;
+    flex-basis: 27px;
+  }
+
+  .comparison-summary-text strong {
+    font-size: .86rem;
+  }
+
+  .comparison-summary-text span {
+    font-size: .70rem;
+  }
+
+  .comparison-button {
+    min-width: 84px;
+    min-height: 36px;
+
+    font-size: .82rem;
+  }
+
+  .comparison-panel {
+    padding: 10px;
+  }
+
+  .school-compare-checkbox {
+    top: 9px;
+    right: 9px;
+
+    width: 24px;
+    height: 24px;
+  }
+}
+
+
+/* ============================================================
+   CONFRONTO — STABLE FINAL
+   ============================================================ */
+
+.comparison-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  margin: 18px 0 14px;
+  padding: 10px 13px;
+
+  border: 1px solid var(--border-color, #ddd);
+  border-radius: 12px;
+
+  background: var(--card-background, #fff);
+
+  box-sizing: border-box;
+}
+
+.comparison-summary {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+}
+
+.comparison-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 30px;
+  height: 30px;
+  flex: 0 0 30px;
+
+  border-radius: 8px;
+
+  background: rgba(0,0,0,.06);
+
+  font-weight: 700;
+}
+
+.comparison-summary-text strong {
+  display: block;
+  font-size: .92rem;
+}
+
+.comparison-summary-text span {
+  display: block;
+  margin-top: 2px;
+  font-size: .75rem;
+  opacity: .65;
+}
+
+.comparison-button {
+  min-width: 90px;
+  min-height: 38px;
+
+  padding: 7px 12px;
+
+  border: 0;
+  border-radius: 9px;
+
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.comparison-button:disabled {
+  cursor: not-allowed;
+  opacity: .4;
+}
+
+.comparison-toolbar.has-selection {
+  border-color: currentColor;
+}
+
+.comparison-toolbar.is-open {
+  margin-bottom: 0;
+  border-bottom-left-radius: 7px;
+  border-bottom-right-radius: 7px;
+}
+
+.comparison-panel {
+  margin: 0 0 20px;
+  padding: 14px;
+
+  border: 1px solid var(--border-color, #ddd);
+  border-top: 0;
+
+  border-radius: 0 0 12px 12px;
+
+  background: var(--card-background, #fff);
+
+  box-sizing: border-box;
+
+  overflow-x: auto;
+}
+
+.comparison-panel[hidden] {
+  display: none !important;
+}
+
+.comparison-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  margin-bottom: 12px;
+}
+
+.comparison-panel-header h3 {
+  margin: 0;
+}
+
+.comparison-panel-header p {
+  margin: 3px 0 0;
+  font-size: .8rem;
+  opacity: .65;
+}
+
+.comparison-close {
+  padding: 7px 10px;
+
+  border: 1px solid var(--border-color, #ddd);
+  border-radius: 8px;
+
+  background: transparent;
+
+  cursor: pointer;
+}
+
+.comparison-table-wrap {
+  overflow-x: auto;
+}
+
+.comparison-panel table {
+  width: 100%;
+  min-width: 620px;
+  border-collapse: collapse;
+}
+
+.comparison-panel th,
+.comparison-panel td {
+  padding: 9px 11px;
+
+  border-bottom: 1px solid var(--border-color, #ddd);
+
+  text-align: left;
+  vertical-align: top;
+}
+
+.comparison-panel th {
+  font-weight: 700;
+}
+
+
+/* Checkbox */
+
+.ranking-card {
+  position: relative;
+}
+
+.school-compare-control {
+  position: absolute;
+
+  top: 10px;
+  right: 10px;
+
+  z-index: 20;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 34px;
+  height: 34px;
+
+  border-radius: 9px;
+
+  background: rgba(255,255,255,.92);
+
+  cursor: pointer;
+}
+
+.school-compare-checkbox {
+  width: 22px;
+  height: 22px;
+
+  margin: 0;
+
+  cursor: pointer;
+}
+
+.ranking-card.is-selected {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+
+@media (max-width: 700px) {
+
+  .comparison-toolbar {
+    position: sticky;
+    bottom: 8px;
+
+    z-index: 100;
+
+    margin: 12px 0;
+
+    padding: 9px 11px;
+
+    border-radius: 11px;
+
+    box-shadow: 0 3px 16px rgba(0,0,0,.12);
+  }
+
+  .comparison-summary {
+    gap: 8px;
+  }
+
+  .comparison-icon {
+    width: 27px;
+    height: 27px;
+    flex-basis: 27px;
+  }
+
+  .comparison-summary-text strong {
+    font-size: .86rem;
+  }
+
+  .comparison-summary-text span {
+    font-size: .70rem;
+  }
+
+  .comparison-button {
+    min-width: 84px;
+    min-height: 36px;
+    font-size: .82rem;
+  }
+
+  .comparison-panel {
+    padding: 10px;
+  }
+
+  .school-compare-control {
+    top: 8px;
+    right: 8px;
+
+    width: 36px;
+    height: 36px;
+  }
+
+  .school-compare-checkbox {
+    width: 24px;
+    height: 24px;
+  }
+}

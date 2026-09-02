@@ -162,31 +162,81 @@
     </section>
 
 
-    <section class="controls">
+    
+<section class="controls">
 
+    <div class="control-search">
+        <label for="search">Cerca scuola</label>
         <input
             id="search"
             type="search"
-            placeholder="Cerca scuola, codice o comune..."
+            placeholder="Nome, comune o codice scuola..."
+            autocomplete="off"
         >
+    </div>
 
+    <div class="control-select">
+        <label for="provinceFilter">Provincia</label>
         <select id="provinceFilter">
             <option value="">Tutte le province</option>
         </select>
+    </div>
 
+    <div class="control-select">
+        <label for="scoreFilter">Affidabilità dati</label>
         <select id="scoreFilter">
-            <option value="">Tutti i punteggi</option>
-            <option value="80">Score ≥ 80%</option>
-            <option value="60">Score ≥ 60%</option>
-            <option value="40">Score ≥ 40%</option>
-            <option value="1">Score > 0%</option>
-            <option value="0">Nessuna evidence</option>
+            <option value="">Qualsiasi</option>
+            <option value="80">≥ 80%</option>
+            <option value="60">≥ 60%</option>
+            <option value="40">≥ 40%</option>
+            <option value="0">Solo senza dati</option>
         </select>
+    </div>
 
-    </section>
+    <div class="control-select">
+        <label for="featureFilter">Caratteristica</label>
+        <select id="featureFilter">
+            <option value="">Tutte le caratteristiche</option>
+        </select>
+    </div>
 
+    <div class="control-select">
+        <label for="enrolmentFilter">Iscrizioni</label>
+        <select id="enrolmentFilter">
+            <option value="">Qualsiasi stato</option>
+            <option value="OPEN">Aperte</option>
+            <option value="CLOSED">Chiuse</option>
+            <option value="UNKNOWN">Non disponibili</option>
+        </select>
+    </div>
 
-    <section>
+    <button
+        type="button"
+        id="resetFilters"
+        class="reset-filters"
+    >
+        Azzera filtri
+    </button>
+
+</section>
+
+<section class="comparison-toolbar" id="comparisonToolbar">
+
+    <div>
+<strong id="comparisonCount">0 scuole</strong>
+    </div>
+
+    <button
+        type="button"
+        id="compareSelected"
+        class="compare-button"
+        disabled
+    >
+        Confronta selezionate
+    </button>
+
+</section>
+<section>
 
         <div class="section-header">
 
@@ -214,6 +264,37 @@
 
     </section>
 
+
+    
+    <div
+      id="comparisonToolbar"
+      class="comparison-toolbar"
+      aria-label="Confronto scuole">
+
+      <div class="comparison-summary">
+        <span class="comparison-icon" aria-hidden="true">⇄</span>
+
+        <div class="comparison-summary-text">
+          <strong>Confronta scuole</strong>
+          <span id="comparisonCount">0/4 selezionate</span>
+        </div>
+      </div>
+
+      <button
+        id="comparisonButton"
+        class="comparison-button"
+        type="button"
+        disabled>
+        Confronta
+      </button>
+
+    </div>
+
+    <section
+      id="comparisonPanel"
+      class="comparison-panel"
+      hidden>
+    </section>
 
     <section id="detail" class="detail hidden">
 

@@ -1,0 +1,412 @@
+[
+  {
+    "school_id": 1,
+    "codice_scuola": "ANMM843014",
+    "denominazione": "OSIMO-S.BIAGIO-OSIMO STAZIONE",
+    "principal": {
+      "name": "Fabio Radicioni",
+      "source": null
+    },
+    "enrolment": {
+      "status": "CLOSED",
+      "school_year": "2026/2027",
+      "open_from": "2026-01-13",
+      "open_until": "2026-02-14",
+      "source": {
+        "id": 151,
+        "url": "https://www.mim.gov.it/-/scuola-dal-13-gennaio-al-14-febbraio-aperte-le-iscrizioni-per-l-anno-scolastico-2026-2027",
+        "title": "MIM – Iscrizioni scuola a.s. 2026/2027",
+        "retrieved_at": "2026-09-02T18:47:52",
+        "status": "VERIFIED"
+      }
+    },
+    "updated_at": "2026-09-02T18:47:52"
+  },
+  {
+    "school_id": 2,
+    "codice_scuola": "MCMM83102L",
+    "denominazione": "SAN VITO",
+    "principal": {
+      "name": "Annamaria De Siena",
+      "source": null
+    },
+    "enrolment": {
+      "status": "CLOSED",
+      "school_year": "2026/2027",
+      "open_from": "2026-01-13",
+      "open_until": "2026-02-14",
+      "source": {
+        "id": 152,
+        "url": "https://www.mim.gov.it/-/scuola-dal-13-gennaio-al-14-febbraio-aperte-le-iscrizioni-per-l-anno-scolastico-2026-2027",
+        "title": "MIM – Iscrizioni scuola a.s. 2026/2027",
+        "retrieved_at": "2026-09-02T18:47:52",
+        "status": "VERIFIED"
+      }
+    },
+    "updated_at": "2026-09-02T18:47:52"
+  },
+  {
+    "school_id": 3,
+    "codice_scuola": "MCMM83501V",
+    "denominazione": "E. MESTICA CIVITANOVA M.",
+    "principal": {
+      "name": "Edoardo Iacucci",
+      "source": {
+        "id": 143,
+        "url": "https://vecchiosito.civitanovatacito.edu.it/utenza/dirigenza/index.html",
+        "title": "Dirigente scolastico – Edoardo Iacucci",
+        "retrieved_at": "2026-09-02T18:47:52",
+        "status": "VERIFIED"
+      }
+    },
+    "enrolment": {
+      "status": "CLOSED",
+      "school_year": "2026/2027",
+      "open_from": "2026-01-13",
+      "open_until": "2026-02-14",
+      "source": {
+        "id": 153,
+        "url": "https://www.mim.gov.it/-/scuola-dal-13-gennaio-al-14-febbraio-aperte-le-iscrizioni-per-l-anno-scolastico-2026-2027",
+        "title": "MIM – Iscrizioni scuola a.s. 2026/2027",
+        "retrieved_at": "2026-09-02T18:47:52",
+        "status": "VERIFIED"
+      }
+    },
+    "updated_at": "2026-09-02T18:47:52"
+  },
+  {
+    "school_id": 4,
+    "codice_scuola": "ANMM842018",
+    "denominazione": "OSIMO \"CAIO GIULIO CESARE\"",
+    "principal": {
+      "name": "Lorella Belleggia",
+      "source": {
+        "id": 144,
+        "url": "https://www.iccaiogiuliocesare.edu.it/persone?id=552",
+        "title": "Dirigente scolastico – Lorella Belleggia",
+        "retrieved_at": "2026-09-02T18:47:52",
+        "status": "VERIFIED"
+      }
+    },
+    "enrolment": {
+      "status": "CLOSED",
+      "school_year": "2026/2027",
+      "open_from": "2026-01-13",
+      "open_until": "2026-02-14",
+      "source": {
+        "id": 154,
+        "url": "https://www.mim.gov.it/-/scuola-dal-13-gennaio-al-14-febbraio-aperte-le-iscrizioni-per-l-anno-scolastico-2026-2027",
+        "title": "MIM – Iscrizioni scuola a.s. 2026/2027",
+        "retrieved_at": "2026-09-02T18:47:52",
+        "status": "VERIFIED"
+      }
+    },
+    "updated_at": "2026-09-02T18:47:52"
+  },
+  {
+    "school_id": 5,
+    "codice_scuola": "MCMM813012",
+    "denominazione": "RAFFAELLO SANZIO",
+    "principal": {
+      "name": null,
+      "source": null
+    },
+    "enrolment": {
+      "status": "CLOSED",
+      "school_year": "2026/2027",
+      "open_from": "2026-01-13",
+      "open_until": "2026-02-14",
+      "source": {
+        "id": 155,
+        "url": "https://www.mim.gov.it/-/scuola-dal-13-gennaio-al-14-febbraio-aperte-le-iscrizioni-per-l-anno-scolastico-2026-2027",
+        "title": "MIM – Iscrizioni scuola a.s. 2026/2027",
+        "retrieved_at": "2026-09-02T18:47:52",
+        "status": "VERIFIED"
+      }
+    },
+    "updated_at": "2026-09-02T18:47:52"
+  },
+  {
+    "school_id": 6,
+    "codice_scuola": "ANMM83201N",
+    "denominazione": "LORETO \" L. LOTTO \"",
+    "principal": {
+      "name": "Luigia Romagnoli",
+      "source": {
+        "id": 145,
+        "url": "https://www.icsolariloreto.edu.it/pagine/personale",
+        "title": "Dirigente scolastico – Luigia Romagnoli",
+        "retrieved_at": "2026-09-02T18:47:52",
+        "status": "VERIFIED"
+      }
+    },
+    "enrolment": {
+      "status": "CLOSED",
+      "school_year": "2026/2027",
+      "open_from": "2026-01-13",
+      "open_until": "2026-02-14",
+      "source": {
+        "id": 156,
+        "url": "https://www.mim.gov.it/-/scuola-dal-13-gennaio-al-14-febbraio-aperte-le-iscrizioni-per-l-anno-scolastico-2026-2027",
+        "title": "MIM – Iscrizioni scuola a.s. 2026/2027",
+        "retrieved_at": "2026-09-02T18:47:52",
+        "status": "VERIFIED"
+      }
+    },
+    "updated_at": "2026-09-02T18:47:52"
+  },
+  {
+    "school_id": 7,
+    "codice_scuola": "MCMM81401T",
+    "denominazione": "LEONARDO DA VINCI",
+    "principal": {
+      "name": "Natalia Virgulti",
+      "source": {
+        "id": 146,
+        "url": "http://www.icpotenzapicena.edu.it/",
+        "title": "Dirigente scolastico – Natalia Virgulti",
+        "retrieved_at": "2026-09-02T18:47:52",
+        "status": "VERIFIED"
+      }
+    },
+    "enrolment": {
+      "status": "CLOSED",
+      "school_year": "2026/2027",
+      "open_from": "2026-01-13",
+      "open_until": "2026-02-14",
+      "source": {
+        "id": 157,
+        "url": "https://www.mim.gov.it/-/scuola-dal-13-gennaio-al-14-febbraio-aperte-le-iscrizioni-per-l-anno-scolastico-2026-2027",
+        "title": "MIM – Iscrizioni scuola a.s. 2026/2027",
+        "retrieved_at": "2026-09-02T18:47:52",
+        "status": "VERIFIED"
+      }
+    },
+    "updated_at": "2026-09-02T18:47:52"
+  },
+  {
+    "school_id": 8,
+    "codice_scuola": "ANMM83101T",
+    "denominazione": "CASTELFIDARDO \"SOPRANI\"",
+    "principal": {
+      "name": "Monica Marchiani",
+      "source": null
+    },
+    "enrolment": {
+      "status": "CLOSED",
+      "school_year": "2026/2027",
+      "open_from": "2026-01-13",
+      "open_until": "2026-02-14",
+      "source": {
+        "id": 158,
+        "url": "https://www.mim.gov.it/-/scuola-dal-13-gennaio-al-14-febbraio-aperte-le-iscrizioni-per-l-anno-scolastico-2026-2027",
+        "title": "MIM – Iscrizioni scuola a.s. 2026/2027",
+        "retrieved_at": "2026-09-02T18:47:52",
+        "status": "VERIFIED"
+      }
+    },
+    "updated_at": "2026-09-02T18:47:52"
+  },
+  {
+    "school_id": 9,
+    "codice_scuola": "MCMM834013",
+    "denominazione": "L. PIRANDELLO",
+    "principal": {
+      "name": null,
+      "source": null
+    },
+    "enrolment": {
+      "status": "CLOSED",
+      "school_year": "2026/2027",
+      "open_from": "2026-01-13",
+      "open_until": "2026-02-14",
+      "source": {
+        "id": 159,
+        "url": "https://www.mim.gov.it/-/scuola-dal-13-gennaio-al-14-febbraio-aperte-le-iscrizioni-per-l-anno-scolastico-2026-2027",
+        "title": "MIM – Iscrizioni scuola a.s. 2026/2027",
+        "retrieved_at": "2026-09-02T18:47:52",
+        "status": "VERIFIED"
+      }
+    },
+    "updated_at": "2026-09-02T18:47:52"
+  },
+  {
+    "school_id": 10,
+    "codice_scuola": "MCMM83001Q",
+    "denominazione": "G. UNGARETTI",
+    "principal": {
+      "name": "Gloria Gradassi",
+      "source": {
+        "id": 147,
+        "url": "https://icsagostino.edu.it/a-scuola-di-debate/",
+        "title": "Dirigente scolastico – Gloria Gradassi",
+        "retrieved_at": "2026-09-02T18:47:52",
+        "status": "VERIFIED"
+      }
+    },
+    "enrolment": {
+      "status": "CLOSED",
+      "school_year": "2026/2027",
+      "open_from": "2026-01-13",
+      "open_until": "2026-02-14",
+      "source": {
+        "id": 160,
+        "url": "https://www.mim.gov.it/-/scuola-dal-13-gennaio-al-14-febbraio-aperte-le-iscrizioni-per-l-anno-scolastico-2026-2027",
+        "title": "MIM – Iscrizioni scuola a.s. 2026/2027",
+        "retrieved_at": "2026-09-02T18:47:52",
+        "status": "VERIFIED"
+      }
+    },
+    "updated_at": "2026-09-02T18:47:52"
+  },
+  {
+    "school_id": 11,
+    "codice_scuola": "MCMM83201B",
+    "denominazione": "M.L. PATRIZI",
+    "principal": {
+      "name": "Paola De Tata",
+      "source": {
+        "id": 148,
+        "url": "https://www.icgigli.edu.it/dirigenza/",
+        "title": "Dirigente scolastico – Paola De Tata",
+        "retrieved_at": "2026-09-02T18:47:52",
+        "status": "VERIFIED"
+      }
+    },
+    "enrolment": {
+      "status": "CLOSED",
+      "school_year": "2026/2027",
+      "open_from": "2026-01-13",
+      "open_until": "2026-02-14",
+      "source": {
+        "id": 161,
+        "url": "https://www.mim.gov.it/-/scuola-dal-13-gennaio-al-14-febbraio-aperte-le-iscrizioni-per-l-anno-scolastico-2026-2027",
+        "title": "MIM – Iscrizioni scuola a.s. 2026/2027",
+        "retrieved_at": "2026-09-02T18:47:52",
+        "status": "VERIFIED"
+      }
+    },
+    "updated_at": "2026-09-02T18:47:52"
+  },
+  {
+    "school_id": 12,
+    "codice_scuola": "MCMM83601P",
+    "denominazione": "ANNIBAL CARO",
+    "principal": {
+      "name": "Maurizio Armandini",
+      "source": null
+    },
+    "enrolment": {
+      "status": "CLOSED",
+      "school_year": "2026/2027",
+      "open_from": "2026-01-13",
+      "open_until": "2026-02-14",
+      "source": {
+        "id": 162,
+        "url": "https://www.mim.gov.it/-/scuola-dal-13-gennaio-al-14-febbraio-aperte-le-iscrizioni-per-l-anno-scolastico-2026-2027",
+        "title": "MIM – Iscrizioni scuola a.s. 2026/2027",
+        "retrieved_at": "2026-09-02T18:47:52",
+        "status": "VERIFIED"
+      }
+    },
+    "updated_at": "2026-09-02T18:47:52"
+  },
+  {
+    "school_id": 13,
+    "codice_scuola": "ANMM844021",
+    "denominazione": "G.LEOPARDI-PASSATEMPO DI OSIMO",
+    "principal": {
+      "name": "Annamaria Greco",
+      "source": {
+        "id": 149,
+        "url": "https://ictrilliniosimo.edu.it/struttura/dirigente-scolastico/",
+        "title": "Dirigente scolastico – Annamaria Greco",
+        "retrieved_at": "2026-09-02T18:47:52",
+        "status": "VERIFIED"
+      }
+    },
+    "enrolment": {
+      "status": "CLOSED",
+      "school_year": "2026/2027",
+      "open_from": "2026-01-13",
+      "open_until": "2026-02-14",
+      "source": {
+        "id": 163,
+        "url": "https://www.mim.gov.it/-/scuola-dal-13-gennaio-al-14-febbraio-aperte-le-iscrizioni-per-l-anno-scolastico-2026-2027",
+        "title": "MIM – Iscrizioni scuola a.s. 2026/2027",
+        "retrieved_at": "2026-09-02T18:47:52",
+        "status": "VERIFIED"
+      }
+    },
+    "updated_at": "2026-09-02T18:47:52"
+  },
+  {
+    "school_id": 14,
+    "codice_scuola": "ANMM84401X",
+    "denominazione": "G. LEOPARDI \"BORGO SAN GIACOMO\"",
+    "principal": {
+      "name": "Annamaria Greco",
+      "source": {
+        "id": 150,
+        "url": "https://ictrilliniosimo.edu.it/struttura/dirigente-scolastico/",
+        "title": "Dirigente scolastico – Annamaria Greco",
+        "retrieved_at": "2026-09-02T18:47:52",
+        "status": "VERIFIED"
+      }
+    },
+    "enrolment": {
+      "status": "CLOSED",
+      "school_year": "2026/2027",
+      "open_from": "2026-01-13",
+      "open_until": "2026-02-14",
+      "source": {
+        "id": 164,
+        "url": "https://www.mim.gov.it/-/scuola-dal-13-gennaio-al-14-febbraio-aperte-le-iscrizioni-per-l-anno-scolastico-2026-2027",
+        "title": "MIM – Iscrizioni scuola a.s. 2026/2027",
+        "retrieved_at": "2026-09-02T18:47:52",
+        "status": "VERIFIED"
+      }
+    },
+    "updated_at": "2026-09-02T18:47:52"
+  },
+  {
+    "school_id": 15,
+    "codice_scuola": "ANMM84101C",
+    "denominazione": "SCUOLA MEDIA",
+    "principal": {
+      "name": "Angelica Baione",
+      "source": null
+    },
+    "enrolment": {
+      "status": "CLOSED",
+      "school_year": "2026/2027",
+      "open_from": "2026-01-13",
+      "open_until": "2026-02-14",
+      "source": {
+        "id": 165,
+        "url": "https://www.mim.gov.it/-/scuola-dal-13-gennaio-al-14-febbraio-aperte-le-iscrizioni-per-l-anno-scolastico-2026-2027",
+        "title": "MIM – Iscrizioni scuola a.s. 2026/2027",
+        "retrieved_at": "2026-09-02T18:47:52",
+        "status": "VERIFIED"
+      }
+    },
+    "updated_at": "2026-09-02T18:47:52"
+  },
+  {
+    "school_id": 16,
+    "codice_scuola": "MC1MIF5001",
+    "denominazione": "Scuola secondaria I grado My School",
+    "principal": {
+      "name": null,
+      "source": null
+    },
+    "enrolment": {
+      "status": "UNKNOWN",
+      "school_year": "2026/2027",
+      "open_from": null,
+      "open_until": null,
+      "source": null
+    },
+    "updated_at": "2026-09-02T18:46:01"
+  }
+]

@@ -6,6 +6,7 @@ let parameters = [];
 let schoolParameters = [];
 let evidences = [];
 let ptofDocuments = [];
+let schoolProfiles = [];
 
 const $ = (id) => document.getElementById(id);
 
@@ -41,7 +42,8 @@ async function loadData() {
             loadJson("school_parameters.json"),
             loadJson("evidence.json"),
             loadJson("ptof_documents.json"),
-            loadJson("statistics.json")
+            loadJson("statistics.json"),
+            loadJson("school_profiles.json")
 
         ]);
 
@@ -53,7 +55,8 @@ async function loadData() {
         schoolParametersResult,
         evidenceResult,
         ptofDocumentsResult,
-        statisticsResult
+        statisticsResult,
+        schoolProfilesResult
     ] = results;
 
 
@@ -85,6 +88,11 @@ async function loadData() {
     ptofDocuments =
         ptofDocumentsResult.status === "fulfilled"
             ? ptofDocumentsResult.value
+            : [];
+
+    schoolProfiles =
+        schoolProfilesResult.status === "fulfilled"
+            ? schoolProfilesResult.value
             : [];
 
 
@@ -217,6 +225,294 @@ function getMergedSchools() {
 }
 
 
+
+/* ============================================================
+   COMPARATOR
+   ============================================================ */
+
+const FEATURE_FILTERS = [
+    { id: 1, label: "Inglese" },
+    { id: 2, label: "Francese" },
+    { id: 3, label: "Spagnolo" },
+    { id: 4, label: "Tedesco" },
+    { id: 5, label: "Arte" },
+    { id: 6, label: "STEM" },
+    { id: 7, label: "Teatro" },
+    { id: 8, label: "Sport" },
+    { id: 9, label: "PNRR" },
+    { id: 11, label: "Indirizzo musicale" },
+    { id: 12, label: "Strumenti musicali" },
+    { id: 15, label: "Mensa" },
+    { id: 13, label: "Biblioteca" },
+    { id: 14, label: "Palestra" },
+    { id: 16, label: "Laboratorio informatica" },
+    { id: 17, label: "Laboratorio scienze" },
+    { id: 18, label: "Laboratorio musicale" },
+    { id: 19, label: "Laboratorio artistico" },
+    { id: 20, label: "Atelier digitale" },
+    { id: 21, label: "Aule multimediali" }
+];
+
+const selectedSchools = new Set();
+
+function getSchoolParameter(schoolId, parameterId) {
+    return schoolParameters.find(
+        p =>
+            Number(p.school_id) === Number(schoolId) &&
+            Number(p.parameter_id) === Number(parameterId)
+    );
+}
+
+function parameterIsPresent(schoolId, parameterId) {
+
+    const p = getSchoolParameter(schoolId, parameterId);
+
+    if (!p) return false;
+
+    const value = String(
+        p.normalized_value ??
+        p.value ??
+        ""
+    ).trim().toUpperCase();
+
+    return [
+        "SI",
+        "SÌ",
+        "YES",
+        "TRUE",
+        "PRESENTE",
+        "1"
+    ].includes(value);
+}
+
+function getProfileForSchool(schoolId) {
+
+    return schoolProfiles.find(
+        p => Number(p.school_id) === Number(schoolId)
+    ) || null;
+}
+
+function initFeatureFilter() {
+
+    const select = $("featureFilter");
+
+    if (!select) return;
+
+    select.innerHTML = `
+        <option value="">Tutte le caratteristiche</option>
+        ${FEATURE_FILTERS.map(
+            f =>
+                `<option value="${f.id}">
+                    ${escapeHtml(f.label)}
+                </option>`
+        ).join("")}
+    `;
+}
+
+function toggleSchoolSelection(schoolId) {
+
+    const id = Number(schoolId);
+
+    if (selectedSchools.has(id)) {
+        selectedSchools.delete(id);
+    } else {
+
+        if (selectedSchools.size >= 4) {
+            alert("Puoi confrontare al massimo 4 scuole.");
+            return;
+        }
+
+        selectedSchools.add(id);
+    }
+
+    updateComparisonButton();
+    renderRanking();
+}
+
+function updateComparisonButton() {
+
+    const button = $("compareSelected");
+
+    if (!button) return;
+
+    const count = selectedSchools.size;
+
+    button.disabled = count < 2;
+
+    button.textContent =
+        count >= 2
+            ? `Confronta ${count} scuole`
+            : "Confronta selezionate";
+
+    const counter = $("comparisonCount");
+
+    if (counter) {
+        counter.textContent =
+            count === 1
+                ? "1 scuola selezionata"
+                : `${count} scuole selezionate`;
+    }
+}
+
+function renderComparisonPanel() {
+
+    const panel = $("comparisonPanel");
+
+    if (!panel || selectedSchools.size < 2) return;
+
+    const selected = schools.filter(
+        s => selectedSchools.has(Number(s.id))
+    );
+
+    panel.classList.remove("hidden");
+
+    const rows = FEATURE_FILTERS.map(feature => {
+
+        return `
+            <tr>
+                <th>${escapeHtml(feature.label)}</th>
+
+                ${selected.map(school => {
+
+                    const present = parameterIsPresent(
+                        school.id,
+                        feature.id
+                    );
+
+                    return `
+                        <td class="${
+                            present
+                                ? "comparison-yes"
+                                : "comparison-no"
+                        }">
+                            ${present ? "✓" : "—"}
+                        </td>
+                    `;
+
+                }).join("")}
+            </tr>
+        `;
+
+    }).join("");
+
+    panel.innerHTML = `
+        <div class="comparison-header">
+
+            <div>
+                <div class="comparison-kicker">
+                    CONFRONTO SCUOLE
+                </div>
+
+                <h2>Confronto delle caratteristiche</h2>
+            </div>
+
+            <button
+                type="button"
+                class="comparison-close"
+                onclick="closeComparison()"
+            >
+                Chiudi
+            </button>
+
+        </div>
+
+        <div class="comparison-table-wrap">
+
+            <table class="comparison-table">
+
+                <thead>
+                    <tr>
+                        <th>Caratteristica</th>
+
+                        ${selected.map(school => `
+                            <th>
+                                ${escapeHtml(
+                                    school.denominazione
+                                )}
+                            </th>
+                        `).join("")}
+
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    ${rows}
+
+                    <tr class="comparison-section">
+
+                        <th>Iscrizioni</th>
+
+                        ${selected.map(school => {
+
+                            const profile =
+                                getProfileForSchool(school.id);
+
+                            const status =
+                                profile?.enrolment?.status ||
+                                "UNKNOWN";
+
+                            return `
+                                <td>
+                                    ${
+                                        status === "OPEN"
+                                            ? "APERTE"
+                                            : status === "CLOSED"
+                                                ? "CHIUSE"
+                                                : "—"
+                                    }
+                                </td>
+                            `;
+
+                        }).join("")}
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+    `;
+
+    panel.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+}
+
+function closeComparison() {
+
+    const panel = $("comparisonPanel");
+
+    if (!panel) return;
+
+    panel.classList.add("hidden");
+    panel.innerHTML = "";
+}
+
+function resetAllFilters() {
+
+    $("search").value = "";
+    $("provinceFilter").value = "";
+    $("scoreFilter").value = "";
+
+    if ($("featureFilter")) {
+        $("featureFilter").value = "";
+    }
+
+    if ($("enrolmentFilter")) {
+        $("enrolmentFilter").value = "";
+    }
+
+    selectedSchools.clear();
+
+    closeComparison();
+    updateComparisonButton();
+    renderRanking();
+}
+
+
 function renderRanking() {
 
     const query =
@@ -229,6 +525,12 @@ function renderRanking() {
 
     const scoreFilter =
         $("scoreFilter").value;
+
+    const featureFilter =
+        $("featureFilter")?.value || "";
+
+    const enrolmentFilter =
+        $("enrolmentFilter")?.value || "";
 
     let results = getMergedSchools();
 
@@ -266,7 +568,42 @@ function renderRanking() {
         }
 
         if (scoreFilter) {
-            return score >= Number(scoreFilter);
+
+            if (scoreFilter === "0") {
+
+                if (score !== 0) {
+                    return false;
+                }
+
+            } else if (
+                score < Number(scoreFilter)
+            ) {
+                return false;
+            }
+        }
+
+        if (featureFilter) {
+
+            if (!parameterIsPresent(
+                school.id,
+                Number(featureFilter)
+            )) {
+                return false;
+            }
+        }
+
+        if (enrolmentFilter) {
+
+            const profile =
+                getProfileForSchool(school.id);
+
+            const status =
+                profile?.enrolment?.status ||
+                "UNKNOWN";
+
+            if (status !== enrolmentFilter) {
+                return false;
+            }
         }
 
         return true;
@@ -367,7 +704,31 @@ function renderRanking() {
                 `;
 
         card.innerHTML = `
-            <div class="ranking-card">
+            <div class="ranking-card ${
+    selectedSchools.has(Number(school.id))
+        ? "is-selected"
+        : ""
+}">
+
+    <label class="school-compare-check">
+
+        <input
+            type="checkbox"
+            ${
+                selectedSchools.has(Number(school.id))
+                    ? "checked"
+                    : ""
+            }
+            onchange="
+                toggleSchoolSelection(${school.id})
+            "
+            onclick="event.stopPropagation()"
+        >
+
+        <span>Confronta</span>
+
+    </label>
+
 
                 <div class="ranking-card-header">
 
@@ -681,6 +1042,37 @@ function documentLink(documentId, label = "Apri documento") {
 }
 
 
+
+function renderProfileSource(source, label = "Fonte ufficiale") {
+  if (!source || !source.url) return "";
+
+  return `
+    <a
+      class="profile-source-link"
+      href="${escapeHtml(source.url)}"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      ${escapeHtml(label)} ↗
+    </a>
+  `;
+}
+
+function renderEnrolmentSource(source) {
+  if (!source || !source.url) return "";
+
+  return `
+    <a
+      class="profile-source-link"
+      href="${escapeHtml(source.url)}"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Fonte MIM ↗
+    </a>
+  `;
+}
+
 function showDetail(schoolId) {
 
     const school =
@@ -692,6 +1084,11 @@ function showDetail(schoolId) {
         scores.find(
             s => s.school_id === schoolId
         );
+
+    const schoolProfile =
+        schoolProfiles.find(
+            profile => profile.school_id === schoolId
+        ) || null;
 
     if (!school) {
         return;
@@ -1168,6 +1565,95 @@ function showDetail(schoolId) {
 
         </section>
 
+
+
+
+        <section class="school-profile">
+
+            <div class="detail-section-heading">
+
+                <div>
+                    <span class="eyebrow">
+                        PROFILO DELLA SCUOLA
+                    </span>
+
+                    <h2>
+                        Informazioni essenziali
+                    </h2>
+                </div>
+
+            </div>
+
+            <div class="school-profile-grid">
+
+                <article class="school-profile-card">
+
+                    <div class="school-profile-icon">
+                        👤
+                    </div>
+
+                    <div class="school-profile-body">
+
+                        <span class="school-profile-label">
+                            DIRIGENTE SCOLASTICO
+                        </span>
+
+                        <strong>
+                            ${
+                                schoolProfile?.principal?.name
+                                    ? escapeHtml(
+                                        schoolProfile.principal.name
+                                    )
+                                    : "Non disponibile"
+                            }
+                        </strong>
+
+                    </div>
+
+                </article>
+
+
+                <article class="school-profile-card">
+
+                    <div class="school-profile-icon">
+                        📝
+                    </div>
+
+                    <div class="school-profile-body">
+
+                        <span class="school-profile-label">
+                            ISCRIZIONI
+                        </span>
+
+                        <strong>
+                            ${
+                                schoolProfile?.enrolment?.status === "OPEN"
+                                    ? "APERTE"
+                                    : schoolProfile?.enrolment?.status === "CLOSED"
+                                        ? "CHIUSE"
+                                        : "Non disponibile"
+                            }
+                        </strong>
+
+                        ${
+                            schoolProfile?.enrolment?.school_year
+                                ? `
+                                    <small>
+                                        A.S. ${escapeHtml(
+                                            schoolProfile.enrolment.school_year
+                                        )}
+                                    </small>
+                                `
+                                : ""
+                        }
+
+                    </div>
+
+                </article>
+
+            </div>
+
+        </section>
 
 
         <section class="school-snapshot">
@@ -1815,6 +2301,35 @@ $("closeDetail").addEventListener(
 );
 
 
+
+if ($("featureFilter")) {
+    $("featureFilter").addEventListener(
+        "change",
+        renderRanking
+    );
+}
+
+if ($("enrolmentFilter")) {
+    $("enrolmentFilter").addEventListener(
+        "change",
+        renderRanking
+    );
+}
+
+if ($("resetFilters")) {
+    $("resetFilters").addEventListener(
+        "click",
+        resetAllFilters
+    );
+}
+
+if ($("compareSelected")) {
+    $("compareSelected").addEventListener(
+        "click",
+        renderComparisonPanel
+    );
+}
+
 $("search").addEventListener(
     "input",
     renderRanking
@@ -1856,6 +2371,8 @@ function escapeHtml(value) {
 }
 
 
+initFeatureFilter();
+
 loadData().catch(error => {
 
     console.error(error);
@@ -1865,4 +2382,334 @@ loadData().catch(error => {
             Errore nel caricamento dei dati.
         </div>
     `;
+});
+
+
+
+
+
+
+/* ============================================================
+   UX FINALE — CONFRONTO + FILTRI
+   ============================================================ */
+
+const FINAL_FEATURE_FILTERS = [
+  { id: 5,  label: "Arte" },
+  { id: 6,  label: "STEM" },
+  { id: 7,  label: "Teatro" },
+  { id: 8,  label: "Sport" },
+  { id: 9,  label: "PNRR" },
+  { id: 11, label: "Indirizzo musicale" },
+  { id: 12, label: "Strumenti musicali" },
+  { id: 1,  label: "Inglese" },
+  { id: 2,  label: "Francese" },
+  { id: 3,  label: "Spagnolo" },
+  { id: 4,  label: "Tedesco" },
+  { id: 15, label: "Mensa" },
+  { id: 13, label: "Biblioteca" },
+  { id: 14, label: "Palestra" },
+  { id: 16, label: "Laboratorio informatica" },
+  { id: 17, label: "Laboratorio scienze" },
+  { id: 18, label: "Laboratorio musicale" },
+  { id: 19, label: "Laboratorio artistico" },
+  { id: 20, label: "Atelier digitale" },
+  { id: 21, label: "Aule multimediali" }
+];
+
+function finalGetParameter(schoolId, parameterId) {
+  if (!Array.isArray(schoolParameters)) return null;
+
+  return schoolParameters.find(
+    p =>
+      Number(p.school_id) === Number(schoolId) &&
+      Number(p.parameter_id) === Number(parameterId)
+  ) || null;
+}
+
+function finalParameterIsPresent(record) {
+
+  if (!record) return false;
+
+  const raw = String(
+    record.normalized_value ??
+    record.value ??
+    ""
+  ).trim().toUpperCase();
+
+  if (!raw) return false;
+
+  if (
+    raw === "NO" ||
+    raw === "N" ||
+    raw === "FALSE" ||
+    raw === "0" ||
+    raw === "ASSENTE" ||
+    raw === "NON PRESENTE"
+  ) {
+    return false;
+  }
+
+  /*
+   * Per le lingue non richiediamo necessariamente SI:
+   * valori come "3", "3 ORE/SETTIMANA", "INGLESE 3H"
+   * indicano comunque presenza di una proposta.
+   */
+  return true;
+}
+
+function finalGetProfile(schoolId) {
+
+  if (!Array.isArray(schoolProfiles)) return null;
+
+  return schoolProfiles.find(
+    p => Number(p.school_id) === Number(schoolId)
+  ) || null;
+}
+
+
+/* ------------------------------------------------------------
+   CONFRONTO
+   ------------------------------------------------------------ */
+
+if (typeof selectedSchools === "undefined") {
+  window.selectedSchools = new Set();
+}
+
+function finalComparisonCount() {
+  return selectedSchools instanceof Set
+    ? selectedSchools.size
+    : 0;
+}
+
+function finalUpdateComparisonUI() {
+
+  const count = finalComparisonCount();
+
+  const toolbar = document.getElementById("comparisonToolbar");
+  const button = document.getElementById("comparisonButton");
+  const countEl = document.getElementById("comparisonCount");
+  const panel = document.getElementById("comparisonPanel");
+
+  if (!toolbar || !button) return;
+
+  if (countEl) {
+    countEl.textContent = `${count}/4 selezionate`;
+  }
+
+  button.disabled = count < 2;
+
+  if (count < 2) {
+    panel?.setAttribute("hidden", "");
+    toolbar.classList.remove("is-open");
+    button.textContent = "Confronta";
+  }
+}
+
+function finalToggleSchoolSelection(schoolId) {
+
+  if (!(selectedSchools instanceof Set)) {
+    window.selectedSchools = new Set();
+  }
+
+  if (selectedSchools.has(schoolId)) {
+
+    selectedSchools.delete(schoolId);
+
+  } else {
+
+    if (selectedSchools.size >= 4) {
+      return;
+    }
+
+    selectedSchools.add(schoolId);
+  }
+
+  finalUpdateComparisonUI();
+
+  /*
+   * Aggiorna visualmente la card senza richiamare
+   * inutilmente tutta la pagina.
+   */
+  document
+    .querySelectorAll(`[data-school-id="${schoolId}"]`)
+    .forEach(card => {
+
+      card.classList.toggle(
+        "is-selected",
+        selectedSchools.has(schoolId)
+      );
+
+      const checkbox =
+        card.querySelector(".school-compare-checkbox");
+
+      if (checkbox) {
+        checkbox.checked = selectedSchools.has(schoolId);
+      }
+    });
+}
+
+function finalRenderComparison() {
+
+  const panel = document.getElementById("comparisonPanel");
+
+  if (!panel) return;
+
+  const ids = Array.from(selectedSchools || []);
+
+  if (ids.length < 2) {
+    panel.hidden = true;
+    return;
+  }
+
+  const selected = schools.filter(
+    s => ids.includes(s.id)
+  );
+
+  if (!selected.length) {
+    panel.hidden = true;
+    return;
+  }
+
+  const rows = FINAL_FEATURE_FILTERS.map(feature => {
+
+    const values = selected.map(school => {
+
+      const p = finalGetParameter(
+        school.id,
+        feature.id
+      );
+
+      const value =
+        p?.value ??
+        p?.normalized_value ??
+        "—";
+
+      return `
+        <td>
+          ${escapeHtml(String(value))}
+        </td>
+      `;
+    }).join("");
+
+    return `
+      <tr>
+        <th scope="row">${escapeHtml(feature.label)}</th>
+        ${values}
+      </tr>
+    `;
+  }).join("");
+
+  panel.innerHTML = `
+    <div class="comparison-panel-header">
+      <div>
+        <h3>Confronto</h3>
+        <p>${selected.length} scuole selezionate</p>
+      </div>
+
+      <button
+        type="button"
+        class="comparison-close"
+        onclick="finalCloseComparison()">
+        Chiudi
+      </button>
+    </div>
+
+    <div class="comparison-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Caratteristica</th>
+            ${selected.map(school => `
+              <th>
+                ${escapeHtml(school.denominazione || "Scuola")}
+              </th>
+            `).join("")}
+          </tr>
+        </thead>
+
+        <tbody>
+          ${rows}
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  panel.hidden = false;
+
+  document
+    .getElementById("comparisonToolbar")
+    ?.classList.add("is-open");
+}
+
+function finalCloseComparison() {
+
+  const panel = document.getElementById("comparisonPanel");
+  const toolbar = document.getElementById("comparisonToolbar");
+  const button = document.getElementById("comparisonButton");
+
+  if (panel) panel.hidden = true;
+
+  toolbar?.classList.remove("is-open");
+
+  if (button) {
+    button.textContent = "Confronta";
+  }
+}
+
+function finalResetFilters() {
+
+  const search = document.getElementById("search");
+  const province = document.getElementById("provinceFilter");
+  const score = document.getElementById("scoreFilter");
+  const feature = document.getElementById("featureFilter");
+  const enrolment = document.getElementById("enrolmentFilter");
+
+  if (search) search.value = "";
+  if (province) province.value = "";
+  if (score) score.value = "0";
+  if (feature) feature.value = "";
+  if (enrolment) enrolment.value = "";
+
+  renderRanking();
+}
+
+
+/* ------------------------------------------------------------
+   INIZIALIZZAZIONE
+   ------------------------------------------------------------ */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  finalUpdateComparisonUI();
+
+  const button =
+    document.getElementById("comparisonButton");
+
+  if (button) {
+
+    button.addEventListener("click", () => {
+
+      if (finalComparisonCount() < 2) return;
+
+      const panel =
+        document.getElementById("comparisonPanel");
+
+      if (panel && !panel.hidden) {
+
+        finalCloseComparison();
+
+      } else {
+
+        finalRenderComparison();
+
+        document
+          .getElementById("comparisonPanel")
+          ?.scrollIntoView({
+            behavior: "smooth",
+            block: "nearest"
+          });
+      }
+    });
+  }
+
 });
