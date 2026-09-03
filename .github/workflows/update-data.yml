@@ -1,0 +1,36 @@
+name: Aggiorna dati scuole
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 5 * * 1"
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Installa dipendenze
+        run: pip install -r requirements.txt
+
+      - name: Collega sources e rigenera school_profiles.json
+        run: python run_school_profile_pipeline.py
+
+      - name: Esporta dati pubblici (parametri, punteggi, evidenze)
+        run: python -m src.export.export_public_data
+
+      - name: Committa i dati aggiornati (se cambiati)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/database/school-intelligence.sqlite docs/data/
+          git diff --staged --quiet || git commit -m "chore: aggiornamento automatico dati scuole"
+          git push
