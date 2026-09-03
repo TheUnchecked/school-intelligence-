@@ -255,11 +255,18 @@ const FEATURE_FILTERS = [
 
 const selectedSchools = new Set();
 
+function getParameterCodeById(parameterId) {
+    const def = parameters.find(p => Number(p.id) === Number(parameterId));
+    return def ? def.code : null;
+}
+
 function getSchoolParameter(schoolId, parameterId) {
+    const code = getParameterCodeById(parameterId);
+    if (!code) return null;
     return schoolParameters.find(
         p =>
             Number(p.school_id) === Number(schoolId) &&
-            Number(p.parameter_id) === Number(parameterId)
+            p.parameter_code === code
     );
 }
 
@@ -2230,10 +2237,13 @@ const FINAL_FEATURE_FILTERS = [
 function finalGetParameter(schoolId, parameterId) {
   if (!Array.isArray(schoolParameters)) return null;
 
+  const code = getParameterCodeById(parameterId);
+  if (!code) return null;
+
   return schoolParameters.find(
     p =>
       Number(p.school_id) === Number(schoolId) &&
-      Number(p.parameter_id) === Number(parameterId)
+      p.parameter_code === code
   ) || null;
 }
 
