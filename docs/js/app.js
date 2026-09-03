@@ -309,188 +309,6 @@ function initFeatureFilter() {
     `;
 }
 
-function toggleSchoolSelection(schoolId) {
-
-    const id = Number(schoolId);
-
-    if (selectedSchools.has(id)) {
-        selectedSchools.delete(id);
-    } else {
-
-        if (selectedSchools.size >= 4) {
-            alert("Puoi confrontare al massimo 4 scuole.");
-            return;
-        }
-
-        selectedSchools.add(id);
-    }
-
-    updateComparisonButton();
-    renderRanking();
-}
-
-function updateComparisonButton() {
-
-    const button = $("compareSelected");
-
-    if (!button) return;
-
-    const count = selectedSchools.size;
-
-    button.disabled = count < 2;
-
-    button.textContent =
-        count >= 2
-            ? `Confronta ${count} scuole`
-            : "Confronta selezionate";
-
-    const counter = $("comparisonCount");
-
-    if (counter) {
-        counter.textContent =
-            count === 1
-                ? "1 scuola selezionata"
-                : `${count} scuole selezionate`;
-    }
-}
-
-function renderComparisonPanel() {
-
-    const panel = $("comparisonPanel");
-
-    if (!panel || selectedSchools.size < 2) return;
-
-    const selected = schools.filter(
-        s => selectedSchools.has(Number(s.id))
-    );
-
-    panel.classList.remove("hidden");
-
-    const rows = FEATURE_FILTERS.map(feature => {
-
-        return `
-            <tr>
-                <th>${escapeHtml(feature.label)}</th>
-
-                ${selected.map(school => {
-
-                    const present = parameterIsPresent(
-                        school.id,
-                        feature.id
-                    );
-
-                    return `
-                        <td class="${
-                            present
-                                ? "comparison-yes"
-                                : "comparison-no"
-                        }">
-                            ${present ? "✓" : "—"}
-                        </td>
-                    `;
-
-                }).join("")}
-            </tr>
-        `;
-
-    }).join("");
-
-    panel.innerHTML = `
-        <div class="comparison-header">
-
-            <div>
-                <div class="comparison-kicker">
-                    CONFRONTO SCUOLE
-                </div>
-
-                <h2>Confronto delle caratteristiche</h2>
-            </div>
-
-            <button
-                type="button"
-                class="comparison-close"
-                onclick="closeComparison()"
-            >
-                Chiudi
-            </button>
-
-        </div>
-
-        <div class="comparison-table-wrap">
-
-            <table class="comparison-table">
-
-                <thead>
-                    <tr>
-                        <th>Caratteristica</th>
-
-                        ${selected.map(school => `
-                            <th>
-                                ${escapeHtml(
-                                    school.denominazione
-                                )}
-                            </th>
-                        `).join("")}
-
-                    </tr>
-                </thead>
-
-                <tbody>
-
-                    ${rows}
-
-                    <tr class="comparison-section">
-
-                        <th>Iscrizioni</th>
-
-                        ${selected.map(school => {
-
-                            const profile =
-                                getProfileForSchool(school.id);
-
-                            const status =
-                                profile?.enrolment?.status ||
-                                "UNKNOWN";
-
-                            return `
-                                <td>
-                                    ${
-                                        status === "OPEN"
-                                            ? "APERTE"
-                                            : status === "CLOSED"
-                                                ? "CHIUSE"
-                                                : "—"
-                                    }
-                                </td>
-                            `;
-
-                        }).join("")}
-
-                    </tr>
-
-                </tbody>
-
-            </table>
-
-        </div>
-    `;
-
-    panel.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-    });
-}
-
-function closeComparison() {
-
-    const panel = $("comparisonPanel");
-
-    if (!panel) return;
-
-    panel.classList.add("hidden");
-    panel.innerHTML = "";
-}
-
 function resetAllFilters() {
 
     $("search").value = "";
@@ -507,8 +325,8 @@ function resetAllFilters() {
 
     selectedSchools.clear();
 
-    closeComparison();
-    updateComparisonButton();
+    finalCloseComparison();
+    finalUpdateComparisonUI();
     renderRanking();
 }
 
@@ -720,7 +538,7 @@ function renderRanking() {
                     : ""
             }
             onchange="
-                toggleSchoolSelection(${school.id})
+                finalToggleSchoolSelection(${school.id})
             "
             onclick="event.stopPropagation()"
         >
@@ -2320,13 +2138,6 @@ if ($("resetFilters")) {
     $("resetFilters").addEventListener(
         "click",
         resetAllFilters
-    );
-}
-
-if ($("compareSelected")) {
-    $("compareSelected").addEventListener(
-        "click",
-        renderComparisonPanel
     );
 }
 
