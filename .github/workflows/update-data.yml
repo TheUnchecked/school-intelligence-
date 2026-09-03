@@ -19,7 +19,12 @@ jobs:
           python-version: "3.11"
 
       - name: Installa dipendenze
-        run: pip install -r requirements.txt
+        run: |
+          pip install -r requirements.txt
+          pip install pytest
+
+      - name: Esegui i test
+        run: pytest tests/
 
       - name: Collega sources e rigenera school_profiles.json
         run: python run_school_profile_pipeline.py

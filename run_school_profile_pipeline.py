@@ -20,12 +20,35 @@ OUT_PATH = BASE_DIR / "docs" / "data" / "school_profiles.json"
 
 NAME_SPLIT_RE = re.compile(r"\s[-\u2013\u2014]\s")
 
+# Finestra di iscrizione comunicata dal MIM (uguale per tutte le scuole
+# statali: la data la fissa una circolare ministeriale nazionale, non la
+# singola scuola). Lo STATO invece NON va scritto a mano: prima veniva
+# fissato a "CLOSED" indipendentemente dalla data corrente, diventando
+# silenziosamente falso ad ogni nuovo anno scolastico. Ora si calcola.
 ENROLMENT_WINDOW = {
-    "status": "CLOSED",
     "school_year": "2026/2027",
     "open_from": "2026-01-13",
     "open_until": "2026-02-14",
 }
+
+
+def resolve_enrolment_status(open_from, open_until, today=None):
+    """Calcola lo stato reale confrontando oggi con la finestra.
+
+    Ritorna "OPEN" se la data odierna è compresa nella finestra,
+    "CLOSED" se è già passata, "UPCOMING" se deve ancora iniziare.
+    """
+    from datetime import date
+
+    today = today or date.today()
+    start = date.fromisoformat(open_from)
+    end = date.fromisoformat(open_until)
+
+    if today < start:
+        return "UPCOMING"
+    if today > end:
+        return "CLOSED"
+    return "OPEN"
 
 
 def extract_principal_name(title):
@@ -80,6 +103,9 @@ def link_enrolments(conn):
     """).fetchall()
 
     for row in rows:
+        status = resolve_enrolment_status(
+            ENROLMENT_WINDOW["open_from"], ENROLMENT_WINDOW["open_until"]
+        )
         conn.execute("""
             UPDATE school_profile
             SET enrolment_status = ?, enrolment_school_year = ?,
@@ -87,7 +113,7 @@ def link_enrolments(conn):
                 enrolment_source_id = ?
             WHERE school_id = ?
         """, (
-            ENROLMENT_WINDOW["status"], ENROLMENT_WINDOW["school_year"],
+            status, ENROLMENT_WINDOW["school_year"],
             ENROLMENT_WINDOW["open_from"], ENROLMENT_WINDOW["open_until"],
             row["id"], row["school_id"],
         ))
