@@ -1502,6 +1502,38 @@ function showDetail(schoolId) {
         </section>
 
 
+        <section class="school-information-section">
+
+            <div class="school-information-header">
+
+                <div>
+                    <span class="eyebrow">
+                        INFORMAZIONI
+                    </span>
+
+                    <h2>
+                        Informazioni sulla scuola
+                    </h2>
+
+                    <p>
+                        Le caratteristiche della scuola rilevate
+                        nei documenti analizzati.
+                    </p>
+                </div>
+
+                <span class="school-information-count">
+                    ${records.length}
+                </span>
+
+            </div>
+
+            <div class="parameters-container">
+                ${parametersHtml}
+            </div>
+
+        </section>
+
+
         <section class="detail-ptof">
 
             <div class="detail-ptof-heading">
@@ -1760,396 +1792,355 @@ function showDetail(schoolId) {
         </section>
 
 
-        <div class="detail-section-heading">
+        <details class="technical-details">
 
-            <div>
-                <span class="eyebrow">
-                    INFORMAZIONI
-                </span>
-
-                <h2>
-                    Informazioni sulla scuola
-                </h2>
-            </div>
-
-            <span>
-                ${records.length} disponibili
-            </span>
-
-        </div>
-
-
-
-
-
-
-        <!-- =====================================================
-             RISCONTRI DOCUMENTALI
-             ===================================================== -->
-
-        <section class="school-data-section evidence-section">
-
-            <div class="school-data-section-header">
+            <summary class="technical-details-summary">
 
                 <div>
                     <span class="eyebrow">
-                        PROVENIENZA DEI DATI
+                        APPROFONDIMENTO
                     </span>
-
-                    <h2>
-                        Riscontri documentali
-                    </h2>
-
-                    <p>
-                        I passaggi dei documenti che supportano
-                        le informazioni riportate nella scheda,
-                        raggruppati per parametro.
-                    </p>
+                    <strong>
+                        Dettagli e fonti documentali
+                    </strong>
                 </div>
 
-                <strong class="school-data-count">
-                    ${schoolEvidence.length}
-                </strong>
+                <span class="technical-details-count">
+                    ${schoolEvidence.length + documentIds.length}
+                </span>
 
-            </div>
+            </summary>
 
-            <div class="school-data-table-wrap">
+            <section class="school-data-section evidence-section">
 
-                <table class="school-data-table evidence-table">
+                <div class="school-data-section-header">
 
-                    <thead>
-                        <tr>
-                            <th>Parametro</th>
-                            <th>Riscontri</th>
-                            <th>Affidabilità migliore</th>
-                        </tr>
-                    </thead>
+                    <div>
+                        <span class="eyebrow">
+                            PROVENIENZA DEI DATI
+                        </span>
 
-                    <tbody>
+                        <h2>
+                            Riscontri documentali
+                        </h2>
 
-                        ${
-                            (() => {
+                        <p>
+                            I passaggi dei documenti che supportano
+                            le informazioni riportate nella scheda,
+                            raggruppati per parametro.
+                        </p>
+                    </div>
 
-                                const groups = new Map();
+                    <strong class="school-data-count">
+                        ${schoolEvidence.length}
+                    </strong>
 
-                                schoolEvidence.forEach(evidence => {
+                </div>
 
-                                    const key =
-                                        evidence.parameter_code ||
-                                        "—";
+                <div class="school-data-table-wrap">
 
-                                    if (!groups.has(key)) {
-                                        groups.set(key, []);
-                                    }
+                    <table class="school-data-table evidence-table">
 
-                                    groups.get(key).push(evidence);
-                                });
+                        <thead>
+                            <tr>
+                                <th>Parametro</th>
+                                <th>Riscontri</th>
+                                <th>Affidabilità migliore</th>
+                            </tr>
+                        </thead>
 
-                                const evidenceTypeLabels = {
-                                    EXPLICIT: "Riscontro diretto",
-                                    INFERRED: "Riscontro indiretto",
-                                    MENTION: "Menzione"
-                                };
+                        <tbody>
 
-                                const groupList = Array.from(groups.entries())
-                                    .map(([code, items]) => {
+                            ${
+                                (() => {
 
-                                        const sorted =
-                                            items.slice().sort(
-                                                (a, b) =>
-                                                    Number(b.confidence || 0) -
-                                                    Number(a.confidence || 0)
-                                            );
+                                    const groups = new Map();
 
-                                        return {
-                                            code,
-                                            items: sorted,
-                                            best: sorted[0]
-                                        };
-                                    })
-                                    .sort(
-                                        (a, b) =>
-                                            Number(b.best?.confidence || 0) -
-                                            Number(a.best?.confidence || 0)
-                                    );
+                                    schoolEvidence.forEach(evidence => {
 
-                                return groupList.map(group => {
+                                        const key =
+                                            evidence.parameter_code ||
+                                            "—";
 
-                                    const parameter =
-                                        records.find(
-                                            record =>
-                                                record.parameter_code === group.code
+                                        if (!groups.has(key)) {
+                                            groups.set(key, []);
+                                        }
+
+                                        groups.get(key).push(evidence);
+                                    });
+
+                                    const evidenceTypeLabels = {
+                                        EXPLICIT: "Riscontro diretto",
+                                        INFERRED: "Riscontro indiretto",
+                                        MENTION: "Menzione"
+                                    };
+
+                                    const groupList = Array.from(groups.entries())
+                                        .map(([code, items]) => {
+
+                                            const sorted =
+                                                items.slice().sort(
+                                                    (a, b) =>
+                                                        Number(b.confidence || 0) -
+                                                        Number(a.confidence || 0)
+                                                );
+
+                                            return {
+                                                code,
+                                                items: sorted,
+                                                best: sorted[0]
+                                            };
+                                        })
+                                        .sort(
+                                            (a, b) =>
+                                                Number(b.best?.confidence || 0) -
+                                                Number(a.best?.confidence || 0)
                                         );
 
-                                    const parameterName =
-                                        parameter?.parameter_name ||
-                                        group.code ||
-                                        "Parametro";
+                                    return groupList.map(group => {
 
-                                    const itemsHtml = group.items.map(evidence => {
-
-                                        const document =
-                                            getDocumentById(
-                                                evidence.document_id
+                                        const parameter =
+                                            records.find(
+                                                record =>
+                                                    record.parameter_code === group.code
                                             );
 
-                                        const documentTitle =
-                                            document?.title ||
-                                            "Documento non disponibile";
+                                        const parameterName =
+                                            parameter?.parameter_name ||
+                                            group.code ||
+                                            "Parametro";
 
-                                        const documentUrl =
-                                            document?.url ||
-                                            "";
+                                        const itemsHtml = group.items.map(evidence => {
 
-                                        const typeLabel =
-                                            evidenceTypeLabels[
-                                                evidence.evidence_type
-                                            ] || "Non specificato";
+                                            const document =
+                                                getDocumentById(
+                                                    evidence.document_id
+                                                );
+
+                                            const documentTitle =
+                                                document?.title ||
+                                                "Documento non disponibile";
+
+                                            const documentUrl =
+                                                document?.url ||
+                                                "";
+
+                                            const typeLabel =
+                                                evidenceTypeLabels[
+                                                    evidence.evidence_type
+                                                ] || "Non specificato";
+
+                                            return `
+                                                <li class="evidence-detail-item">
+
+                                                    <div class="evidence-detail-meta">
+                                                        <span class="evidence-detail-type">
+                                                            ${escapeHtml(typeLabel)}
+                                                        </span>
+                                                        <span class="evidence-detail-confidence">
+                                                            ${formatPercent(evidence.confidence)}
+                                                        </span>
+                                                    </div>
+
+                                                    <div class="evidence-detail-doc">
+                                                        ${
+                                                            documentUrl
+                                                                ? `
+                                                                    <a
+                                                                        class="school-document-link"
+                                                                        href="${escapeHtml(documentUrl)}"
+                                                                        target="_blank"
+                                                                        rel="noopener noreferrer"
+                                                                    >
+                                                                        ${escapeHtml(documentTitle)} ↗
+                                                                    </a>
+                                                                  `
+                                                                : escapeHtml(documentTitle)
+                                                        }
+                                                    </div>
+
+                                                    ${
+                                                        evidence.evidence
+                                                            ? `
+                                                                <details class="evidence-row-details">
+                                                                    <summary>Testo del riscontro</summary>
+                                                                    <div>${escapeHtml(evidence.evidence)}</div>
+                                                                </details>
+                                                              `
+                                                            : ""
+                                                    }
+
+                                                </li>
+                                            `;
+                                        }).join("");
 
                                         return `
-                                            <li class="evidence-detail-item">
+                                            <tr>
 
-                                                <div class="evidence-detail-meta">
-                                                    <span class="evidence-detail-type">
-                                                        ${escapeHtml(typeLabel)}
-                                                    </span>
-                                                    <span class="evidence-detail-confidence">
-                                                        ${formatPercent(evidence.confidence)}
-                                                    </span>
-                                                </div>
+                                                <td data-label="Parametro">
+                                                    <strong>
+                                                        ${escapeHtml(parameterName)}
+                                                    </strong>
+                                                </td>
 
-                                                <div class="evidence-detail-doc">
+                                                <td data-label="Riscontri">
+
+                                                    <details class="evidence-row-details">
+
+                                                        <summary>
+                                                            ${group.items.length}
+                                                            ${
+                                                                group.items.length === 1
+                                                                    ? "documento"
+                                                                    : "documenti"
+                                                            }
+                                                        </summary>
+
+                                                        <ul class="evidence-detail-list">
+                                                            ${itemsHtml}
+                                                        </ul>
+
+                                                    </details>
+
+                                                </td>
+
+                                                <td data-label="Affidabilità migliore">
+                                                    <strong>
+                                                        ${formatPercent(group.best?.confidence)}
+                                                    </strong>
+                                                </td>
+
+                                            </tr>
+                                        `;
+                                    }).join("");
+                                })()
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+            <section class="school-data-section documents-section">
+
+                <div class="school-data-section-header">
+
+                    <div>
+                        <span class="eyebrow">
+                            FONTI DELL'ANALISI
+                        </span>
+
+                        <h2>
+                            Documenti analizzati
+                        </h2>
+
+                        <p>
+                            I documenti utilizzati per raccogliere e verificare
+                            le informazioni presenti nella scheda.
+                        </p>
+                    </div>
+
+                    <strong class="school-data-count">
+                        ${documentIds.length}
+                    </strong>
+
+                </div>
+
+                <div class="school-data-table-wrap">
+
+                    <table class="school-data-table">
+
+                        <thead>
+                            <tr>
+                                <th>Documento</th>
+                                <th>Tipologia</th>
+                                <th>Utilizzo</th>
+                                <th>Apri</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            ${
+                                documentIds
+                                    .map(documentId => {
+
+                                        const document =
+                                            getDocumentById(documentId);
+
+                                        if (!document) {
+                                            return "";
+                                        }
+
+                                        const title =
+                                            document.title ||
+                                            "Documento";
+
+                                        const type =
+                                            document.document_type ||
+                                            document.type ||
+                                            "Documento";
+
+                                        const url =
+                                            document.url || "";
+
+                                        return `
+                                            <tr>
+
+                                                <td data-label="Documento">
+                                                    <strong>
+                                                        ${escapeHtml(title)}
+                                                    </strong>
+                                                </td>
+
+                                                <td data-label="Tipologia">
+                                                    ${escapeHtml(type)}
+                                                </td>
+
+                                                <td data-label="Utilizzo">
+                                                    Documento utilizzato
+                                                    nell'analisi
+                                                </td>
+
+                                                <td data-label="Apri">
+
                                                     ${
-                                                        documentUrl
+                                                        url
                                                             ? `
                                                                 <a
                                                                     class="school-document-link"
-                                                                    href="${escapeHtml(documentUrl)}"
+                                                                    href="${escapeHtml(url)}"
                                                                     target="_blank"
                                                                     rel="noopener noreferrer"
                                                                 >
-                                                                    ${escapeHtml(documentTitle)} ↗
+                                                                    Apri ↗
                                                                 </a>
                                                               `
-                                                            : escapeHtml(documentTitle)
+                                                            : "Non disponibile"
                                                     }
-                                                </div>
 
-                                                ${
-                                                    evidence.evidence
-                                                        ? `
-                                                            <details class="evidence-row-details">
-                                                                <summary>Testo del riscontro</summary>
-                                                                <div>${escapeHtml(evidence.evidence)}</div>
-                                                            </details>
-                                                          `
-                                                        : ""
-                                                }
+                                                </td>
 
-                                            </li>
+                                            </tr>
                                         `;
-                                    }).join("");
+                                    })
+                                    .join("")
+                            }
 
-                                    return `
-                                        <tr>
+                        </tbody>
 
-                                            <td data-label="Parametro">
-                                                <strong>
-                                                    ${escapeHtml(parameterName)}
-                                                </strong>
-                                            </td>
+                    </table>
 
-                                            <td data-label="Riscontri">
-
-                                                <details class="evidence-row-details">
-
-                                                    <summary>
-                                                        ${group.items.length}
-                                                        ${
-                                                            group.items.length === 1
-                                                                ? "documento"
-                                                                : "documenti"
-                                                        }
-                                                    </summary>
-
-                                                    <ul class="evidence-detail-list">
-                                                        ${itemsHtml}
-                                                    </ul>
-
-                                                </details>
-
-                                            </td>
-
-                                            <td data-label="Affidabilità migliore">
-                                                <strong>
-                                                    ${formatPercent(group.best?.confidence)}
-                                                </strong>
-                                            </td>
-
-                                        </tr>
-                                    `;
-                                }).join("");
-                            })()
-                        }
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-        </section>
-
-
-        <!-- =====================================================
-             DOCUMENTI ANALIZZATI
-             ===================================================== -->
-
-        <section class="school-data-section documents-section">
-
-            <div class="school-data-section-header">
-
-                <div>
-                    <span class="eyebrow">
-                        FONTI DELL'ANALISI
-                    </span>
-
-                    <h2>
-                        Documenti analizzati
-                    </h2>
-
-                    <p>
-                        I documenti utilizzati per raccogliere e verificare
-                        le informazioni presenti nella scheda.
-                    </p>
                 </div>
 
-                <strong class="school-data-count">
-                    ${documentIds.length}
-                </strong>
+            </section>
 
-            </div>
-
-            <div class="school-data-table-wrap">
-
-                <table class="school-data-table">
-
-                    <thead>
-                        <tr>
-                            <th>Documento</th>
-                            <th>Tipologia</th>
-                            <th>Utilizzo</th>
-                            <th>Apri</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-
-                        ${
-                            documentIds
-                                .map(documentId => {
-
-                                    const document =
-                                        getDocumentById(documentId);
-
-                                    if (!document) {
-                                        return "";
-                                    }
-
-                                    const title =
-                                        document.title ||
-                                        "Documento";
-
-                                    const type =
-                                        document.document_type ||
-                                        document.type ||
-                                        "Documento";
-
-                                    const url =
-                                        document.url || "";
-
-                                    return `
-                                        <tr>
-
-                                            <td data-label="Documento">
-                                                <strong>
-                                                    ${escapeHtml(title)}
-                                                </strong>
-                                            </td>
-
-                                            <td data-label="Tipologia">
-                                                ${escapeHtml(type)}
-                                            </td>
-
-                                            <td data-label="Utilizzo">
-                                                Documento utilizzato
-                                                nell'analisi
-                                            </td>
-
-                                            <td data-label="Apri">
-
-                                                ${
-                                                    url
-                                                        ? `
-                                                            <a
-                                                                class="school-document-link"
-                                                                href="${escapeHtml(url)}"
-                                                                target="_blank"
-                                                                rel="noopener noreferrer"
-                                                            >
-                                                                Apri ↗
-                                                            </a>
-                                                          `
-                                                        : "Non disponibile"
-                                                }
-
-                                            </td>
-
-                                        </tr>
-                                    `;
-                                })
-                                .join("")
-                        }
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-        </section>
+        </details>
 
 
-        <section class="school-information-section">
-
-            <div class="school-information-header">
-
-                <div>
-                    <span class="eyebrow">
-                        INFORMAZIONI
-                    </span>
-
-                    <h2>
-                        Informazioni sulla scuola
-                    </h2>
-
-                    <p>
-                        Le caratteristiche della scuola rilevate
-                        nei documenti analizzati.
-                    </p>
-                </div>
-
-                <span class="school-information-count">
-                    ${records.length}
-                </span>
-
-            </div>
-
-            <div class="parameters-container">
-                ${parametersHtml}
-            </div>
-
-        </section>
 
     `;
 
