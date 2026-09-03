@@ -3,8 +3,11 @@
     "school_id": 1,
     "codice_scuola": "ANMM843014",
     "denominazione": "OSIMO-S.BIAGIO-OSIMO STAZIONE",
+    "comune": "OSIMO",
+    "provincia": "ANCONA",
+    "website": "https://brunodaosimo.edu.it/",
     "principal": {
-      "name": "Fabio Radicioni",
+      "name": null,
       "source": null
     },
     "enrolment": {
@@ -26,8 +29,11 @@
     "school_id": 2,
     "codice_scuola": "MCMM83102L",
     "denominazione": "SAN VITO",
+    "comune": "RECANATI",
+    "provincia": "MACERATA",
+    "website": "https://icbadaloni.edu.it/",
     "principal": {
-      "name": "Annamaria De Siena",
+      "name": null,
       "source": null
     },
     "enrolment": {
@@ -49,6 +55,9 @@
     "school_id": 3,
     "codice_scuola": "MCMM83501V",
     "denominazione": "E. MESTICA CIVITANOVA M.",
+    "comune": "CIVITANOVA MARCHE",
+    "provincia": "MACERATA",
+    "website": "https://civitanovatacito.edu.it/",
     "principal": {
       "name": "Edoardo Iacucci",
       "source": {
@@ -78,6 +87,9 @@
     "school_id": 4,
     "codice_scuola": "ANMM842018",
     "denominazione": "OSIMO \"CAIO GIULIO CESARE\"",
+    "comune": "OSIMO",
+    "provincia": "ANCONA",
+    "website": "https://www.iccaiogiuliocesare.edu.it/",
     "principal": {
       "name": "Lorella Belleggia",
       "source": {
@@ -107,6 +119,9 @@
     "school_id": 5,
     "codice_scuola": "MCMM813012",
     "denominazione": "RAFFAELLO SANZIO",
+    "comune": "POTENZA PICENA",
+    "provincia": "MACERATA",
+    "website": "https://www.icrsanzio.it",
     "principal": {
       "name": null,
       "source": null
@@ -130,6 +145,9 @@
     "school_id": 6,
     "codice_scuola": "ANMM83201N",
     "denominazione": "LORETO \" L. LOTTO \"",
+    "comune": "LORETO",
+    "provincia": "ANCONA",
+    "website": "https://www.icsolariloreto.edu.it/",
     "principal": {
       "name": "Luigia Romagnoli",
       "source": {
@@ -159,6 +177,9 @@
     "school_id": 7,
     "codice_scuola": "MCMM81401T",
     "denominazione": "LEONARDO DA VINCI",
+    "comune": "POTENZA PICENA",
+    "provincia": "MACERATA",
+    "website": "https://www.icpotenzapicena.edu.it/",
     "principal": {
       "name": "Natalia Virgulti",
       "source": {
@@ -188,8 +209,11 @@
     "school_id": 8,
     "codice_scuola": "ANMM83101T",
     "denominazione": "CASTELFIDARDO \"SOPRANI\"",
+    "comune": "CASTELFIDARDO",
+    "provincia": "ANCONA",
+    "website": "https://icsoprani.edu.it/",
     "principal": {
-      "name": "Monica Marchiani",
+      "name": null,
       "source": null
     },
     "enrolment": {
@@ -211,6 +235,9 @@
     "school_id": 9,
     "codice_scuola": "MCMM834013",
     "denominazione": "L. PIRANDELLO",
+    "comune": "CIVITANOVA MARCHE",
+    "provincia": "MACERATA",
+    "website": "https://icviareginaelena.edu.it/",
     "principal": {
       "name": null,
       "source": null
@@ -234,6 +261,9 @@
     "school_id": 10,
     "codice_scuola": "MCMM83001Q",
     "denominazione": "G. UNGARETTI",
+    "comune": "CIVITANOVA MARCHE",
+    "provincia": "MACERATA",
+    "website": "https://www.icsagostino.it",
     "principal": {
       "name": "Gloria Gradassi",
       "source": {
@@ -263,6 +293,9 @@
     "school_id": 11,
     "codice_scuola": "MCMM83201B",
     "denominazione": "M.L. PATRIZI",
+    "comune": "RECANATI",
+    "provincia": "MACERATA",
+    "website": "https://www.icgigli.edu.it/scuola-secondaria-patrizi/",
     "principal": {
       "name": "Paola De Tata",
       "source": {
@@ -292,8 +325,11 @@
     "school_id": 12,
     "codice_scuola": "MCMM83601P",
     "denominazione": "ANNIBAL CARO",
+    "comune": "CIVITANOVA MARCHE",
+    "provincia": "MACERATA",
+    "website": "https://iscviaugobassi.edu.it/",
     "principal": {
-      "name": "Maurizio Armandini",
+      "name": null,
       "source": null
     },
     "enrolment": {
@@ -315,6 +351,9 @@
     "school_id": 13,
     "codice_scuola": "ANMM844021",
     "denominazione": "G.LEOPARDI-PASSATEMPO DI OSIMO",
+    "comune": "OSIMO",
+    "provincia": "ANCONA",
+    "website": "https://ictrilliniosimo.edu.it/",
     "principal": {
       "name": "Annamaria Greco",
       "source": {
@@ -344,6 +383,9 @@
     "school_id": 14,
     "codice_scuola": "ANMM84401X",
     "denominazione": "G. LEOPARDI \"BORGO SAN GIACOMO\"",
+    "comune": "OSIMO",
+    "provincia": "ANCONA",
+    "website": "https://ictrilliniosimo.edu.it/",
     "principal": {
       "name": "Annamaria Greco",
       "source": {
@@ -373,8 +415,11 @@
     "school_id": 15,
     "codice_scuola": "ANMM84101C",
     "denominazione": "SCUOLA MEDIA",
+    "comune": "CASTELFIDARDO",
+    "provincia": "ANCONA",
+    "website": "https://icmazzinicastelfidardo.edu.it/",
     "principal": {
-      "name": "Angelica Baione",
+      "name": null,
       "source": null
     },
     "enrolment": {
@@ -396,13 +441,16 @@
     "school_id": 16,
     "codice_scuola": "MC1MIF5001",
     "denominazione": "Scuola secondaria I grado My School",
+    "comune": "CIVITANOVA MARCHE",
+    "provincia": "MACERATA",
+    "website": null,
     "principal": {
       "name": null,
       "source": null
     },
     "enrolment": {
-      "status": "UNKNOWN",
-      "school_year": "2026/2027",
+      "status": null,
+      "school_year": null,
       "open_from": null,
       "open_until": null,
       "source": null
