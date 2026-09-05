@@ -38,6 +38,17 @@ KEYWORDS = [
 MAX_LINKS = 100
 
 
+def canonical_source_url(url):
+    """Canonical identity for direct PDF URLs; preserve query params on other URLs."""
+    if not url:
+        return url
+    from urllib.parse import urlsplit, urlunsplit
+    parts = urlsplit(url.strip())
+    if parts.scheme in ("http", "https") and parts.path.lower().endswith(".pdf"):
+        return urlunsplit((parts.scheme.lower(), parts.netloc.lower(), parts.path, "", ""))
+    return url
+
+
 def sha256_bytes(data):
     return hashlib.sha256(data).hexdigest()
 
@@ -209,6 +220,59 @@ def save_source(
     status,
 ):
 
+    canonical_url = canonical_source_url(url)
+
+    # Same logical source already associated with this school/plesso.
+    rows = conn.execute(
+        """
+        SELECT id, url
+        FROM sources
+        WHERE school_id = ?
+        """,
+        (school_id,),
+    ).fetchall()
+
+    for row in rows:
+        if canonical_source_url(row["url"]) == canonical_url:
+            return False
+
+    # Same logical source already associated with another plesso
+    # belonging to the same institute.
+    current_school = conn.execute(
+        """
+        SELECT codice_istituto
+        FROM schools
+        WHERE id = ?
+        """,
+        (school_id,),
+    ).fetchone()
+
+    shared = None
+
+    if current_school and current_school[0]:
+        rows = conn.execute(
+            """
+            SELECT s.id, s.url
+            FROM sources s
+            JOIN schools source_school
+              ON source_school.id = s.school_id
+            WHERE s.source_type = 'PTOF_CANDIDATE'
+              AND source_school.codice_istituto = ?
+            """,
+            (current_school[0],),
+        ).fetchall()
+
+        for row in rows:
+            if canonical_source_url(row["url"]) == canonical_url:
+                shared = row
+                break
+
+    notes = (
+        "SHARED_INSTITUTE_SOURCE"
+        if shared
+        else None
+    )
+
     conn.execute(
         """
         INSERT INTO sources (
@@ -218,7 +282,8 @@ def save_source(
             title,
             retrieved_at,
             content_hash,
-            status
+            status,
+            notes
         )
         VALUES (
             ?,
@@ -226,6 +291,7 @@ def save_source(
             ?,
             ?,
             datetime('now'),
+            ?,
             ?,
             ?
         )
@@ -236,9 +302,11 @@ def save_source(
             title,
             content_hash,
             status,
+            notes,
         ),
     )
 
+    return True
 
 def main():
 

@@ -260,8 +260,6 @@ def save_document(
         response.url
     )
 
-    # Aggiungiamo hash per evitare
-    # collisioni tra file omonimi.
     safe_name = re.sub(
         r"[^A-Za-z0-9._-]+",
         "_",
@@ -284,17 +282,19 @@ def save_document(
     )
 
     if not destination.exists():
+        destination.write_bytes(content)
 
-        destination.write_bytes(
-            content
-        )
+    # ---------------------------------------------------------
+    # Identità del contenuto
+    # ---------------------------------------------------------
 
-    existing = conn.execute(
+    existing_hash = conn.execute(
         """
         SELECT id
         FROM ptof_documents
         WHERE school_id = ?
           AND sha256 = ?
+        LIMIT 1
         """,
         (
             school_id,
@@ -302,8 +302,47 @@ def save_document(
         ),
     ).fetchone()
 
-    if existing:
-        return False
+    if existing_hash:
+        return "UNCHANGED"
+
+    # ---------------------------------------------------------
+    # Identità logica della fonte
+    # ---------------------------------------------------------
+
+    source_key = (
+        f"{school_id}|{clean_url(response.url)}"
+    )
+
+    previous = conn.execute(
+        """
+        SELECT id, version_number
+        FROM ptof_documents
+        WHERE source_key = ?
+        ORDER BY version_number DESC, id DESC
+        LIMIT 1
+        """,
+        (source_key,),
+    ).fetchone()
+
+    if previous:
+        event_status = "CHANGED"
+        version_number = previous[1] + 1
+
+        conn.execute(
+            """
+            UPDATE ptof_documents
+            SET is_current = 0
+            WHERE source_key = ?
+            """,
+            (source_key,),
+        )
+    else:
+        event_status = "NEW"
+        version_number = 1
+
+    # ---------------------------------------------------------
+    # Nuova versione
+    # ---------------------------------------------------------
 
     conn.execute(
         """
@@ -315,7 +354,10 @@ def save_document(
             local_path,
             sha256,
             retrieved_at,
-            status
+            status,
+            source_key,
+            version_number,
+            is_current
         )
         VALUES (
             ?,
@@ -325,7 +367,10 @@ def save_document(
             ?,
             ?,
             datetime('now'),
-            'DOWNLOADED'
+            'DOWNLOADED',
+            ?,
+            ?,
+            1
         )
         """,
         (
@@ -335,10 +380,13 @@ def save_document(
             title,
             str(destination),
             digest,
+            source_key,
+            version_number,
         ),
     )
 
-    return True
+    return event_status
+
 
 
 def process_source(

@@ -193,9 +193,17 @@ def export_ptof_documents(conn):
             pages,
             document_type,
             relevance,
-            relevance_score
+            relevance_score,
+            source_key,
+            version_number,
+            is_current
         FROM ptof_documents
-        ORDER BY school_id, relevance_score DESC, id
+        ORDER BY
+            school_id,
+            source_key,
+            version_number DESC,
+            relevance_score DESC,
+            id
     """).fetchall()
 
     columns = [
@@ -210,12 +218,19 @@ def export_ptof_documents(conn):
         "document_type",
         "relevance",
         "relevance_score",
+        "source_key",
+        "version_number",
+        "is_current",
     ]
 
-    return [
-        dict(zip(columns, row))
-        for row in rows
-    ]
+    data = []
+
+    for row in rows:
+        item = dict(zip(columns, row))
+        item["is_latest"] = bool(item["is_current"])
+        data.append(item)
+
+    return data
 
 
 def export_statistics(conn):

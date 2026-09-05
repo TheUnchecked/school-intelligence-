@@ -937,6 +937,30 @@ function showDetail(schoolId) {
         )
     ];
 
+    // Recupera tutte le versioni delle fonti dei documenti
+    // effettivamente utilizzati nell'analisi.
+    const documentSourceKeys = [
+        ...new Set(
+            documentIds
+                .map(documentId => getDocumentById(documentId))
+                .filter(document => document && document.source_key)
+                .map(document => document.source_key)
+        )
+    ];
+
+    const historicalDocumentIds = ptofDocuments
+        .filter(document =>
+            documentSourceKeys.includes(document.source_key)
+        )
+        .map(document => document.id);
+
+    const allDocumentIds = [
+        ...new Set([
+            ...documentIds,
+            ...historicalDocumentIds
+        ])
+    ];
+
     const sourceIds = [
         ...new Set(
             schoolEvidence
@@ -1383,7 +1407,7 @@ function showDetail(schoolId) {
             >
                 <span>DOCUMENTI ANALIZZATI</span>
                 <strong>
-                    ${documentIds.length}
+                    ${allDocumentIds.length}
                 </strong>
             </div>
 
@@ -2038,6 +2062,7 @@ function showDetail(schoolId) {
                         <tr>
                             <th>Documento</th>
                             <th>Tipologia</th>
+                            <th>Versione</th>
                             <th>Utilizzo</th>
                             <th>Apri</th>
                         </tr>
@@ -2046,7 +2071,7 @@ function showDetail(schoolId) {
                     <tbody>
 
                         ${
-                            documentIds
+                            allDocumentIds
                                 .map(documentId => {
 
                                     const document =
@@ -2079,6 +2104,40 @@ function showDetail(schoolId) {
 
                                             <td data-label="Tipologia">
                                                 ${escapeHtml(type)}
+                                            </td>
+
+                                            <td data-label="Versione">
+                                                ${
+                                                    document.version_number
+                                                        ? `
+                                                            <strong>
+                                                                v${escapeHtml(String(document.version_number))}
+                                                            </strong>
+                                                            ${
+                                                                document.is_latest
+                                                                    ? `
+                                                                        <span class="document-version-current">
+                                                                            Corrente
+                                                                        </span>
+                                                                      `
+                                                                    : `
+                                                                        <span class="document-version-history">
+                                                                            Storico
+                                                                        </span>
+                                                                      `
+                                                            }
+                                                          `
+                                                        : "—"
+                                                }
+                                                ${
+                                                    document.sha256
+                                                        ? `
+                                                            <small class="document-sha">
+                                                                SHA ${escapeHtml(String(document.sha256).slice(0, 12))}
+                                                            </small>
+                                                          `
+                                                        : ""
+                                                }
                                             </td>
 
                                             <td data-label="Utilizzo">

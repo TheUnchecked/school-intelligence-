@@ -36,6 +36,17 @@ KEYWORDS = [
 ]
 
 
+def canonical_source_url(url):
+    """Canonical identity for direct PDF URLs; preserve query params on other URLs."""
+    if not url:
+        return url
+    from urllib.parse import urlsplit, urlunsplit
+    parts = urlsplit(url.strip())
+    if parts.scheme in ("http", "https") and parts.path.lower().endswith(".pdf"):
+        return urlunsplit((parts.scheme.lower(), parts.netloc.lower(), parts.path, "", ""))
+    return url
+
+
 def score(text, url):
 
     text = f"{text} {url}".lower()
@@ -170,22 +181,58 @@ def save_candidate(
     school_id,
     item,
 ):
+    canonical_url = canonical_source_url(item["url"])
 
-    existing = conn.execute(
+    # Same logical source already associated with this school/plesso.
+    rows = conn.execute(
         """
-        SELECT id
+        SELECT id, url
         FROM sources
         WHERE school_id = ?
-          AND url = ?
         """,
-        (
-            school_id,
-            item["url"],
-        ),
+        (school_id,),
+    ).fetchall()
+
+    for row in rows:
+        if canonical_source_url(row["url"]) == canonical_url:
+            return False
+
+    # Same logical source already associated with another plesso
+    # belonging to the same institute.
+    current_school = conn.execute(
+        """
+        SELECT codice_istituto
+        FROM schools
+        WHERE id = ?
+        """,
+        (school_id,),
     ).fetchone()
 
-    if existing:
-        return False
+    shared = None
+
+    if current_school and current_school[0]:
+        rows = conn.execute(
+            """
+            SELECT s.id, s.url
+            FROM sources s
+            JOIN schools source_school
+              ON source_school.id = s.school_id
+            WHERE s.source_type = 'PTOF_CANDIDATE'
+              AND source_school.codice_istituto = ?
+            """,
+            (current_school[0],),
+        ).fetchall()
+
+        for row in rows:
+            if canonical_source_url(row["url"]) == canonical_url:
+                shared = row
+                break
+
+    notes = (
+        "SHARED_INSTITUTE_SOURCE"
+        if shared
+        else None
+    )
 
     conn.execute(
         """
@@ -195,26 +242,26 @@ def save_candidate(
             url,
             title,
             retrieved_at,
-            status
+            content_hash,
+            local_path,
+            status,
+            notes
         )
-        VALUES (
-            ?,
-            'PTOF_CANDIDATE',
-            ?,
-            ?,
-            datetime('now'),
-            'DISCOVERED_L2'
-        )
+        VALUES (?, ?, ?, ?, datetime('now'), ?, ?, ?, ?)
         """,
         (
             school_id,
+            "PTOF_CANDIDATE",
             item["url"],
-            item["text"],
+            item["title"],
+            item.get("content_hash"),
+            item.get("local_path"),
+            "DISCOVERED_L2",
+            notes,
         ),
     )
 
     return True
-
 
 def process_school(
     conn,
