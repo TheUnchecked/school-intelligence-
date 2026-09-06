@@ -52,3 +52,6 @@ data/database/*.before-*.sqlite
 *.before-*
 *.v3-working
 *.v4-backup
+
+# Database SQLite generato dalla pipeline (rigenerato ad ogni run)
+data/database/*.sqlite
