@@ -284,6 +284,10 @@ def save_document(
     if not destination.exists():
         destination.write_bytes(content)
 
+    # Percorso relativo al repository:
+    # deve funzionare sia in Termux sia in GitHub Actions.
+    relative_destination = destination.relative_to(BASE_DIR)
+
     # ---------------------------------------------------------
     # Identità del contenuto
     # ---------------------------------------------------------
@@ -303,6 +307,21 @@ def save_document(
     ).fetchone()
 
     if existing_hash:
+        # Il contenuto è invariato, ma il file potrebbe essere stato
+        # perso perché il database proviene da un altro ambiente.
+        # In ogni caso rendiamo il local_path portabile.
+        conn.execute(
+            """
+            UPDATE ptof_documents
+            SET local_path = ?
+            WHERE id = ?
+            """,
+            (
+                str(relative_destination),
+                existing_hash[0],
+            ),
+        )
+
         return "UNCHANGED"
 
     # ---------------------------------------------------------
@@ -378,7 +397,7 @@ def save_document(
             school_year,
             response.url,
             title,
-            str(destination),
+            str(relative_destination),
             digest,
             source_key,
             version_number,
