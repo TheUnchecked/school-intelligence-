@@ -28,6 +28,9 @@ jobs:
           pip install -r requirements.txt
           pip install pytest
 
+      - name: Verifica sintassi frontend
+        run: node --check docs/js/app.js
+
       - name: Esegui i test
         run: PYTHONPATH=. python -m pytest tests/
 
