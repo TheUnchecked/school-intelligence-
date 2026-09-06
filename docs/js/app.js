@@ -2269,43 +2269,6 @@ function showDetail(schoolId) {
 
                     </table>
 
-                                            <td data-label="Riscontri">
-
-                                                <details class="evidence-row-details">
-
-                                                    <summary>
-                                                        ${group.items.length}
-                                                        ${
-                                                            group.items.length === 1
-                                                                ? "documento"
-                                                                : "documenti"
-                                                        }
-                                                    </summary>
-
-                                                    <ul class="evidence-detail-list">
-                                                        ${itemsHtml}
-                                                    </ul>
-
-                                                </details>
-
-                                            </td>
-
-                                            <td data-label="Affidabilità migliore">
-                                                <strong>
-                                                    ${formatPercent(group.best?.confidence)}
-                                                </strong>
-                                            </td>
-
-                                        </tr>
-                                    `;
-                                }).join("");
-                            })()
-                        }
-
-                    </tbody>
-
-                </table>
-
                 ${
                     (() => {
                         const comparisons = allDocumentIds
