@@ -2578,11 +2578,16 @@ initFeatureFilter();
 
 loadData().catch(error => {
 
-    console.error(error);
+    console.error("SCHOOL INTELLIGENCE RUNTIME ERROR:", error);
+
+    const message = error && error.stack
+        ? error.stack
+        : String(error);
 
     $("schoolList").innerHTML = `
-        <div class="school-card">
-            Errore nel caricamento dei dati.
+        <div class="error" style="white-space:pre-wrap;overflow-wrap:anywhere;">
+            <strong>Errore applicazione</strong><br><br>
+            ${escapeHtml(message)}
         </div>
     `;
 });
