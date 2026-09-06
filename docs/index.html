@@ -354,7 +354,49 @@ window.addEventListener("unhandledrejection", function (event) {
 });
 </script>
 
-<script src="js/app.js?v=20260906-03"></script>
+<script>
+window.addEventListener("error", function (event) {
+    const box = document.getElementById("schoolList");
+    if (!box) return;
+
+    const message =
+        event.error?.stack ||
+        event.message ||
+        "Errore JavaScript sconosciuto";
+
+    box.innerHTML = `
+        <div class="error" style="white-space:pre-wrap;overflow-wrap:anywhere;">
+            <strong>SCHOOL_INTELLIGENCE_GLOBAL_ERROR</strong><br><br>
+            ${String(message)
+                .replaceAll("&", "&amp;")
+                .replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;")}
+        </div>
+    `;
+});
+
+window.addEventListener("unhandledrejection", function (event) {
+    const box = document.getElementById("schoolList");
+    if (!box) return;
+
+    const reason =
+        event.reason?.stack ||
+        event.reason?.message ||
+        String(event.reason);
+
+    box.innerHTML = `
+        <div class="error" style="white-space:pre-wrap;overflow-wrap:anywhere;">
+            <strong>SCHOOL_INTELLIGENCE_GLOBAL_PROMISE</strong><br><br>
+            ${String(reason)
+                .replaceAll("&", "&amp;")
+                .replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;")}
+        </div>
+    `;
+});
+</script>
+
+<script src="js/app.js?v=20260906-04"></script>
 
 </body>
 </html>
