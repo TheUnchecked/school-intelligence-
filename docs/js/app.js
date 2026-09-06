@@ -6,6 +6,7 @@ let parameters = [];
 let schoolParameters = [];
 let evidences = [];
 let ptofDocuments = [];
+let ptofComparisons = [];
 let schoolProfiles = [];
 
 const $ = (id) => document.getElementById(id);
@@ -42,6 +43,7 @@ async function loadData() {
             loadJson("school_parameters.json"),
             loadJson("evidence.json"),
             loadJson("ptof_documents.json"),
+            loadJson("ptof_comparisons.json"),
             loadJson("statistics.json"),
             loadJson("school_profiles.json")
 
@@ -55,6 +57,7 @@ async function loadData() {
         schoolParametersResult,
         evidenceResult,
         ptofDocumentsResult,
+        ptofComparisonsResult,
         statisticsResult,
         schoolProfilesResult
     ] = results;
@@ -88,6 +91,11 @@ async function loadData() {
     ptofDocuments =
         ptofDocumentsResult.status === "fulfilled"
             ? ptofDocumentsResult.value
+            : [];
+
+    ptofComparisons =
+        ptofComparisonsResult.status === "fulfilled"
+            ? ptofComparisonsResult.value
             : [];
 
     schoolProfiles =
@@ -838,7 +846,110 @@ function getDocumentById(documentId) {
 }
 
 
-function documentLink(documentId, label = "Apri documento") {
+function getPtofComparison(documentId) {
+    return ptofComparisons.find(
+        comparison =>
+            String(comparison.document_id_old) === String(documentId) ||
+            String(comparison.document_id_new) === String(documentId)
+    );
+}
+
+
+function renderPtofComparison(comparison) {
+
+    if (!comparison) {
+        return "";
+    }
+
+    const diff = comparison.diff || {};
+
+    const added = Array.isArray(diff.added)
+        ? diff.added
+        : [];
+
+    const removed = Array.isArray(diff.removed)
+        ? diff.removed
+        : [];
+
+    const addedLines = Number(diff.added_lines || added.length);
+    const removedLines = Number(diff.removed_lines || removed.length);
+
+    const addedHtml = added
+        .slice(0, 80)
+        .map(line => `
+            <div class="ptof-comparison-line ptof-comparison-line-added">
+                + ${escapeHtml(String(line))}
+            </div>
+        `)
+        .join("");
+
+    const removedHtml = removed
+        .slice(0, 80)
+        .map(line => `
+            <div class="ptof-comparison-line ptof-comparison-line-removed">
+                - ${escapeHtml(String(line))}
+            </div>
+        `)
+        .join("");
+
+    return `
+        <div class="ptof-comparison">
+
+            <div class="ptof-comparison-header">
+                <div>
+                    <p class="ptof-comparison-title">
+                        Confronto v${escapeHtml(String(comparison.version_old))}
+                        → v${escapeHtml(String(comparison.version_new))}
+                    </p>
+
+                    <div class="ptof-comparison-meta">
+                        SHA:
+                        ${escapeHtml(String(comparison.sha256_old || "").slice(0, 12))}
+                        →
+                        ${escapeHtml(String(comparison.sha256_new || "").slice(0, 12))}
+                    </div>
+                </div>
+            </div>
+
+            <div class="ptof-comparison-stats">
+
+                <span class="ptof-comparison-stat ptof-comparison-added">
+                    +${addedLines} aggiunte
+                </span>
+
+                <span class="ptof-comparison-stat ptof-comparison-removed">
+                    -${removedLines} rimosse
+                </span>
+
+            </div>
+
+            ${
+                addedHtml || removedHtml
+                    ? `
+                        <details class="ptof-comparison-detail">
+                            <summary>
+                                Mostra modifiche
+                            </summary>
+
+                            <div class="ptof-comparison-lines">
+                                ${addedHtml}
+                                ${removedHtml}
+                            </div>
+                        </details>
+                      `
+                    : `
+                        <div class="ptof-comparison-meta">
+                            Nessuna modifica testuale rilevata.
+                        </div>
+                      `
+            }
+
+        </div>
+    `;
+}
+
+
+${marker}
     const document = getDocumentById(documentId);
 
     if (!document || !document.url) {
@@ -2020,6 +2131,27 @@ function showDetail(schoolId) {
 
                 </table>
 
+                ${
+                    (() => {
+                        const comparisons = allDocumentIds
+                            .map(documentId => getPtofComparison(documentId))
+                            .filter(Boolean);
+
+                        const uniqueComparisons = [
+                            ...new Map(
+                                comparisons.map(comparison => [
+                                    `${comparison.document_id_old}-${comparison.document_id_new}`,
+                                    comparison
+                                ])
+                            ).values()
+                        ];
+
+                        return uniqueComparisons
+                            .map(renderPtofComparison)
+                            .join("");
+                    })()
+                }
+
             </div>
 
         </section>
@@ -2049,7 +2181,7 @@ function showDetail(schoolId) {
                 </div>
 
                 <strong class="school-data-count">
-                    ${documentIds.length}
+                    ${allDocumentIds.length}
                 </strong>
 
             </div>

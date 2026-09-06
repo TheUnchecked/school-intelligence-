@@ -4238,3 +4238,139 @@ footer {
     height: 24px;
   }
 }
+
+/* =====================================================
+   PTOF VERSION HISTORY / COMPARISON
+   ===================================================== */
+
+.document-version-current,
+.document-version-history {
+    display: inline-block;
+    margin-left: 0.45rem;
+    padding: 0.18rem 0.5rem;
+    border-radius: 999px;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+}
+
+.document-version-current {
+    background: var(--text);
+    color: var(--background);
+}
+
+.document-version-history {
+    background: var(--surface);
+    color: var(--muted);
+    border: 1px solid var(--border);
+}
+
+.document-sha {
+    display: block;
+    margin-top: 0.3rem;
+    color: var(--muted);
+    font-size: 0.68rem;
+    font-family: monospace;
+}
+
+.ptof-comparison {
+    margin-top: 1rem;
+    padding: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+}
+
+.ptof-comparison-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.ptof-comparison-title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 800;
+}
+
+.ptof-comparison-meta {
+    color: var(--muted);
+    font-size: 0.78rem;
+}
+
+.ptof-comparison-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+}
+
+.ptof-comparison-stat {
+    padding: 0.45rem 0.7rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.ptof-comparison-added {
+    border-left: 3px solid var(--text);
+}
+
+.ptof-comparison-removed {
+    border-left: 3px solid var(--muted);
+}
+
+.ptof-comparison-detail {
+    margin-top: 0.75rem;
+}
+
+.ptof-comparison-detail summary {
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.82rem;
+}
+
+.ptof-comparison-lines {
+    margin-top: 0.75rem;
+    max-height: 420px;
+    overflow: auto;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+
+.ptof-comparison-line {
+    padding: 0.45rem 0.7rem;
+    border-bottom: 1px solid var(--border);
+    font-family: monospace;
+    font-size: 0.72rem;
+    line-height: 1.45;
+    white-space: pre-wrap;
+}
+
+.ptof-comparison-line:last-child {
+    border-bottom: 0;
+}
+
+.ptof-comparison-line-added {
+    background: var(--surface);
+}
+
+.ptof-comparison-line-removed {
+    background: var(--background);
+}
+
+@media (max-width: 700px) {
+
+    .ptof-comparison-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .ptof-comparison-stats {
+        flex-direction: column;
+    }
+
+}

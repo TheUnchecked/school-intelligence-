@@ -194,7 +194,7 @@ def save_candidate(
     ).fetchall()
 
     for row in rows:
-        if canonical_source_url(row["url"]) == canonical_url:
+        if canonical_source_url(row[1]) == canonical_url:
             return False
 
     # Same logical source already associated with another plesso
@@ -224,7 +224,7 @@ def save_candidate(
         ).fetchall()
 
         for row in rows:
-            if canonical_source_url(row["url"]) == canonical_url:
+            if canonical_source_url(row[1]) == canonical_url:
                 shared = row
                 break
 

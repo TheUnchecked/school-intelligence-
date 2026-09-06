@@ -1,17 +1,14 @@
 from pathlib import Path
 import sqlite3
-from datetime import datetime
-
+from datetime import datetime, timezone
 
 BASE_DIR = Path(__file__).resolve().parents[2]
-
 DB_PATH = (
     BASE_DIR
     / "data"
     / "database"
     / "school-intelligence.sqlite"
 )
-
 
 LEVEL_PRIORITY = {
     "EXPLICIT": 3,
@@ -21,7 +18,6 @@ LEVEL_PRIORITY = {
 
 
 def normalize_text(value):
-
     if value is None:
         return None
 
@@ -33,18 +29,7 @@ def normalize_text(value):
     return value
 
 
-def first_existing(columns, candidates):
-
-    for candidate in candidates:
-
-        if candidate in columns:
-            return candidate
-
-    return None
-
-
 def main():
-
     print("=" * 80)
     print("SCHOOL INTELLIGENCE - EVIDENCE NORMALIZER")
     print("=" * 80)
@@ -54,443 +39,224 @@ def main():
     print(DB_PATH)
 
     if not DB_PATH.exists():
-
         print()
         print("ERRORE: database non trovato.")
-        return
+        return 1
 
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
 
-    cur = conn.cursor()
+    try:
+        cur = conn.cursor()
 
-    # ---------------------------------------------------------
-    # 1. VERIFICA TABELLA EVIDENCE
-    # ---------------------------------------------------------
+        # -----------------------------------------------------------------
+        # 1. VERIFICA MODELLO ATTUALE
+        # -----------------------------------------------------------------
 
-    cur.execute("""
-        SELECT name
-        FROM sqlite_master
-        WHERE type = 'table'
-        AND name = 'evidence'
-    """)
+        cur.execute("PRAGMA table_info(school_features)")
+        schema = cur.fetchall()
 
-    if cur.fetchone() is None:
+        if not schema:
+            print()
+            print("ERRORE: tabella school_features non trovata.")
+            return 1
+
+        columns = [row["name"] for row in schema]
 
         print()
-        print("ERRORE: tabella evidence non trovata.")
+        print("COLONNE SCHOOL_FEATURES:")
 
-        conn.close()
-        return
+        for column in columns:
+            print(" -", column)
 
-    # ---------------------------------------------------------
-    # 2. LEGGI LO SCHEMA
-    # ---------------------------------------------------------
-
-    cur.execute("PRAGMA table_info(evidence)")
-
-    schema = cur.fetchall()
-
-    columns = [
-        row["name"]
-        for row in schema
-    ]
-
-    print()
-    print("COLONNE EVIDENCE:")
-
-    for column in columns:
-        print(" -", column)
-
-    # ---------------------------------------------------------
-    # 3. TROVA LE COLONNE
-    # ---------------------------------------------------------
-
-    school_col = first_existing(
-        columns,
-        [
+        required = [
             "school_id",
-            "school",
-        ],
-    )
-
-    feature_col = first_existing(
-        columns,
-        [
             "feature",
-            "evidence_type",
-            "type",
-        ],
-    )
-
-    value_col = first_existing(
-        columns,
-        [
-            "value",
-            "evidence_value",
-        ],
-    )
-
-    level_col = first_existing(
-        columns,
-        [
-            "evidence_level",
-            "level",
-            "classification",
-        ],
-    )
-
-    confidence_col = first_existing(
-        columns,
-        [
             "confidence",
-            "confidence_score",
-        ],
-    )
+            "evidence_type",
+        ]
 
-    text_col = first_existing(
-        columns,
-        [
-            "source_text",
-            "text",
-            "snippet",
-            "evidence",
-        ],
-    )
+        missing = [
+            column
+            for column in required
+            if column not in columns
+        ]
 
-    document_col = first_existing(
-        columns,
-        [
+        if missing:
+            print()
+            print(
+                "ERRORE: colonne mancanti:",
+                ", ".join(missing),
+            )
+            return 1
+
+        # -----------------------------------------------------------------
+        # 2. LEGGI LE EVIDENZE ATTUALI
+        # -----------------------------------------------------------------
+
+        select = [
+            "id",
+            "school_id",
+            "feature",
+            "confidence",
+            "evidence_type",
+        ]
+
+        for column in (
+            "value",
+            "normalized_value",
             "document_id",
-            "source_document_id",
-            "ptof_document_id",
-        ],
-    )
+            "source_id",
+            "evidence",
+            "verified_at",
+        ):
+            if column in columns:
+                select.append(column)
 
-    print()
-    print("MAPPING:")
+        rows = cur.execute(
+            f"""
+            SELECT {", ".join(select)}
+            FROM school_features
+            WHERE school_id IS NOT NULL
+              AND feature IS NOT NULL
+            ORDER BY id
+            """
+        ).fetchall()
 
-    print("school_id  :", school_col)
-    print("feature    :", feature_col)
-    print("value      :", value_col)
-    print("level      :", level_col)
-    print("confidence :", confidence_col)
-    print("text       :", text_col)
-    print("document   :", document_col)
+        print()
+        print("EVIDENCE RAW:", len(rows))
 
-    # ---------------------------------------------------------
-    # 4. VERIFICA COLONNE MINIME
-    # ---------------------------------------------------------
+        if not rows:
+            print()
+            print("ATTENZIONE: nessuna evidence da normalizzare.")
+            return 0
 
-    if not school_col:
-        print("ERRORE: manca school_id")
-        conn.close()
-        return
+        # -----------------------------------------------------------------
+        # 3. NORMALIZZAZIONE IN PLACE
+        # -----------------------------------------------------------------
 
-    if not feature_col:
-        print("ERRORE: manca feature")
-        conn.close()
-        return
+        now = datetime.now(timezone.utc).isoformat()
 
-    if not level_col:
-        print("ERRORE: manca evidence_level")
-        conn.close()
-        return
+        normalized = 0
 
-    if not confidence_col:
-        print("ERRORE: manca confidence")
-        conn.close()
-        return
+        for row in rows:
+            feature = normalize_text(row["feature"])
 
-    # ---------------------------------------------------------
-    # 5. CREA school_features
-    # ---------------------------------------------------------
+            if feature:
+                feature = feature.upper()
 
-    cur.execute("""
-        CREATE TABLE IF NOT EXISTS school_features (
-
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-
-            school_id INTEGER NOT NULL,
-
-            feature TEXT NOT NULL,
-
-            value TEXT,
-
-            confidence INTEGER NOT NULL DEFAULT 0,
-
-            evidence_level TEXT NOT NULL,
-
-            source_evidence_id INTEGER,
-
-            source_document_id INTEGER,
-
-            source_text TEXT,
-
-            created_at TEXT NOT NULL,
-
-            updated_at TEXT NOT NULL,
-
-            FOREIGN KEY (school_id)
-                REFERENCES schools(id)
-                ON DELETE CASCADE
-        )
-    """)
-
-    cur.execute("""
-        CREATE UNIQUE INDEX IF NOT EXISTS
-        idx_school_features_unique
-        ON school_features(
-            school_id,
-            feature
-        )
-    """)
-
-    # ---------------------------------------------------------
-    # 6. LEGGI LE EVIDENCE
-    # ---------------------------------------------------------
-
-    select = [
-        f"e.id AS evidence_id",
-        f"e.{school_col} AS school_id",
-        f"e.{feature_col} AS feature",
-        f"e.{level_col} AS evidence_level",
-        f"e.{confidence_col} AS confidence",
-    ]
-
-    if value_col:
-        select.append(
-            f"e.{value_col} AS value"
-        )
-    else:
-        select.append(
-            "NULL AS value"
-        )
-
-    if text_col:
-        select.append(
-            f"e.{text_col} AS source_text"
-        )
-    else:
-        select.append(
-            "NULL AS source_text"
-        )
-
-    if document_col:
-        select.append(
-            f"e.{document_col} AS document_id"
-        )
-    else:
-        select.append(
-            "NULL AS document_id"
-        )
-
-    query = f"""
-        SELECT
-            {", ".join(select)}
-        FROM evidence e
-        WHERE e.{school_col} IS NOT NULL
-        AND e.{feature_col} IS NOT NULL
-    """
-
-    cur.execute(query)
-
-    rows = cur.fetchall()
-
-    print()
-    print("EVIDENCE RAW:", len(rows))
-
-    # ---------------------------------------------------------
-    # 7. DEDUPLICAZIONE
-    # ---------------------------------------------------------
-
-    best = {}
-
-    for row in rows:
-
-        school_id = row["school_id"]
-
-        feature = normalize_text(
-            row["feature"]
-        )
-
-        if not feature:
-            continue
-
-        feature = feature.upper()
-
-        level = normalize_text(
-            row["evidence_level"]
-        )
-
-        if level:
-            level = level.upper()
-        else:
-            level = "INFERRED"
-
-        try:
-            confidence = int(
-                row["confidence"] or 0
+            value = (
+                normalize_text(row["value"])
+                if "value" in row.keys()
+                else None
             )
-        except:
-            confidence = 0
 
-        candidate = {
-            "evidence_id": row["evidence_id"],
-            "school_id": school_id,
-            "feature": feature,
-            "value": normalize_text(
-                row["value"]
-            ),
-            "level": level,
-            "confidence": confidence,
-            "source_text": normalize_text(
-                row["source_text"]
-            ),
-            "document_id": row["document_id"],
-        }
+            normalized_value = (
+                normalize_text(row["normalized_value"])
+                if "normalized_value" in row.keys()
+                else None
+            )
 
-        key = (
-            school_id,
-            feature,
-        )
+            evidence_type = normalize_text(
+                row["evidence_type"]
+            )
 
-        if key not in best:
+            if evidence_type:
+                evidence_type = evidence_type.upper()
+            else:
+                evidence_type = "INFERRED"
 
-            best[key] = candidate
+            try:
+                confidence = int(row["confidence"] or 0)
+            except (TypeError, ValueError):
+                confidence = 0
 
-            continue
+            if confidence < 0:
+                confidence = 0
 
-        current = best[key]
+            if confidence > 100:
+                confidence = 100
 
-        current_rank = (
-            LEVEL_PRIORITY.get(
-                current["level"],
-                0
-            ),
-            current["confidence"],
-            current["evidence_id"],
-        )
+            updates = [
+                "feature = ?",
+                "confidence = ?",
+                "evidence_type = ?",
+            ]
 
-        candidate_rank = (
-            LEVEL_PRIORITY.get(
-                candidate["level"],
-                0
-            ),
-            candidate["confidence"],
-            candidate["evidence_id"],
-        )
-
-        if candidate_rank > current_rank:
-
-            best[key] = candidate
-
-    print(
-        "FEATURE UNICHE:",
-        len(best)
-    )
-
-    print(
-        "DUPLICATE ELIMINATE:",
-        len(rows) - len(best)
-    )
-
-    # ---------------------------------------------------------
-    # 8. RICREA DATI NORMALIZZATI
-    # ---------------------------------------------------------
-
-    cur.execute("""
-        DELETE FROM school_features
-    """)
-
-    now = datetime.utcnow().isoformat(
-        timespec="seconds"
-    )
-
-    for item in best.values():
-
-        cur.execute("""
-            INSERT INTO school_features (
-                school_id,
+            params = [
                 feature,
-                value,
                 confidence,
-                evidence_level,
-                source_evidence_id,
-                source_document_id,
-                source_text,
-                created_at,
-                updated_at
+                evidence_type,
+            ]
+
+            if "normalized_value" in columns:
+                if normalized_value is None and value is not None:
+                    normalized_value = value
+
+                updates.append("normalized_value = ?")
+                params.append(normalized_value)
+
+            if "verified_at" in columns:
+                updates.append(
+                    "verified_at = COALESCE(verified_at, ?)"
+                )
+                params.append(now)
+
+            params.append(row["id"])
+
+            cur.execute(
+                f"""
+                UPDATE school_features
+                SET {", ".join(updates)}
+                WHERE id = ?
+                """,
+                params,
             )
 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """, (
-            item["school_id"],
-            item["feature"],
-            item["value"],
-            item["confidence"],
-            item["level"],
-            item["evidence_id"],
-            item["document_id"],
-            item["source_text"],
-            now,
-            now,
-        ))
+            normalized += 1
 
-    conn.commit()
+        conn.commit()
 
-    # ---------------------------------------------------------
-    # 9. REPORT
-    # ---------------------------------------------------------
+        # -----------------------------------------------------------------
+        # 4. REPORT FINALE
+        # -----------------------------------------------------------------
 
-    print()
-    print("=" * 80)
-    print("FEATURE NORMALIZZATE")
-    print("=" * 80)
-
-    cur.execute("""
-        SELECT
-            feature,
-            COUNT(*) AS totale
-        FROM school_features
-        GROUP BY feature
-        ORDER BY totale DESC
-    """)
-
-    for row in cur.fetchall():
-
-        print(
-            f"{row['feature']:30} "
-            f"{row['totale']:4}"
+        cur.execute(
+            """
+            SELECT
+                COUNT(*) AS total,
+                COUNT(DISTINCT school_id) AS schools,
+                COUNT(DISTINCT feature) AS features
+            FROM school_features
+            """
         )
 
-    print()
-    print("=" * 80)
-    print("LIVELLI")
-    print("=" * 80)
+        summary = cur.fetchone()
 
-    cur.execute("""
-        SELECT
-            evidence_level,
-            COUNT(*) AS totale
-        FROM school_features
-        GROUP BY evidence_level
-    """)
+        print()
+        print("=" * 80)
+        print("NORMALIZZAZIONE COMPLETATA")
+        print("=" * 80)
+        print()
+        print("Evidence normalizzate :", normalized)
+        print("Evidence totali       :", summary["total"])
+        print("Scuole coinvolte      :", summary["schools"])
+        print("Feature distinte      :", summary["features"])
+        print()
+        print("Nota: tutte le evidence individuali sono state conservate.")
+        print("=" * 80)
 
-    for row in cur.fetchall():
+        return 0
 
-        print(
-            f"{row['evidence_level']:15} "
-            f"{row['totale']:4}"
-        )
+    except Exception as exc:
+        conn.rollback()
+        print()
+        print("ERRORE NORMALIZZATORE:", exc)
+        return 1
 
-    conn.close()
-
-    print()
-    print("=" * 80)
-    print("NORMALIZZAZIONE COMPLETATA")
-    print("=" * 80)
+    finally:
+        conn.close()
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

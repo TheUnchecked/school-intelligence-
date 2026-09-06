@@ -1,106 +1,98 @@
-from pathlib import Path
+#!/usr/bin/env python3
+
+import shutil
+import sqlite3
 import subprocess
-import sys
+from pathlib import Path
 
 
-ROOT = Path("data/documents/ptof")
+ROOT = Path(__file__).resolve().parents[2]
+DB_PATH = ROOT / "data" / "database" / "school-intelligence.sqlite"
+TEXT_DIR = ROOT / "data" / "documents" / "text"
 
 
-def convert_pdf(pdf_path: Path):
-    txt_path = pdf_path.with_suffix(".txt")
+def convert_pdf(pdf_path: Path, txt_path: Path) -> bool:
+    txt_path.parent.mkdir(parents=True, exist_ok=True)
 
-    print(f"PDF : {pdf_path}")
-    print(f"TXT : {txt_path}")
-
-    try:
-        result = subprocess.run(
-            [
-                "pdftotext",
-                "-layout",
-                str(pdf_path),
-                str(txt_path),
-            ],
-            capture_output=True,
-            text=True,
-        )
-
-        if result.returncode != 0:
-            print("ERROR:", result.stderr.strip())
-            return False
-
-        if not txt_path.exists():
-            print("ERROR: TXT non creato")
-            return False
-
-        size = txt_path.stat().st_size
-
-        if size == 0:
-            print("WARNING: TXT vuoto")
-            return False
-
-        print(
-            f"OK: {size / 1024:.1f} KB"
-        )
-
-        return True
-
-    except FileNotFoundError:
-        print(
-            "ERROR: pdftotext non installato."
-        )
+    if shutil.which("pdftotext") is None:
+        print("ERRORE: comando 'pdftotext' non trovato.")
         return False
 
-    except Exception as e:
-        print(
-            f"ERROR: {type(e).__name__}: {e}"
-        )
+    result = subprocess.run(
+        ["pdftotext", "-layout", str(pdf_path), str(txt_path)],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+    )
+
+    if result.returncode != 0:
+        print(f"ERRORE conversione: {pdf_path}")
+        if result.stderr:
+            print(result.stderr.strip())
         return False
+
+    return txt_path.exists()
 
 
 def main():
+    if not DB_PATH.exists():
+        print(f"ERRORE: database non trovato: {DB_PATH}")
+        return 1
 
-    print("=" * 80)
-    print("PDF → TXT CONVERTER")
-    print("=" * 80)
+    TEXT_DIR.mkdir(parents=True, exist_ok=True)
 
-    pdfs = sorted(
-        ROOT.rglob("*.pdf")
-    )
+    conn = sqlite3.connect(DB_PATH)
+    rows = conn.execute(
+        """
+        SELECT id, local_path
+        FROM ptof_documents
+        WHERE local_path IS NOT NULL
+          AND TRIM(local_path) <> ''
+        ORDER BY id
+        """
+    ).fetchall()
 
-    print(
-        f"PDF trovati: {len(pdfs)}"
-    )
-    print()
+    converted = 0
+    skipped = 0
+    errors = 0
 
-    success = 0
-    failed = 0
+    for document_id, local_path in rows:
+        pdf_path = Path(local_path)
 
-    for pdf in pdfs:
+        if not pdf_path.is_absolute():
+            pdf_path = ROOT / pdf_path
 
-        if convert_pdf(pdf):
-            success += 1
+        if not pdf_path.exists():
+            print(f"ERRORE: PDF non trovato per document_id={document_id}: {pdf_path}")
+            errors += 1
+            continue
+
+        txt_path = TEXT_DIR / f"{document_id}.txt"
+
+        if txt_path.exists() and txt_path.stat().st_size > 0:
+            skipped += 1
+            continue
+
+        if convert_pdf(pdf_path, txt_path):
+            converted += 1
+            print(f"OK: {document_id} -> {txt_path}")
         else:
-            failed += 1
+            errors += 1
 
-        print()
+    conn.close()
 
-    print("=" * 80)
-    print("CONVERSIONE COMPLETATA")
-    print("=" * 80)
+    print()
+    print("=" * 60)
+    print("PDF TO TEXT")
+    print("=" * 60)
+    print(f"Documenti totali : {len(rows)}")
+    print(f"Convertiti       : {converted}")
+    print(f"Già presenti     : {skipped}")
+    print(f"Errori           : {errors}")
+    print("=" * 60)
 
-    print(
-        f"Convertiti: {success}"
-    )
-
-    print(
-        f"Falliti:    {failed}"
-    )
-
-    print(
-        f"TXT totali: "
-        f"{len(list(ROOT.rglob('*.txt')))}"
-    )
+    return 1 if errors else 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
