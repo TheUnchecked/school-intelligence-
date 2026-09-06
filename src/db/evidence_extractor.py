@@ -17,11 +17,11 @@ DB_PATH = (
     / "school-intelligence.sqlite"
 )
 
-PTOF_DIR = (
+TEXT_DIR = (
     BASE_DIR
     / "data"
     / "documents"
-    / "ptof"
+    / "text"
 )
 
 SNIPPET_RADIUS = 220
@@ -1303,10 +1303,10 @@ def main():
 
         return 1
 
-    if not PTOF_DIR.exists():
+    if not TEXT_DIR.exists():
 
         print(
-            "\nERRORE: directory PTOF non trovata."
+            "\nERRORE: directory TXT non trovata."
         )
 
         return 1
@@ -1364,13 +1364,10 @@ def main():
 
         for document in documents:
 
-            path = Path(
-                document["local_path"]
-            )
-
-            # ptof_documents contiene il PDF.
-            # Cerchiamo automaticamente il TXT associato.
-            txt_path = path.with_suffix(".txt")
+            # Il PDF resta in data/documents/ptof/.
+            # I TXT generati da pdf_to_text sono centralizzati
+            # in data/documents/text/{document_id}.txt.
+            txt_path = TEXT_DIR / f"{document['id']}.txt"
 
             if not txt_path.exists():
 
