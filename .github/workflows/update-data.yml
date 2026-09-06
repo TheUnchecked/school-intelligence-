@@ -27,7 +27,7 @@ jobs:
           pip install pytest
 
       - name: Esegui i test
-        run: pytest tests/
+        run: PYTHONPATH=. python -m pytest tests/
 
       - name: Esegue pipeline completa
         run: python run_pipeline.py
