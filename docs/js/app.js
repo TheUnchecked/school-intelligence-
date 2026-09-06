@@ -949,7 +949,7 @@ function renderPtofComparison(comparison) {
 }
 
 
-${marker}
+function documentLink(documentId, label = "Apri documento") {
     const document = getDocumentById(documentId);
 
     if (!document || !document.url) {
