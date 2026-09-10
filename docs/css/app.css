@@ -3614,33 +3614,6 @@ footer {
 
 
 
-/* Checkbox confronto */
-
-.ranking-card {
-  position: relative;
-}
-
-.school-compare-checkbox {
-  position: absolute;
-
-  top: 13px;
-  right: 13px;
-
-  z-index: 5;
-
-  width: 23px;
-  height: 23px;
-
-  margin: 0;
-
-  cursor: pointer;
-}
-
-.ranking-card.is-selected {
-  outline: 2px solid currentColor;
-  outline-offset: 2px;
-}
-
 /* Tabella confronto */
 
 .comparison-panel table {
@@ -3715,14 +3688,6 @@ footer {
 
   .comparison-panel {
     padding: 11px;
-  }
-
-  .school-compare-checkbox {
-    top: 9px;
-    right: 9px;
-
-    width: 24px;
-    height: 24px;
   }
 
 }
@@ -3896,33 +3861,6 @@ footer {
   font-weight: 700;
 }
 
-/* Card */
-
-.ranking-card {
-  position: relative;
-}
-
-.school-compare-checkbox {
-  position: absolute;
-
-  top: 12px;
-  right: 12px;
-
-  z-index: 5;
-
-  width: 23px;
-  height: 23px;
-
-  margin: 0;
-
-  cursor: pointer;
-}
-
-.ranking-card.is-selected {
-  outline: 2px solid currentColor;
-  outline-offset: 2px;
-}
-
 /* Mobile */
 
 @media (max-width: 700px) {
@@ -3968,13 +3906,6 @@ footer {
     padding: 10px;
   }
 
-  .school-compare-checkbox {
-    top: 9px;
-    right: 9px;
-
-    width: 24px;
-    height: 24px;
-  }
 }
 
 
@@ -4137,47 +4068,6 @@ footer {
 }
 
 
-/* Checkbox */
-
-.ranking-card {
-  position: relative;
-}
-
-.school-compare-control {
-  position: absolute;
-
-  top: 10px;
-  right: 10px;
-
-  z-index: 20;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  width: 34px;
-  height: 34px;
-
-  border-radius: 9px;
-
-  background: rgba(255,255,255,.92);
-
-  cursor: pointer;
-}
-
-.school-compare-checkbox {
-  width: 22px;
-  height: 22px;
-
-  margin: 0;
-
-  cursor: pointer;
-}
-
-.ranking-card.is-selected {
-  outline: 2px solid currentColor;
-  outline-offset: 2px;
-}
 
 
 @media (max-width: 700px) {
@@ -4225,18 +4115,6 @@ footer {
     padding: 10px;
   }
 
-  .school-compare-control {
-    top: 8px;
-    right: 8px;
-
-    width: 36px;
-    height: 36px;
-  }
-
-  .school-compare-checkbox {
-    width: 24px;
-    height: 24px;
-  }
 }
 
 /* =====================================================

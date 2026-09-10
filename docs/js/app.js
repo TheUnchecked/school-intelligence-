@@ -8,6 +8,7 @@ let evidences = [];
 let ptofDocuments = [];
 let ptofComparisons = [];
 let schoolProfiles = [];
+let schoolClassEnrolment = [];
 
 const $ = (id) => document.getElementById(id);
 
@@ -45,7 +46,8 @@ async function loadData() {
             loadJson("ptof_documents.json"),
             loadJson("ptof_comparisons.json"),
             loadJson("statistics.json"),
-            loadJson("school_profiles.json")
+            loadJson("school_profiles.json"),
+            loadJson("school_class_enrolment.json")
 
         ]);
 
@@ -59,7 +61,8 @@ async function loadData() {
         ptofDocumentsResult,
         ptofComparisonsResult,
         statisticsResult,
-        schoolProfilesResult
+        schoolProfilesResult,
+        schoolClassEnrolmentResult
     ] = results;
 
 
@@ -298,6 +301,89 @@ function parameterIsPresent(schoolId, parameterId) {
         "PRESENTE",
         "1"
     ].includes(value);
+}
+
+
+function getClassEnrolmentForSchool(schoolId) {
+    return schoolClassEnrolment
+        .filter(
+            row => Number(row.school_id) === Number(schoolId)
+        )
+        .sort(
+            (a, b) =>
+                String(b.school_year).localeCompare(
+                    String(a.school_year)
+                ) ||
+                Number(a.course_year) - Number(b.course_year)
+        );
+}
+
+function renderClassEnrolment(schoolId) {
+    const rows = getClassEnrolmentForSchool(schoolId);
+
+    if (!rows.length) {
+        return `
+            <section class="detail-section">
+                <h3>Alunni e classi</h3>
+                <p>
+                    Dato MIM non disponibile per questa scuola.
+                </p>
+            </section>
+        `;
+    }
+
+    const latestYear = rows[0].school_year;
+
+    const latest = rows.filter(
+        row => row.school_year === latestYear
+    );
+
+    return `
+        <section class="detail-section">
+            <h3>Alunni e classi</h3>
+            <p>
+                Fonte ufficiale MIM · anno scolastico
+                ${escapeHtml(latestYear)}
+            </p>
+
+            <div class="detail-table-wrap">
+                <table class="detail-table">
+                    <thead>
+                        <tr>
+                            <th>Anno</th>
+                            <th>Classi</th>
+                            <th>Alunni</th>
+                            <th>Media alunni/classe</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${latest.map(row => `
+                            <tr>
+                                <td>${row.course_year}ª</td>
+                                <td>${row.classes}</td>
+                                <td>${row.students}</td>
+                                <td>
+                                    ${
+                                        Number(row.classes) > 0
+                                            ? (
+                                                Number(row.students) /
+                                                Number(row.classes)
+                                              ).toFixed(1)
+                                            : "—"
+                                    }
+                                </td>
+                            </tr>
+                        `).join("")}
+                    </tbody>
+                </table>
+            </div>
+
+            <small>
+                Il dato MIM è aggregato per anno di corso:
+                non identifica le singole sezioni (1A, 1B, ecc.).
+            </small>
+        </section>
+    `;
 }
 
 function getProfileForSchool(schoolId) {
@@ -543,26 +629,6 @@ function renderRanking() {
         : ""
 }">
 
-    <label class="school-compare-check">
-
-        <input
-            type="checkbox"
-            ${
-                selectedSchools.has(Number(school.id))
-                    ? "checked"
-                    : ""
-            }
-            onchange="
-                finalToggleSchoolSelection(${school.id})
-            "
-            onclick="event.stopPropagation()"
-        >
-
-        <span>Confronta</span>
-
-    </label>
-
-
                 <div class="ranking-card-header">
 
                     <div class="ranking-card-identity">
@@ -586,6 +652,25 @@ function renderRanking() {
                     </div>
 
                     <div class="ranking-score">
+
+                        <label class="school-compare-check">
+
+                            <input
+                                type="checkbox"
+                                ${
+                                    selectedSchools.has(Number(school.id))
+                                        ? "checked"
+                                        : ""
+                                }
+                                onchange="
+                                    finalToggleSchoolSelection(${school.id})
+                                "
+                                onclick="event.stopPropagation()"
+                            >
+
+                            <span>Confronta</span>
+
+                        </label>
 
                         <div class="ranking-score-value ${
                             hasData
@@ -2541,16 +2626,16 @@ initFeatureFilter();
 
 loadData().catch(error => {
 
+    // Il dettaglio tecnico resta in console per chi sta facendo debug;
+    // ai visitatori del sito mostriamo solo un messaggio comprensibile,
+    // senza esporre lo stack trace interno dell'applicazione.
     console.error("SCHOOL INTELLIGENCE RUNTIME ERROR:", error);
 
-    const message = error && error.stack
-        ? error.stack
-        : String(error);
-
     $("schoolList").innerHTML = `
-        <div class="error" style="white-space:pre-wrap;overflow-wrap:anywhere;">
-            <strong>Errore applicazione</strong><br><br>
-            ${escapeHtml(message)}
+        <div class="error">
+            <strong>Non è stato possibile caricare i dati.</strong><br><br>
+            Riprova tra qualche minuto. Se il problema persiste, i dati
+            potrebbero essere in fase di aggiornamento.
         </div>
     `;
 });
