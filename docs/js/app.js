@@ -823,8 +823,8 @@ const RADAR_CATEGORIES = [
     { key: "LINGUE", label: "Lingue" },
     { key: "SERVIZI", label: "Servizi" },
     { key: "STRUTTURE", label: "Strutture" },
-    { key: "DIDATTICA", label: "Attività e didattica" },
-    { key: "ORGANIZZAZIONE", label: "Organizzazione" }
+    { key: "DIDATTICA", label: "Didattica" },
+    { key: "ORGANIZZAZIONE", label: "Orario" }
 ];
 
 function computeCategoryScores(records) {
@@ -871,10 +871,10 @@ function renderRadarChart(records) {
     const scores = computeCategoryScores(records);
     const n = scores.length;
 
-    const size = 240;
+    const size = 340;
     const center = size / 2;
-    const radius = 82;
-    const labelRadius = radius + 30;
+    const radius = 88;
+    const labelRadius = radius + 48;
 
     const angleFor = (i) =>
         (Math.PI * 2 * i) / n - Math.PI / 2;
@@ -915,15 +915,15 @@ function renderRadarChart(records) {
             const y = center + labelRadius * Math.sin(angle);
 
             const anchor =
-                Math.abs(Math.cos(angle)) < 0.2
+                Math.abs(Math.cos(angle)) < 0.25
                     ? "middle"
                     : Math.cos(angle) > 0
                         ? "start"
                         : "end";
 
             return `
-                <text x="${x}" y="${y - 5}" text-anchor="${anchor}" class="radar-label">${escapeHtml(s.category)}</text>
-                <text x="${x}" y="${y + 11}" text-anchor="${anchor}" class="radar-label-value">${s.percent}%</text>
+                <text x="${x}" y="${y - 4}" text-anchor="${anchor}" class="radar-label">${escapeHtml(s.category)}</text>
+                <text x="${x}" y="${y + 10}" text-anchor="${anchor}" class="radar-label-value">${s.percent}%</text>
             `;
         })
         .join("");
