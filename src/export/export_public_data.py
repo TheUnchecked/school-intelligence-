@@ -233,6 +233,48 @@ def export_ptof_documents(conn):
     return data
 
 
+
+def export_school_class_enrolment(conn):
+    # La tabella esiste solo dopo che qualcuno ha importato a mano un
+    # CSV MIM (src.collectors.mim_class_enrolment): non fa parte della
+    # pipeline automatica. Sul runner GitHub, dove il database viene
+    # ricostruito da zero ad ogni run, la tabella non c'è quasi mai:
+    # in quel caso ritorniamo None per dire "non toccare il file
+    # pubblicato", invece di sovrascriverlo con dati vuoti.
+    table_exists = conn.execute(
+        """
+        SELECT name FROM sqlite_master
+        WHERE type = 'table' AND name = 'school_class_enrolment'
+        """
+    ).fetchone()
+
+    if not table_exists:
+        return None
+
+    rows = conn.execute(
+        """
+        SELECT
+            e.school_id,
+            e.school_code,
+            e.school_year,
+            e.course_year,
+            e.classes,
+            e.male,
+            e.female,
+            e.students,
+            e.source_url,
+            e.retrieved_at
+        FROM school_class_enrolment e
+        ORDER BY
+            e.school_id,
+            e.school_year DESC,
+            e.course_year
+        """
+    ).fetchall()
+
+    return [dict(row) for row in rows]
+
+
 def export_statistics(conn):
     schools = conn.execute(
         "SELECT COUNT(*) FROM schools"
@@ -401,6 +443,29 @@ def main():
             f"  ptof_documents.json: "
             f"{len(ptof_documents)}"
         )
+
+        print()
+        print("Esportazione classi/alunni MIM...")
+
+        class_enrolment = export_school_class_enrolment(conn)
+
+        if class_enrolment is None:
+            # manteniamo i dati già pubblicati: nessuna tabella in
+            # questo run, quindi non tocchiamo il file esistente.
+            print(
+                "  school_class_enrolment.json: tabella assente, "
+                "file esistente lasciato invariato"
+            )
+        else:
+            write_json(
+                "school_class_enrolment.json",
+                class_enrolment
+            )
+
+            print(
+                f"  school_class_enrolment.json: "
+                f"{len(class_enrolment)}"
+            )
 
         print()
         print("Esportazione statistics...")
