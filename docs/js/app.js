@@ -1297,6 +1297,9 @@ function showDetail(schoolId) {
     ];
 
     $("schoolList").parentElement.classList.add("hidden");
+    if ($("homeIntro")) {
+        $("homeIntro").classList.add("hidden");
+    }
     $("detail").classList.remove("hidden");
 
     // URL condivisibile: chi apre questo link arriva direttamente
@@ -2709,6 +2712,10 @@ function closeDetailView() {
     $("schoolList").parentElement.classList.remove(
         "hidden"
     );
+
+    if ($("homeIntro")) {
+        $("homeIntro").classList.remove("hidden");
+    }
 
     const shareUrl = new URL(window.location.href);
     shareUrl.searchParams.delete("scuola");
