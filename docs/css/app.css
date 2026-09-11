@@ -3107,6 +3107,7 @@ footer {
    ============================================================ */
 
 .ranking-card {
+    position: relative;
     display: block !important;
     width: 100% !important;
     min-width: 0 !important;
@@ -3454,18 +3455,6 @@ footer {
     font-weight: 700;
 }
 
-.comparison-toolbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 16px;
-    margin: 18px 0;
-    padding: 15px 18px;
-    border: 1px solid var(--border, #ddd);
-    border-radius: 14px;
-    background: var(--surface, #fff);
-}
-
 .comparison-kicker {
     font-size: .68rem;
     font-weight: 850;
@@ -3499,10 +3488,6 @@ footer {
 .school-compare-check input {
     width: 16px;
     height: 16px;
-}
-
-.ranking-card {
-    position: relative;
 }
 
 .ranking-card.is-selected {
@@ -3701,24 +3686,6 @@ footer {
 /* ============================================================
    UX FINALE
    ============================================================ */
-
-.comparison-toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-
-  margin: 18px 0;
-
-  padding: 10px 13px;
-
-  border: 1px solid var(--border-color, #ddd);
-  border-radius: 12px;
-
-  background: var(--card-background, #fff);
-
-  box-sizing: border-box;
-}
 
 .comparison-summary {
   display: flex;
@@ -4417,4 +4384,123 @@ a:hover {
 .school-feature-icon svg {
     width: 55%;
     height: 55%;
+}
+
+
+/* ============================================================
+   SKELETON DI CARICAMENTO
+   ============================================================ */
+
+.skeleton-block {
+    border-radius: 6px;
+    background: var(--line);
+    animation: skeleton-pulse 1.4s ease-in-out infinite;
+}
+
+.skeleton-rank {
+    width: 28px;
+    height: 14px;
+    margin-bottom: 10px;
+}
+
+.skeleton-title {
+    width: 70%;
+    height: 22px;
+    margin-bottom: 10px;
+}
+
+.skeleton-meta {
+    width: 50%;
+    height: 13px;
+}
+
+.skeleton-score {
+    width: 64px;
+    height: 32px;
+    margin-left: auto;
+}
+
+.skeleton-progress {
+    width: 100%;
+    height: 6px;
+    margin-top: 20px;
+}
+
+.skeleton-card {
+    cursor: default;
+    pointer-events: none;
+}
+
+@keyframes skeleton-pulse {
+    0%, 100% {
+        opacity: .55;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .skeleton-block {
+        animation: none;
+        opacity: .7;
+    }
+}
+
+
+/* ============================================================
+   BADGE NUMERICO CONFRONTA
+   ============================================================ */
+
+.compare-count-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    margin-left: 2px;
+
+    border-radius: 8px;
+    background: var(--accent);
+    color: #fff;
+
+    font-size: 0.68rem;
+    font-weight: 800;
+    line-height: 1;
+}
+
+
+/* ============================================================
+   RADAR PER CATEGORIA
+   ============================================================ */
+
+.radar-chart-wrap {
+    display: flex;
+    justify-content: center;
+    margin: 8px 0 24px;
+}
+
+.radar-chart {
+    width: 100%;
+    max-width: 320px;
+    height: auto;
+}
+
+.radar-label {
+    font-size: 9px;
+    font-weight: 700;
+    fill: var(--text);
+}
+
+.radar-label-value {
+    font-size: 9px;
+    fill: var(--accent);
+    font-weight: 800;
+}
+
+@media (max-width: 700px) {
+    .radar-chart {
+        max-width: 260px;
+    }
 }

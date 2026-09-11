@@ -786,6 +786,15 @@ function renderRanking() {
 
                         <span>Confronta</span>
 
+                        <span
+                            class="compare-count-badge"
+                            ${
+                                finalComparisonCount() > 0
+                                    ? ""
+                                    : "hidden"
+                            }
+                        >${finalComparisonCount()}</span>
+
                     </label>
 
                     <span class="ranking-footer-meta">
@@ -808,6 +817,126 @@ function renderRanking() {
 
 
 
+
+
+const RADAR_CATEGORIES = [
+    "Lingue",
+    "Servizi",
+    "Strutture",
+    "Attività e didattica",
+    "Organizzazione"
+];
+
+function computeCategoryScores(records) {
+
+    const totals = {};
+
+    RADAR_CATEGORIES.forEach(category => {
+        totals[category] = { total: 0, score: 0 };
+    });
+
+    records.forEach(record => {
+
+        const category = record.category;
+
+        if (!totals[category]) return;
+
+        totals[category].total++;
+
+        const weight =
+            record.status === "VERIFIED" ? 1 :
+            record.status === "PROBABLE" ? 0.7 :
+            record.status === "MENTIONED" ? 0.4 :
+            0;
+
+        totals[category].score += weight;
+    });
+
+    return RADAR_CATEGORIES.map(category => {
+
+        const { total, score } = totals[category];
+
+        return {
+            category,
+            percent:
+                total > 0
+                    ? Math.round((score / total) * 100)
+                    : 0
+        };
+    });
+}
+
+function renderRadarChart(records) {
+
+    const scores = computeCategoryScores(records);
+    const n = scores.length;
+
+    const size = 240;
+    const center = size / 2;
+    const radius = 82;
+    const labelRadius = radius + 30;
+
+    const angleFor = (i) =>
+        (Math.PI * 2 * i) / n - Math.PI / 2;
+
+    const pointAt = (i, fraction) => {
+        const angle = angleFor(i);
+        return [
+            center + radius * fraction * Math.cos(angle),
+            center + radius * fraction * Math.sin(angle)
+        ];
+    };
+
+    const gridRings = [0.33, 0.66, 1]
+        .map(fraction => {
+            const points = scores
+                .map((_, i) => pointAt(i, fraction).join(","))
+                .join(" ");
+            return `<polygon points="${points}" fill="none" stroke="var(--line)" stroke-width="1" />`;
+        })
+        .join("");
+
+    const axisLines = scores
+        .map((_, i) => {
+            const [x, y] = pointAt(i, 1);
+            return `<line x1="${center}" y1="${center}" x2="${x}" y2="${y}" stroke="var(--line)" stroke-width="1" />`;
+        })
+        .join("");
+
+    const dataPoints = scores
+        .map((s, i) => pointAt(i, Math.max(0.04, s.percent / 100)).join(","))
+        .join(" ");
+
+    const labels = scores
+        .map((s, i) => {
+
+            const angle = angleFor(i);
+            const x = center + labelRadius * Math.cos(angle);
+            const y = center + labelRadius * Math.sin(angle);
+
+            const anchor =
+                Math.abs(Math.cos(angle)) < 0.2
+                    ? "middle"
+                    : Math.cos(angle) > 0
+                        ? "start"
+                        : "end";
+
+            return `
+                <text x="${x}" y="${y - 5}" text-anchor="${anchor}" class="radar-label">${escapeHtml(s.category)}</text>
+                <text x="${x}" y="${y + 11}" text-anchor="${anchor}" class="radar-label-value">${s.percent}%</text>
+            `;
+        })
+        .join("");
+
+    return `
+        <svg viewBox="0 0 ${size} ${size}" class="radar-chart" role="img" aria-label="Punteggio per categoria">
+            ${gridRings}
+            ${axisLines}
+            <polygon points="${dataPoints}" fill="var(--accent)" fill-opacity="0.18" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round" />
+            ${labels}
+        </svg>
+    `;
+}
 
 
 function parameterMeta(code) {
@@ -1912,6 +2041,10 @@ function showDetail(schoolId) {
 
             </div>
 
+            <div class="radar-chart-wrap">
+                ${renderRadarChart(records)}
+            </div>
+
             <div class="parameters-container">
                 ${parametersHtml}
             </div>
@@ -2962,6 +3095,13 @@ function finalUpdateComparisonUI() {
   if (countEl) {
     countEl.textContent = `${count}/4 selezionate`;
   }
+
+  document
+    .querySelectorAll(".compare-count-badge")
+    .forEach(badge => {
+      badge.textContent = String(count);
+      badge.hidden = count === 0;
+    });
 
   button.disabled = count < 2;
 
