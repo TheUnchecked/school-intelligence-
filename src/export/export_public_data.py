@@ -1,5 +1,6 @@
 from pathlib import Path
 import json
+import math
 import sqlite3
 
 
@@ -30,6 +31,76 @@ def write_json(filename, data):
     return path
 
 
+# Coordinate del centro di ogni comune coperto dal dataset.
+# Aggiornare quando la classifica si estende a nuovi comuni: la
+# scuola risulterebbe altrimenti senza lat/lon e non comparirebbe
+# sulla mappa (viene comunque esportata regolarmente nell'elenco).
+COMUNE_COORDINATES = {
+    "C100": (43.46306, 13.55000),   # Castelfidardo (AN)
+    "C770": (43.30700, 13.72060),   # Civitanova Marche (MC)
+    "E690": (43.43889, 13.60861),   # Loreto (AN)
+    "F632": (43.36700, 13.61700),   # Potenza Picena (MC)
+    "G157": (43.48300, 13.48300),   # Osimo (AN)
+    "H211": (43.40361, 13.54972),   # Recanati (MC)
+}
+
+
+def attach_coordinates(schools):
+    """
+    Assegna lat/lon ad ogni scuola. Le scuole nello stesso comune
+    vengono disposte in un piccolo cerchio attorno al centro del
+    comune (badge geografico, non l'indirizzo esatto) così da non
+    sovrapporsi sulla mappa quando sono più di una.
+    """
+
+    by_comune = {}
+
+    for school in schools:
+        by_comune.setdefault(
+            school.get("codice_comune"), []
+        ).append(school)
+
+    for codice_comune, group in by_comune.items():
+        base = COMUNE_COORDINATES.get(codice_comune)
+
+        if not base:
+            for school in group:
+                school["lat"] = None
+                school["lon"] = None
+            continue
+
+        lat0, lon0 = base
+        count = len(group)
+
+        ordered = sorted(
+            group,
+            key=lambda s: s.get("codice_scuola") or ""
+        )
+
+        for index, school in enumerate(ordered):
+
+            if count == 1:
+                school["lat"] = lat0
+                school["lon"] = lon0
+                continue
+
+            angle = 2 * math.pi * index / count
+            radius_degrees = 0.0035
+
+            school["lat"] = round(
+                lat0 + radius_degrees * math.cos(angle), 6
+            )
+            school["lon"] = round(
+                lon0 + (
+                    radius_degrees * math.sin(angle)
+                    / math.cos(math.radians(lat0))
+                ),
+                6
+            )
+
+    return schools
+
+
 def export_schools(conn):
     rows = conn.execute(
         """
@@ -57,7 +128,9 @@ def export_schools(conn):
         """
     ).fetchall()
 
-    return [dict(row) for row in rows]
+    schools = [dict(row) for row in rows]
+
+    return attach_coordinates(schools)
 
 
 def export_parameters(conn):

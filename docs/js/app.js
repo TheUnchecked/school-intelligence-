@@ -9,8 +9,94 @@ let ptofDocuments = [];
 let ptofComparisons = [];
 let schoolProfiles = [];
 let schoolClassEnrolment = [];
+let schoolMap = null;
+let schoolMapMarkers = [];
 
 const $ = (id) => document.getElementById(id);
+
+
+function renderMap() {
+
+    const container = $("schoolMap");
+
+    if (!container || typeof L === "undefined") {
+        return;
+    }
+
+    const scoreMap = new Map(
+        scores.map(s => [s.school_id, s])
+    );
+
+    const withCoordinates = schools.filter(
+        s => s.lat != null && s.lon != null
+    );
+
+    if (!withCoordinates.length) {
+        container.innerHTML =
+            "<p style=\"padding:16px;color:var(--muted);\">" +
+            "Coordinate non disponibili per le scuole in elenco." +
+            "</p>";
+        return;
+    }
+
+    if (!schoolMap) {
+        schoolMap = L.map(container, {
+            scrollWheelZoom: false
+        });
+
+        L.tileLayer(
+            "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            {
+                maxZoom: 18,
+                attribution:
+                    "&copy; " +
+                    "<a href=\"https://www.openstreetmap.org/copyright\">" +
+                    "OpenStreetMap</a>"
+            }
+        ).addTo(schoolMap);
+    }
+
+    schoolMapMarkers.forEach(marker => schoolMap.removeLayer(marker));
+    schoolMapMarkers = [];
+
+    withCoordinates.forEach(school => {
+
+        const score = scoreMap.get(school.id);
+
+        const scoreText =
+            score && Number(score.evidence_count ?? 0) > 0
+                ? formatPercent(score.score_percent)
+                : "Dati insufficienti";
+
+        const popupHtml = `
+            <div class="school-map-popup">
+                <strong>${escapeHtml(school.denominazione)}</strong>
+                <span>
+                    ${escapeHtml(school.comune)} ·
+                    ${scoreText}
+                </span>
+                <button
+                    type="button"
+                    onclick="showDetail(${school.id})"
+                >
+                    Apri scheda
+                </button>
+            </div>
+        `;
+
+        const marker =
+            L.marker([school.lat, school.lon])
+                .addTo(schoolMap)
+                .bindPopup(popupHtml);
+
+        schoolMapMarkers.push(marker);
+    });
+
+    const bounds = L.featureGroup(schoolMapMarkers).getBounds();
+    schoolMap.fitBounds(bounds, { padding: [24, 24] });
+
+    setTimeout(() => schoolMap.invalidateSize(), 150);
+}
 
 
 async function loadData() {
@@ -190,6 +276,7 @@ async function loadData() {
     populateProvinceFilter();
 
     renderRanking();
+    renderMap();
 }
 
 

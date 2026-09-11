@@ -17,7 +17,9 @@
     "tipologia": "SCUOLA PRIMO GRADO",
     "caratteristica": "NORMALE",
     "website": "https://iscviaugobassi.edu.it/",
-    "sede_scolastica": "SI"
+    "sede_scolastica": "SI",
+    "lat": 43.308082,
+    "lon": 13.716026
   },
   {
     "id": 8,
@@ -37,7 +39,9 @@
     "tipologia": "SCUOLA PRIMO GRADO",
     "caratteristica": "NORMALE",
     "website": "https://icsoprani.edu.it/",
-    "sede_scolastica": "SI"
+    "sede_scolastica": "SI",
+    "lat": 43.46656,
+    "lon": 13.55
   },
   {
     "id": 3,
@@ -57,7 +61,9 @@
     "tipologia": "SCUOLA PRIMO GRADO",
     "caratteristica": "NORMALE",
     "website": "https://civitanovatacito.edu.it/",
-    "sede_scolastica": "SI"
+    "sede_scolastica": "SI",
+    "lat": 43.304168,
+    "lon": 13.717773
   },
   {
     "id": 14,
@@ -77,7 +83,9 @@
     "tipologia": "SCUOLA PRIMO GRADO",
     "caratteristica": "NORMALE",
     "website": "https://ictrilliniosimo.edu.it/",
-    "sede_scolastica": "SI"
+    "sede_scolastica": "SI",
+    "lat": 43.4795,
+    "lon": 13.483
   },
   {
     "id": 10,
@@ -97,7 +105,9 @@
     "tipologia": "SCUOLA PRIMO GRADO",
     "caratteristica": "NORMALE",
     "website": "https://www.icsagostino.it",
-    "sede_scolastica": "SI"
+    "sede_scolastica": "SI",
+    "lat": 43.308082,
+    "lon": 13.725174
   },
   {
     "id": 13,
@@ -117,7 +127,9 @@
     "tipologia": "SCUOLA PRIMO GRADO",
     "caratteristica": "NORMALE",
     "website": "https://ictrilliniosimo.edu.it/",
-    "sede_scolastica": "SI"
+    "sede_scolastica": "SI",
+    "lat": 43.483,
+    "lon": 13.478176
   },
   {
     "id": 9,
@@ -137,7 +149,9 @@
     "tipologia": "SCUOLA PRIMO GRADO",
     "caratteristica": "NORMALE",
     "website": "https://icviareginaelena.edu.it/",
-    "sede_scolastica": "SI"
+    "sede_scolastica": "SI",
+    "lat": 43.304168,
+    "lon": 13.723427
   },
   {
     "id": 7,
@@ -157,7 +171,9 @@
     "tipologia": "SCUOLA PRIMO GRADO",
     "caratteristica": "NORMALE",
     "website": "https://www.icpotenzapicena.edu.it/",
-    "sede_scolastica": "SI"
+    "sede_scolastica": "SI",
+    "lat": 43.3635,
+    "lon": 13.617
   },
   {
     "id": 6,
@@ -177,7 +193,9 @@
     "tipologia": "SCUOLA PRIMO GRADO",
     "caratteristica": "NORMALE",
     "website": "https://www.icsolariloreto.edu.it/",
-    "sede_scolastica": "SI"
+    "sede_scolastica": "SI",
+    "lat": 43.43889,
+    "lon": 13.60861
   },
   {
     "id": 11,
@@ -197,7 +215,9 @@
     "tipologia": "SCUOLA PRIMO GRADO",
     "caratteristica": "NORMALE",
     "website": "https://www.icgigli.edu.it/scuola-secondaria-patrizi/",
-    "sede_scolastica": "SI"
+    "sede_scolastica": "SI",
+    "lat": 43.40011,
+    "lon": 13.54972
   },
   {
     "id": 4,
@@ -217,7 +237,9 @@
     "tipologia": "SCUOLA PRIMO GRADO",
     "caratteristica": "NORMALE",
     "website": "https://www.iccaiogiuliocesare.edu.it/",
-    "sede_scolastica": "SI"
+    "sede_scolastica": "SI",
+    "lat": 43.4865,
+    "lon": 13.483
   },
   {
     "id": 1,
@@ -237,7 +259,9 @@
     "tipologia": "SCUOLA PRIMO GRADO",
     "caratteristica": "NORMALE",
     "website": "https://brunodaosimo.edu.it/",
-    "sede_scolastica": "SI"
+    "sede_scolastica": "SI",
+    "lat": 43.483,
+    "lon": 13.487824
   },
   {
     "id": 5,
@@ -257,7 +281,9 @@
     "tipologia": "SCUOLA PRIMO GRADO",
     "caratteristica": "NORMALE",
     "website": "https://www.icrsanzio.it",
-    "sede_scolastica": "SI"
+    "sede_scolastica": "SI",
+    "lat": 43.3705,
+    "lon": 13.617
   },
   {
     "id": 2,
@@ -277,7 +303,9 @@
     "tipologia": "SCUOLA PRIMO GRADO",
     "caratteristica": "NORMALE",
     "website": "https://icbadaloni.edu.it/",
-    "sede_scolastica": "SI"
+    "sede_scolastica": "SI",
+    "lat": 43.40711,
+    "lon": 13.54972
   },
   {
     "id": 15,
@@ -297,7 +325,9 @@
     "tipologia": "SCUOLA PRIMO GRADO",
     "caratteristica": "NORMALE",
     "website": "https://icmazzinicastelfidardo.edu.it/",
-    "sede_scolastica": "SI"
+    "sede_scolastica": "SI",
+    "lat": 43.45956,
+    "lon": 13.55
   },
   {
     "id": 16,
@@ -317,6 +347,8 @@
     "tipologia": "SCUOLA SEC. PRIMO GRADO NON STATALE",
     "caratteristica": null,
     "website": null,
-    "sede_scolastica": null
+    "sede_scolastica": null,
+    "lat": 43.3105,
+    "lon": 13.7206
   }
 ]
