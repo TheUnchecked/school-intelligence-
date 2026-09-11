@@ -575,52 +575,18 @@ function renderRanking() {
                 ? "INDICE COMPLESSIVO"
                 : "NON VALUTABILE";
 
-        const statsHtml =
+        const verifiedCount =
             hasData
-                ? `
-                    <div class="ranking-stat">
-                        <span>Dati disponibili</span>
-                        <strong>
-                            ${formatPercent(score?.coverage_percent)}
-                        </strong>
-                    </div>
+                ? Number(score?.verified_count ?? 0)
+                : 0;
 
-                    <div class="ranking-stat">
-                        <span>Affidabilità dei dati</span>
-                        <strong>
-                            ${formatPercent(score?.confidence_percent)}
-                        </strong>
-                    </div>
+        const totalParameters =
+            Number(score?.parameter_count ?? 21);
 
-                    <div class="ranking-stat">
-                        <span>Informazioni verificate</span>
-                        <strong>
-                            ${score?.verified_count ?? 0}
-                        </strong>
-                    </div>
-
-                    <div class="ranking-stat">
-                        <span>Riscontri documentali</span>
-                        <strong>
-                            ${evidenceCount}
-                        </strong>
-                    </div>
-                `
-                : `
-                    <div class="ranking-stat ranking-stat-message">
-                        <span>Stato della valutazione</span>
-                        <strong>
-                            Nessun riscontro documentale
-                        </strong>
-                    </div>
-
-                    <div class="ranking-stat">
-                        <span>Parametri da verificare</span>
-                        <strong>
-                            ${score?.parameter_count ?? 21}
-                        </strong>
-                    </div>
-                `;
+        const coveragePercent =
+            hasData
+                ? Math.max(0, Math.min(100, Number(score?.coverage_percent ?? 0)))
+                : 0;
 
         card.innerHTML = `
             <div class="ranking-card ${
@@ -653,25 +619,6 @@ function renderRanking() {
 
                     <div class="ranking-score">
 
-                        <label class="school-compare-check">
-
-                            <input
-                                type="checkbox"
-                                ${
-                                    selectedSchools.has(Number(school.id))
-                                        ? "checked"
-                                        : ""
-                                }
-                                onchange="
-                                    finalToggleSchoolSelection(${school.id})
-                                "
-                                onclick="event.stopPropagation()"
-                            >
-
-                            <span>Confronta</span>
-
-                        </label>
-
                         <div class="ranking-score-value ${
                             hasData
                                 ? ""
@@ -688,8 +635,46 @@ function renderRanking() {
 
                 </div>
 
-                <div class="ranking-stats">
-                    ${statsHtml}
+                <div class="ranking-progress">
+
+                    <div class="ranking-progress-track">
+                        <div
+                            class="ranking-progress-fill"
+                            style="width: ${coveragePercent}%"
+                        ></div>
+                    </div>
+
+                    <span class="ranking-progress-label">
+                        ${verifiedCount}/${totalParameters} parametri verificati
+                    </span>
+
+                </div>
+
+                <div class="ranking-footer">
+
+                    <label class="school-compare-check">
+
+                        <input
+                            type="checkbox"
+                            ${
+                                selectedSchools.has(Number(school.id))
+                                    ? "checked"
+                                    : ""
+                            }
+                            onchange="
+                                finalToggleSchoolSelection(${school.id})
+                            "
+                            onclick="event.stopPropagation()"
+                        >
+
+                        <span>Confronta</span>
+
+                    </label>
+
+                    <span class="ranking-footer-meta">
+                        ${evidenceCount} riscontri documentali
+                    </span>
+
                 </div>
 
             </div>
