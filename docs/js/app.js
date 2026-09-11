@@ -817,127 +817,127 @@ function parameterMeta(code) {
         INGLESE: {
             label: "Inglese",
             category: "Lingue",
-            icon: "🇬🇧"
+            icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><text x="12" y="15.5" font-size="8" text-anchor="middle" fill="currentColor" stroke="none" font-family="sans-serif" font-weight="700">EN</text></svg>`
         },
 
         FRANCESE: {
             label: "Francese",
             category: "Lingue",
-            icon: "🇫🇷"
+            icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><text x="12" y="15.5" font-size="8" text-anchor="middle" fill="currentColor" stroke="none" font-family="sans-serif" font-weight="700">FR</text></svg>`
         },
 
         SPAGNOLO: {
             label: "Spagnolo",
             category: "Lingue",
-            icon: "🇪🇸"
+            icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><text x="12" y="15.5" font-size="8" text-anchor="middle" fill="currentColor" stroke="none" font-family="sans-serif" font-weight="700">ES</text></svg>`
         },
 
         TEDESCO: {
             label: "Tedesco",
             category: "Lingue",
-            icon: "🇩🇪"
+            icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><text x="12" y="15.5" font-size="8" text-anchor="middle" fill="currentColor" stroke="none" font-family="sans-serif" font-weight="700">DE</text></svg>`
         },
 
         MENSA: {
             label: "Mensa scolastica",
             category: "Servizi",
-            icon: "🍽️"
+            icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2v8a2 2 0 1 0 4 0V2M8 2v20"/><path d="M17 2c-2 0-3 3-3 6s1 4 3 4v10"/></svg>`
         },
 
         PALESTRA: {
             label: "Palestra",
             category: "Strutture",
-            icon: "🏀"
+            icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6M7 7v10M17 7v10M20 9v6M7 12h10"/></svg>`
         },
 
         BIBLIOTECA: {
             label: "Biblioteca",
             category: "Strutture",
-            icon: "📚"
+            icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V4.5A1.5 1.5 0 0 1 5.5 3H18a1 1 0 0 1 1 1v14"/><path d="M6.5 3H18v18H6.5A1.5 1.5 0 0 1 5 19.5v0A1.5 1.5 0 0 1 6.5 18H19"/></svg>`
         },
 
         LABORATORIO_INFORMATICA: {
             label: "Laboratorio di informatica",
             category: "Strutture",
-            icon: "💻"
+            icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M8 20h8M12 16v4"/></svg>`
         },
 
         LABORATORIO_SCIENZE: {
             label: "Laboratorio di scienze",
             category: "Strutture",
-            icon: "🧪"
+            icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v5.5L5.5 17a1.8 1.8 0 0 0 1.6 2.6h9.8a1.8 1.8 0 0 0 1.6-2.6L14 8.5V3"/><path d="M7.5 14h9"/></svg>`
         },
 
         LABORATORIO_MUSICALE: {
             label: "Laboratorio musicale",
             category: "Strutture",
-            icon: "🎵"
+            icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="17" r="3"/><path d="M11 17V4l7 3"/></svg>`
         },
 
         LABORATORIO_ARTISTICO: {
             label: "Laboratorio artistico",
             category: "Strutture",
-            icon: "🎨"
+            icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 0 18c1.5 0 2-1 2-2s-.5-1.5-.5-2.5S14 15 15 15h3a3 3 0 0 0 3-3c0-5-4-9-9-9Z"/><circle cx="7.5" cy="10.5" r="1" fill="currentColor" stroke="none"/><circle cx="9.5" cy="7" r="1" fill="currentColor" stroke="none"/><circle cx="14" cy="7" r="1" fill="currentColor" stroke="none"/></svg>`
         },
 
         ATELIER_DIGITALE: {
             label: "Atelier digitale",
             category: "Strutture",
-            icon: "🖥️"
+            icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="12" height="16" rx="2"/><path d="M9 17h0"/><path d="M19 13l2 2-7 7h-2v-2Z"/></svg>`
         },
 
         AULE_MULTIMEDIALI: {
             label: "Aule multimediali",
             category: "Strutture",
-            icon: "📺"
+            icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="9" width="8" height="6" rx="1.5"/><circle cx="6" cy="12" r="1.4"/><path d="M10 11l10-4v10l-10-4"/><path d="M21 5v14"/></svg>`
         },
 
         STEM: {
             label: "STEM",
             category: "Attività e didattica",
-            icon: "🔬"
+            icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/><ellipse cx="12" cy="12" rx="9" ry="4"/><ellipse cx="12" cy="12" rx="9" ry="4" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="9" ry="4" transform="rotate(120 12 12)"/></svg>`
         },
 
         ARTE: {
             label: "Arte",
             category: "Attività e didattica",
-            icon: "🎨"
+            icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 15c-2 2-2 4-4 4M13 5c3-3 6-1 6 2s-3 3-3 3l-7 7-4-4 7-7Z"/></svg>`
         },
 
         TEATRO: {
             label: "Teatro",
             category: "Attività e didattica",
-            icon: "🎭"
+            icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8c0-3 3.5-5 8-5s8 2 8 5c0 4-3 5-3 8a5 5 0 0 1-10 0c0-3-3-4-3-8Z"/><circle cx="9" cy="10" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="1" fill="currentColor" stroke="none"/><path d="M9 15c1.2 1 2.8 1 4 0"/></svg>`
         },
 
         SPORT: {
             label: "Sport",
             category: "Attività e didattica",
-            icon: "⚽"
+            icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7l3.5 2.5-1.3 4.1H9.8L8.5 9.5Z"/><path d="M12 3v4M4.5 8l3 1.7M4.7 16l3.3-1.6M19.3 16l-3.3-1.6M19.5 8l-3 1.7M12 17v4"/></svg>`
         },
 
         PNRR: {
             label: "Progetti PNRR",
             category: "Attività e didattica",
-            icon: "🚀"
+            icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c2 3 3 5.5 3 8a3 3 0 0 1-6 0c0-2.5 1-5 3-8Z"/><path d="M6 16c1.5-1 3-1 4 0M14 16c1-1 2.5-1 4 0M4 21h16"/></svg>`
         },
 
         INDIRIZZO_MUSICALE: {
             label: "Indirizzo musicale",
             category: "Attività e didattica",
-            icon: "🎼"
+            icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="18" r="2.4"/><circle cx="15" cy="16" r="2.4"/><path d="M9.4 18V6l8-2v12"/><path d="M9.4 8l8-2"/></svg>`
         },
 
         STRUMENTI_MUSICALI: {
             label: "Strumenti musicali",
             category: "Attività e didattica",
-            icon: "🎹"
+            icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="M8 5v9M12 5v9M16 5v9"/></svg>`
         },
 
         TEMPO_SCUOLA: {
             label: "Tempo scuola",
             category: "Organizzazione",
-            icon: "🕒"
+            icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V9l8-5 8 5v12"/><path d="M9 21v-6h6v6M4 9h16"/></svg>`
         }
     };
 

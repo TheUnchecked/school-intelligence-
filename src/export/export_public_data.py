@@ -3,6 +3,7 @@ import json
 import math
 import sqlite3
 from datetime import datetime, timezone
+from xml.sax.saxutils import escape as xml_escape
 
 
 BASE_DIR = Path(__file__).resolve().parents[2]
@@ -28,6 +29,51 @@ def write_json(filename, data):
         ),
         encoding="utf-8"
     )
+
+    return path
+
+
+SITE_BASE_URL = "https://theunchecked.github.io/school-intelligence-/"
+
+
+def write_sitemap(schools):
+    """
+    Genera docs/sitemap.xml con la home e un URL per ogni scuola
+    (?scuola=CODICE), così i motori di ricerca possono indicizzare
+    anche le singole schede, non solo la home.
+    """
+
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+
+    urls = [(SITE_BASE_URL, "1.0")]
+
+    for school in schools:
+        codice = school.get("codice_scuola")
+
+        if not codice:
+            continue
+
+        url = f"{SITE_BASE_URL}?scuola={xml_escape(codice)}"
+        urls.append((url, "0.7"))
+
+    entries = "\n".join(
+        f"""  <url>
+    <loc>{loc}</loc>
+    <lastmod>{today}</lastmod>
+    <priority>{priority}</priority>
+  </url>"""
+        for loc, priority in urls
+    )
+
+    xml = (
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        f"{entries}\n"
+        "</urlset>\n"
+    )
+
+    path = OUTPUT_DIR.parent / "sitemap.xml"
+    path.write_text(xml, encoding="utf-8")
 
     return path
 
@@ -456,6 +502,12 @@ def main():
 
         print(
             f"  schools.json: {len(schools)}"
+        )
+
+        sitemap_path = write_sitemap(schools)
+        print(
+            f"  sitemap.xml: {len(schools) + 1} URL "
+            f"({sitemap_path.name})"
         )
 
         print()

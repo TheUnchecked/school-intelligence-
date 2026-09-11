@@ -4402,3 +4402,19 @@ a:hover {
     color: var(--muted);
     font-size: 0.82rem;
 }
+
+
+/* ============================================================
+   ICONE SVG PARAMETRI (al posto delle emoji)
+   ============================================================ */
+
+.parameter-v4-icon,
+.school-feature-icon {
+    color: var(--accent);
+}
+
+.parameter-v4-icon svg,
+.school-feature-icon svg {
+    width: 55%;
+    height: 55%;
+}
