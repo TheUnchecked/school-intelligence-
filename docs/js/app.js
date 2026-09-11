@@ -1300,6 +1300,12 @@ function showDetail(schoolId) {
     if ($("homeIntro")) {
         $("homeIntro").classList.add("hidden");
     }
+    if ($("comparisonToolbar")) {
+        $("comparisonToolbar").classList.add("hidden");
+    }
+    if ($("comparisonPanel")) {
+        $("comparisonPanel").hidden = true;
+    }
     $("detail").classList.remove("hidden");
 
     // URL condivisibile: chi apre questo link arriva direttamente
@@ -2715,6 +2721,10 @@ function closeDetailView() {
 
     if ($("homeIntro")) {
         $("homeIntro").classList.remove("hidden");
+    }
+
+    if ($("comparisonToolbar")) {
+        $("comparisonToolbar").classList.remove("hidden");
     }
 
     const shareUrl = new URL(window.location.href);
