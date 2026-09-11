@@ -4307,3 +4307,98 @@ footer {
     }
 
 }
+
+
+/* ============================================================
+   ACCENTO COLORE
+   ============================================================ */
+
+:root {
+    --accent: #185fa5;
+    --accent-fill: #378add;
+    --accent-soft: #e6f1fb;
+}
+
+a {
+    color: var(--accent);
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.eyebrow {
+    color: var(--accent);
+}
+
+.kpi strong {
+    color: var(--accent);
+}
+
+.ranking-rank {
+    color: var(--accent);
+}
+
+.ranking-score-value {
+    color: var(--accent);
+}
+
+.ranking-score-value.ranking-score-no-data {
+    color: var(--muted);
+}
+
+.ranking-progress-track {
+    background: var(--accent-soft);
+}
+
+.ranking-progress-fill {
+    background: var(--accent-fill);
+    opacity: 1;
+}
+
+.school-compare-check {
+    color: var(--accent);
+}
+
+.reset-filters:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.back-button:hover {
+    color: var(--accent);
+}
+
+/* ============================================================
+   COPIA LINK SCHEDA SCUOLA
+   ============================================================ */
+
+.detail-header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 4px;
+}
+
+.copy-link-button {
+    padding: 6px 12px;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    background: transparent;
+    color: var(--muted);
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.copy-link-button:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.hero-updated {
+    color: var(--muted);
+    font-size: 0.82rem;
+}

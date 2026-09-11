@@ -2,6 +2,7 @@ from pathlib import Path
 import json
 import math
 import sqlite3
+from datetime import datetime, timezone
 
 
 BASE_DIR = Path(__file__).resolve().parents[2]
@@ -416,7 +417,8 @@ def export_statistics(conn):
             "PROBABLE": probable,
             "MENTIONED": mentioned,
             "NOT_FOUND": not_found,
-        }
+        },
+        "generated_at": datetime.now(timezone.utc).isoformat()
     }
 
 

@@ -272,11 +272,41 @@ async function loadData() {
         statistics.schools ??
         schools.length;
 
+    if (statistics.generated_at && $("lastUpdated")) {
+        const generatedDate = new Date(statistics.generated_at);
+
+        if (!Number.isNaN(generatedDate.getTime())) {
+            $("lastUpdated").textContent =
+                "dati aggiornati al " +
+                generatedDate.toLocaleDateString("it-IT", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric"
+                });
+        }
+    }
+
 
     populateProvinceFilter();
 
     renderRanking();
     renderMap();
+
+    // Se il link contiene ?scuola=CODICE, apre direttamente quella
+    // scheda invece della lista — è quello che rende il link
+    // condivisibile utile (es. mandato su WhatsApp).
+    const requestedSchoolCode =
+        new URLSearchParams(window.location.search).get("scuola");
+
+    if (requestedSchoolCode) {
+        const requestedSchool = schools.find(
+            s => s.codice_scuola === requestedSchoolCode
+        );
+
+        if (requestedSchool) {
+            showDetail(requestedSchool.id);
+        }
+    }
 }
 
 
@@ -1166,6 +1196,35 @@ function renderEnrolmentSource(source) {
   `;
 }
 
+function copySchoolLink(schoolId) {
+
+    const school = schools.find(s => s.id === schoolId);
+
+    if (!school) {
+        return;
+    }
+
+    const shareUrl = new URL(window.location.href);
+    shareUrl.searchParams.set("scuola", school.codice_scuola);
+
+    const button = $("copyLinkButton");
+
+    navigator.clipboard.writeText(shareUrl.toString())
+        .then(() => {
+            if (!button) return;
+            const original = button.textContent;
+            button.textContent = "Link copiato";
+            setTimeout(() => {
+                button.textContent = original;
+            }, 1800);
+        })
+        .catch(() => {
+            if (!button) return;
+            button.textContent = "Copia manuale dalla barra indirizzi";
+        });
+}
+
+
 function showDetail(schoolId) {
 
     const school =
@@ -1239,6 +1298,18 @@ function showDetail(schoolId) {
 
     $("schoolList").parentElement.classList.add("hidden");
     $("detail").classList.remove("hidden");
+
+    // URL condivisibile: chi apre questo link arriva direttamente
+    // sulla scheda della scuola, senza dover cercarla nell'elenco.
+    const shareUrl = new URL(window.location.href);
+    shareUrl.searchParams.set("scuola", school.codice_scuola);
+    history.pushState(
+        { schoolId },
+        "",
+        shareUrl.toString()
+    );
+    document.title =
+        `${school.denominazione} — School Intelligence`;
 
     const groups = {};
 
@@ -1576,11 +1647,24 @@ function showDetail(schoolId) {
 
         <div class="detail-header">
 
-            <span class="eyebrow">
-                ${escapeHtml(
-                    school.codice_scuola
-                )}
-            </span>
+            <div class="detail-header-top">
+
+                <span class="eyebrow">
+                    ${escapeHtml(
+                        school.codice_scuola
+                    )}
+                </span>
+
+                <button
+                    type="button"
+                    class="copy-link-button"
+                    id="copyLinkButton"
+                    onclick="copySchoolLink(${school.id})"
+                >
+                    Copia link
+                </button>
+
+            </div>
 
             <h1>
                 ${escapeHtml(
@@ -2616,17 +2700,52 @@ function showDetail(schoolId) {
 }
 
 
+function closeDetailView() {
+
+    $("detail").classList.add(
+        "hidden"
+    );
+
+    $("schoolList").parentElement.classList.remove(
+        "hidden"
+    );
+
+    const shareUrl = new URL(window.location.href);
+    shareUrl.searchParams.delete("scuola");
+    history.pushState(
+        {},
+        "",
+        shareUrl.toString()
+    );
+    document.title = "School Intelligence";
+}
+
+
 $("closeDetail").addEventListener(
     "click",
+    closeDetailView
+);
+
+// Torna al ranking anche con il pulsante "indietro" del browser,
+// invece di uscire dal sito.
+window.addEventListener(
+    "popstate",
     () => {
+        const codiceScuola =
+            new URLSearchParams(window.location.search).get("scuola");
 
-        $("detail").classList.add(
-            "hidden"
+        if (!codiceScuola) {
+            closeDetailView();
+            return;
+        }
+
+        const school = schools.find(
+            s => s.codice_scuola === codiceScuola
         );
 
-        $("schoolList").parentElement.classList.remove(
-            "hidden"
-        );
+        if (school) {
+            showDetail(school.id);
+        }
     }
 );
 
