@@ -820,28 +820,28 @@ function renderRanking() {
 
 
 const RADAR_CATEGORIES = [
-    "Lingue",
-    "Servizi",
-    "Strutture",
-    "Attività e didattica",
-    "Organizzazione"
+    { key: "LINGUE", label: "Lingue" },
+    { key: "SERVIZI", label: "Servizi" },
+    { key: "STRUTTURE", label: "Strutture" },
+    { key: "DIDATTICA", label: "Attività e didattica" },
+    { key: "ORGANIZZAZIONE", label: "Organizzazione" }
 ];
 
 function computeCategoryScores(records) {
 
     const totals = {};
 
-    RADAR_CATEGORIES.forEach(category => {
-        totals[category] = { total: 0, score: 0 };
+    RADAR_CATEGORIES.forEach(({ key }) => {
+        totals[key] = { total: 0, score: 0 };
     });
 
     records.forEach(record => {
 
-        const category = record.category;
+        const key = String(record.category || "").toUpperCase();
 
-        if (!totals[category]) return;
+        if (!totals[key]) return;
 
-        totals[category].total++;
+        totals[key].total++;
 
         const weight =
             record.status === "VERIFIED" ? 1 :
@@ -849,15 +849,15 @@ function computeCategoryScores(records) {
             record.status === "MENTIONED" ? 0.4 :
             0;
 
-        totals[category].score += weight;
+        totals[key].score += weight;
     });
 
-    return RADAR_CATEGORIES.map(category => {
+    return RADAR_CATEGORIES.map(({ key, label }) => {
 
-        const { total, score } = totals[category];
+        const { total, score } = totals[key];
 
         return {
-            category,
+            category: label,
             percent:
                 total > 0
                     ? Math.round((score / total) * 100)
